@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkoFy — Skill Meets Trust</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Unbounded:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#FAFAF8; --bg2:#F2F1ED; --bg3:#ECEAE4;
+  --ink:#0D0C0A; --ink2:rgba(13,12,10,0.6); --ink3:rgba(13,12,10,0.35);
+  --brand:#FFCE48; --brand-dk:#E5B800;
+  --teal:#00C896; --teal-dim:rgba(0,200,150,0.1);
+  --sky:#0ea5e9; --violet:#7c3aed; --rose:#e11d48; --orange:#f26419;
+  --card:#FFFFFF; --border:rgba(13,12,10,0.09); --shadow:rgba(13,12,10,0.07);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.6}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:rgba(13,12,10,0.15);border-radius:2px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;display:flex;align-items:center;padding:0 48px;background:rgba(250,250,248,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all 0.3s}
+.nav-logo{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;letter-spacing:-0.5px;color:var(--ink);margin-right:auto;text-decoration:none}
+.nav-logo span{color:var(--brand-dk)}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{font-size:12px;font-weight:500;color:var(--ink2);padding:7px 14px;border-radius:100px;text-decoration:none;transition:all 0.15s}
+.nav-links a:hover{background:var(--ink);color:#fff}
+.nav-cta{margin-left:16px;font-size:12px;font-weight:700;color:var(--ink);background:var(--brand);padding:8px 20px;border-radius:100px;text-decoration:none;transition:all 0.15s;white-space:nowrap}
+.nav-cta:hover{background:var(--brand-dk)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 72px 80px;position:relative;overflow:hidden;background:var(--bg)}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-blob-1{position:absolute;top:-100px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(255,206,72,0.18) 0%,transparent 70%);border-radius:50%}
+.hero-blob-2{position:absolute;bottom:-150px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(0,200,150,0.12) 0%,transparent 70%);border-radius:50%}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(13,12,10,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(13,12,10,0.04) 1px,transparent 1px);background-size:64px 64px}
+.hero-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero-left{}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--teal);margin-bottom:28px;display:flex;align-items:center;gap:10px;opacity:0;animation:fadeUp 0.7s ease forwards 0.2s}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero-h1{font-family:'Unbounded',sans-serif;font-size:clamp(40px,5.5vw,72px);font-weight:900;line-height:0.95;letter-spacing:-3px;margin-bottom:28px;opacity:0;animation:fadeUp 0.7s ease forwards 0.35s}
+.hero-h1 .accent{color:var(--brand-dk)}
+.hero-h1 .dim{color:var(--ink3);font-weight:400}
+.hero-desc{font-size:17px;font-weight:400;color:var(--ink2);line-height:1.8;max-width:500px;margin-bottom:40px;opacity:0;animation:fadeUp 0.7s ease forwards 0.5s}
+.hero-desc strong{color:var(--ink);font-weight:600}
+.hero-ctas{display:flex;gap:12px;align-items:center;margin-bottom:52px;opacity:0;animation:fadeUp 0.7s ease forwards 0.65s}
+.btn-primary{font-size:14px;font-weight:700;color:var(--ink);background:var(--brand);padding:14px 28px;border-radius:100px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--brand-dk);transform:translateY(-1px);box-shadow:0 8px 24px rgba(229,184,0,0.3)}
+.btn-secondary{font-size:14px;font-weight:600;color:var(--ink2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.15s}
+.btn-secondary:hover{color:var(--ink)}
+.hero-stats{display:flex;gap:32px;opacity:0;animation:fadeUp 0.7s ease forwards 0.8s}
+.hstat{border-left:2px solid var(--border);padding-left:16px}
+.hstat-n{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;line-height:1;margin-bottom:4px}
+.hstat-l{font-size:11px;color:var(--ink3);letter-spacing:0.3px}
+
+/* Hero right - floating card preview */
+.hero-right{opacity:0;animation:fadeIn 0.8s ease forwards 0.9s}
+.hero-card-stack{position:relative;height:380px}
+.hcard{position:absolute;background:var(--card);border-radius:20px;border:1px solid var(--border);box-shadow:0 8px 32px var(--shadow);padding:20px;transition:all 0.4s}
+.hcard-main{width:300px;left:50%;transform:translateX(-50%);top:20px;z-index:3;padding:24px}
+.hcard-float-1{width:220px;left:10%;top:60px;z-index:2;transform:rotate(-4deg);opacity:0.85}
+.hcard-float-2{width:200px;right:5%;top:80px;z-index:2;transform:rotate(3deg);opacity:0.85}
+.hcard-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.hcard-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.hcard-sub{font-size:12px;color:var(--ink2);margin-bottom:14px}
+.hcard-score{display:flex;align-items:center;gap:8px}
+.hcs-num{font-family:'Unbounded',sans-serif;font-size:24px;font-weight:900;color:var(--brand-dk)}
+.hcs-bar{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.hcs-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--teal));border-radius:3px}
+.hcard-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px}
+.badge-green{background:rgba(0,200,150,0.1);color:#007a5a}
+.badge-yellow{background:rgba(255,206,72,0.15);color:#927200}
+.badge-blue{background:rgba(14,165,233,0.1);color:#0369a1}
+.hcard-mini-row{display:flex;gap:6px;margin-bottom:6px}
+
+/* ── COMMON SECTION ── */
+.section{max-width:1200px;margin:0 auto;padding:100px 52px}
+.section-alt{background:var(--bg2)}
+.section-dark{background:var(--ink);color:#fff}
+
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px}
+.eyebrow::after{content:'';width:24px;height:1px;opacity:0.4}
+.ew-y{color:var(--brand-dk)}.ew-y::after{background:var(--brand-dk)}
+.ew-t{color:var(--teal)}.ew-t::after{background:var(--teal)}
+.ew-b{color:var(--sky)}.ew-b::after{background:var(--sky)}
+.ew-v{color:var(--violet)}.ew-v::after{background:var(--violet)}
+.ew-o{color:var(--orange)}.ew-o::after{background:var(--orange)}
+.ew-r{color:var(--rose)}.ew-r::after{background:var(--rose)}
+
+.section-h2{font-family:'Unbounded',sans-serif;font-size:clamp(30px,4vw,54px);font-weight:900;line-height:0.96;letter-spacing:-2px;margin-bottom:18px}
+.section-h2 .dim{font-weight:400;color:var(--ink3);display:block}
+.section-lead{font-size:17px;color:var(--ink2);max-width:600px;line-height:1.8;margin-bottom:52px}
+.section-lead strong{color:var(--ink);font-weight:600}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.18s}.d3{transition-delay:.26s}
+.d4{transition-delay:.34s}.d5{transition-delay:.42s}.d6{transition-delay:.5s}
+
+/* ══════════════════════════════════
+   STORY / USE CASE SECTION
+══════════════════════════════════ */
+.stories-section{background:var(--bg);padding:0}
+.stories-inner{max-width:1200px;margin:0 auto;padding:100px 52px}
+
+.story-tabs{display:flex;gap:12px;margin-bottom:48px;flex-wrap:wrap}
+.story-tab{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:100px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;transition:all 0.25s;font-size:13px;font-weight:600;color:var(--ink2)}
+.story-tab:hover{border-color:rgba(13,12,10,0.25);color:var(--ink)}
+.story-tab.active{border-color:var(--brand);background:var(--brand);color:var(--ink)}
+.story-tab-icon{font-size:18px}
+
+/* STAGE */
+.story-stage{background:var(--card);border-radius:28px;border:1px solid var(--border);overflow:hidden;box-shadow:0 4px 40px var(--shadow)}
+
+/* Scene area */
+.scene{height:440px;background:linear-gradient(180deg,#EEF6FF 0%,#F8FFF4 100%);position:relative;overflow:hidden;display:none}
+.scene.active{display:block}
+.scene-1{background:linear-gradient(180deg,#FFF8E1 0%,#FFFDE8 55%,#F0FAF8 100%)}
+.scene-2{background:linear-gradient(180deg,#EEF2FF 0%,#E8F0FE 55%,#F3E8FF 100%)}
+.scene-3{background:linear-gradient(180deg,#FDF4FF 0%,#FEE2E2 55%,#FDF2F8 100%)}
+.scene-4{background:linear-gradient(180deg,#FFFBEB 0%,#FEF3C7 55%,#ECFDF5 100%)}
+.scene-5{background:linear-gradient(180deg,#EFF6FF 0%,#DBEAFE 55%,#EEF9F0 100%)}
+
+/* Ground */
+.ground{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.04))}
+.ground-line{position:absolute;bottom:80px;left:0;right:0;height:2px;background:rgba(0,0,0,0.06)}
+
+/* Characters */
+.char-wrap{position:absolute;bottom:84px;display:flex;flex-direction:column;align-items:center;transition:all 0.75s cubic-bezier(0.34,1.2,0.64,1)}
+
+/* Customer - left side */
+.char-customer{left:58px}
+/* Provider - right side, starts visible but faded/small */
+.char-provider{right:58px;opacity:0.18;filter:grayscale(70%);transform:scale(0.88);transform-origin:bottom center}
+.char-provider.arrived{opacity:1;filter:none;transform:scale(1)}
+
+/* Character SVG sizing (fallback) */
+.char-svg{width:100px;height:145px;display:block}
+/* 3D PNG character image */
+.char-img{width:380px;height:570px;object-fit:contain;object-position:bottom center;display:block;mix-blend-mode:multiply}
+.char-label{font-size:11px;font-weight:700;color:var(--ink2);margin-top:8px;text-align:center;letter-spacing:0.2px}
+
+/* Speech bubble */
+.speech{position:absolute;background:white;border:1.5px solid var(--border);border-radius:18px 18px 18px 5px;padding:11px 16px;font-size:12px;font-weight:600;color:var(--ink);max-width:190px;line-height:1.45;box-shadow:0 6px 20px rgba(13,12,10,0.1);opacity:0;transform:scale(0.7) translateY(8px);transition:all 0.45s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none}
+.speech.show{opacity:1;transform:scale(1) translateY(0)}
+.speech::after{content:'';position:absolute;bottom:-9px;left:14px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:9px solid white}
+.speech-provider{border-radius:18px 18px 5px 18px}
+.speech-provider::after{left:auto;right:14px;border-top-color:white}
+
+/* AI Hub in center */
+.ai-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;transition:all 0.5s ease;pointer-events:none}
+.ai-hub.show{opacity:1}
+.ai-hub-circle{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--teal));display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(255,206,72,0.4);animation:none}
+.ai-hub-circle.pulse{animation:hubPulse 1.5s ease-in-out 3}
+.ai-hub-icon{font-size:32px}
+.ai-hub-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink2);text-align:center}
+
+/* Floating objects in scene */
+.float-obj{position:absolute;font-size:28px;opacity:0;transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+.float-obj.show{opacity:1}
+
+/* HCI badge flying animation */
+.hci-fly{position:absolute;background:var(--brand);border-radius:100px;padding:6px 14px;font-size:12px;font-weight:800;color:var(--ink);opacity:0;transform:translateY(20px) scale(0.8);transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap}
+.hci-fly.show{opacity:1;transform:translateY(0) scale(1)}
+
+/* Story info panel */
+.story-info{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--border)}
+.si-left{padding:32px 36px;border-right:1px solid var(--border)}
+.si-step-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.si-step{padding:4px 12px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;background:var(--bg2);color:var(--ink3);cursor:pointer;transition:all 0.2s;border:1.5px solid transparent}
+.si-step.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.si-title{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.5px;color:var(--ink);margin-bottom:8px;line-height:1.25}
+.si-body{font-size:14px;color:var(--ink2);line-height:1.75}
+.si-body strong{color:var(--ink);font-weight:600}
+.si-right{padding:32px 36px;display:flex;flex-direction:column;justify-content:space-between}
+.si-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.si-fact{background:var(--bg2);border-radius:12px;padding:14px 16px}
+.sif-val{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1}
+.sif-l{font-size:11px;color:var(--ink3)}
+.story-progress{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.story-bar{height:100%;background:var(--brand);border-radius:2px;width:0;transition:width 4s linear}
+
+/* ══════════════════════════════════
+   WHY SKOFY (product features)
+══════════════════════════════════ */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:52px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;transition:all 0.3s;position:relative;overflow:hidden}
+.feat:hover{border-color:rgba(13,12,10,0.2);transform:translateY(-4px);box-shadow:0 16px 48px var(--shadow)}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.f1::before{background:linear-gradient(90deg,var(--brand),var(--brand-dk))}
+.f2::before{background:linear-gradient(90deg,var(--teal),var(--sky))}
+.f3::before{background:linear-gradient(90deg,var(--sky),var(--violet))}
+.f4::before{background:linear-gradient(90deg,var(--violet),var(--rose))}
+.f5::before{background:linear-gradient(90deg,var(--orange),var(--brand))}
+.f6::before{background:linear-gradient(90deg,var(--rose),var(--orange))}
+.feat-icon{font-size:32px;margin-bottom:16px}
+.feat-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.3}
+.feat-desc{font-size:13.5px;color:var(--ink2);line-height:1.7}
+.feat-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:var(--bg2);color:var(--ink3);margin-top:14px}
+
+/* ══════════════════════════════════
+   HCI SCORE SECTION
+══════════════════════════════════ */
+.hci-section{background:var(--bg2)}
+.hci-split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-top:56px}
+.hci-left{}
+.hci-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 4px 24px var(--shadow)}
+.hci-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.hci-provider-info{display:flex;align-items:center;gap:12px}
+.hci-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--teal));display:flex;align-items:center;justify-content:center;font-size:22px}
+.hci-name{font-size:15px;font-weight:700;color:var(--ink)}
+.hci-trade{font-size:12px;color:var(--ink3)}
+.hci-score-badge{background:var(--brand);border-radius:12px;padding:8px 16px;text-align:center}
+.hsb-n{font-family:'Unbounded',sans-serif;font-size:26px;font-weight:900;color:var(--ink);line-height:1}
+.hsb-l{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(13,12,10,0.5);margin-top:3px}
+.hci-dims-mini{display:flex;flex-direction:column;gap:10px}
+.hdm{display:flex;align-items:center;gap:12px}
+.hdm-label{font-size:12px;font-weight:600;color:var(--ink);width:110px;flex-shrink:0}
+.hdm-bar-bg{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.hdm-bar{height:100%;border-radius:3px;width:0;transition:width 1.5s ease}
+.hdm-pct{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);width:32px;text-align:right;flex-shrink:0}
+.hci-trajectory{margin-top:20px;padding:16px;background:var(--bg2);border-radius:12px}
+.hci-traj-label{font-size:11px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.hci-traj-text{font-size:12px;color:var(--ink2)}
+
+.hci-right{}
+.hci-for{margin-bottom:36px}
+.hci-for-title{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.5px;color:var(--ink);margin-bottom:12px}
+.hci-for-desc{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:16px}
+.hci-for-desc strong{color:var(--ink);font-weight:600}
+.hci-points{list-style:none;display:flex;flex-direction:column;gap:8px}
+.hci-points li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink2);line-height:1.55}
+.hci-points li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* ══════════════════════════════════
+   VERTICALS
+══════════════════════════════════ */
+.vert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:52px}
+.vcard{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:28px;transition:all 0.3s;position:relative;overflow:hidden;cursor:default}
+.vcard:hover{border-color:rgba(13,12,10,0.2);transform:translateY(-3px);box-shadow:0 14px 40px var(--shadow)}
+.vcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.vv1::before{background:linear-gradient(90deg,var(--teal),var(--sky))}
+.vv2::before{background:linear-gradient(90deg,var(--sky),var(--violet))}
+.vv3::before{background:linear-gradient(90deg,var(--rose),var(--orange))}
+.vv4::before{background:linear-gradient(90deg,var(--violet),var(--rose))}
+.vv5::before{background:linear-gradient(90deg,var(--brand),var(--orange))}
+.vv6::before{background:linear-gradient(90deg,var(--teal),var(--brand))}
+.vc-icon{font-size:36px;margin-bottom:14px}
+.vc-name{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px}
+.vc-phase{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:12px}
+.vcp1{background:rgba(0,200,150,0.1);color:#007a5a}
+.vcp2{background:rgba(14,165,233,0.1);color:#0369a1}
+.vcp3{background:rgba(124,58,237,0.1);color:#5b21b6}
+.vcpi{background:rgba(255,206,72,0.12);color:#927200}
+.vc-desc{font-size:13px;color:var(--ink2);line-height:1.65;margin-bottom:14px}
+.vc-tags{display:flex;flex-wrap:wrap;gap:5px}
+.vc-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;background:var(--bg2);border:1px solid var(--border);color:var(--ink3)}
+
+/* ══════════════════════════════════
+   C2C / VISION
+══════════════════════════════════ */
+.vision-section{background:var(--ink);color:#fff}
+.vision-inner{max-width:1200px;margin:0 auto;padding:100px 52px}
+.vis-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.vis-left{}
+.vis-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--teal);margin-bottom:20px}
+.vis-h{font-family:'Unbounded',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1;letter-spacing:-2px;margin-bottom:24px}
+.vis-h em{font-style:normal;background:linear-gradient(135deg,var(--brand),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.vis-body{font-size:16px;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.8;margin-bottom:36px}
+.vis-body strong{color:rgba(255,255,255,0.85);font-weight:500}
+.vis-pills{display:flex;flex-wrap:wrap;gap:8px}
+.vis-pill{font-size:12px;font-weight:600;padding:7px 16px;border-radius:100px;border:1.5px solid;background:rgba(255,255,255,0.04)}
+.vp-y{border-color:rgba(255,206,72,0.3);color:var(--brand)}
+.vp-t{border-color:rgba(0,200,150,0.3);color:var(--teal)}
+.vp-b{border-color:rgba(14,165,233,0.3);color:var(--sky)}
+
+.vis-right{}
+.vis-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:36px}
+.vis-c2c{display:flex;flex-direction:column;gap:16px}
+.vis-c2c-row{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.vis-nodes{display:flex;flex-direction:column;gap:8px}
+.vis-node{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 14px}
+.vis-node.rev{flex-direction:row-reverse;text-align:right}
+.vn-icon{font-size:18px;flex-shrink:0}
+.vn-name{font-size:12px;font-weight:600;color:rgba(255,255,255,0.82)}
+.vn-sub{font-size:10px;color:rgba(255,255,255,0.28)}
+.vis-hub{display:flex;flex-direction:column;align-items:center;gap:8px}
+.vis-hub-circle{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--teal));display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(255,206,72,0.2);animation:hubPulse 3s ease-in-out infinite}
+.vis-hub-t{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:900;color:#000;text-align:center;line-height:1.2}
+.vis-arrow{font-size:16px;color:rgba(255,255,255,0.15);text-align:center}
+.vis-col-h{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:8px;text-align:center}
+
+/* ══════════════════════════════════
+   CTA BAND
+══════════════════════════════════ */
+.cta-band{background:var(--brand);padding:80px 52px;text-align:center}
+.cta-inner{max-width:680px;margin:0 auto}
+.cta-kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(13,12,10,0.5);margin-bottom:20px}
+.cta-h{font-family:'Unbounded',sans-serif;font-size:clamp(30px,4vw,52px);font-weight:900;color:var(--ink);letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+.cta-sub{font-size:16px;color:rgba(13,12,10,0.6);margin-bottom:36px;line-height:1.7}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-ink{font-size:14px;font-weight:700;color:#fff;background:var(--ink);padding:14px 28px;border-radius:100px;text-decoration:none;transition:all 0.2s}
+.btn-ink:hover{background:#333;transform:translateY(-1px)}
+.btn-outline{font-size:14px;font-weight:600;color:var(--ink);border:2px solid rgba(13,12,10,0.25);padding:12px 24px;border-radius:100px;text-decoration:none;transition:all 0.2s;background:transparent}
+.btn-outline:hover{background:rgba(13,12,10,0.06)}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);padding:60px 52px 32px}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:28px}
+.footer-logo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px;margin-bottom:12px;color:#fff}
+.footer-logo span{color:var(--brand)}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,0.28);line-height:1.65;max-width:240px}
+.footer-col-h{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:16px}
+.footer-links{list-style:none}
+.footer-links li{margin-bottom:10px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.38);text-decoration:none;transition:color 0.15s}
+.footer-links a:hover{color:rgba(255,255,255,0.8)}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.14)}
+.footer-copy strong{color:var(--brand)}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes hubPulse{0%,100%{box-shadow:0 0 30px rgba(0,200,150,0.15)}50%{box-shadow:0 0 60px rgba(0,200,150,0.35)}}
+@keyframes walkIn{from{transform:translateX(120px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes walkOut{from{transform:translateX(0);opacity:1}to{transform:translateX(-120px);opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes celebrate{0%{transform:rotate(0deg)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}100%{transform:rotate(0deg)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .hero-right{display:none}
+  .features-grid,.vert-grid{grid-template-columns:1fr 1fr}
+  .hci-split,.vis-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .story-info{grid-template-columns:1fr}
+  .si-left{border-right:none;border-bottom:1px solid var(--border)}
+}
+@media(max-width:960px) and (min-width:769px){
+  .char-img{width:260px;height:390px}
+}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero{padding:80px 24px 60px}
+  .hero-h1{letter-spacing:-1.5px}
+  .section{padding:64px 24px}
+  .stories-inner{padding:64px 24px}
+  .features-grid,.vert-grid{grid-template-columns:1fr}
+  .scene{height:360px}
+  .char-customer{left:8px}
+  .char-provider{right:8px}
+  .char-svg{width:78px;height:113px}
+  .char-img{width:150px;height:200px}
+  .vision-inner,.cta-band,footer{padding-left:24px;padding-right:24px}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="mainNav">
+  <a class="nav-logo" href="#home">Sko<span>Fy</span></a>
+  <ul class="nav-links">
+    <li><a href="#stories">Use Cases</a></li>
+    <li><a href="#features">AI Features</a></li>
+    <li><a href="#hci">HCI Score</a></li>
+    <li><a href="#verticals">Verticals</a></li>
+    <li><a href="#vision">Vision</a></li>
+  </ul>
+  <a class="nav-cta" href="#stories">See It Work →</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-blob-1"></div>
+    <div class="hero-blob-2"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">SkoFy · Trust Infrastructure for Skilled Work</div>
+      <h1 class="hero-h1">
+        The <span class="accent">right</span> professional,<br>
+        <span class="dim">every time.</span>
+      </h1>
+      <p class="hero-desc">
+        SkoFy connects customers with <strong>AI-verified skilled professionals</strong> — ranked by real behavioral scores, not just stars. For home services, healthcare, trades, and beyond.
+      </p>
+      <div class="hero-ctas">
+        <a href="#stories" class="btn-primary">Watch It Work ↓</a>
+        <a href="#hci" class="btn-secondary">How HCI works →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-n" style="color:var(--teal)">AI</div>
+          <div class="hstat-l">Powered matching</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-n" style="color:var(--brand-dk)">10</div>
+          <div class="hstat-l">Trust dimensions</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-n" style="color:var(--violet)">∞</div>
+          <div class="hstat-l">Verticals possible</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-n" style="color:var(--rose)">0</div>
+          <div class="hstat-l">Monopoly lock-in</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card-stack">
+        <!-- Main provider card -->
+        <div class="hcard hcard-main">
+          <div class="hcard-label">Best Match · AC Technician</div>
+          <div class="hcard-title">Rajesh K. · HCI Score</div>
+          <div class="hcard-score" style="margin-bottom:12px">
+            <div class="hcs-num">847</div>
+            <div class="hcs-bar"><div class="hcs-fill" style="width:84.7%"></div></div>
+          </div>
+          <div class="hcard-mini-row">
+            <span class="hcard-badge badge-green">✓ Skill Verified</span>
+            <span class="hcard-badge badge-yellow">↑ Improving</span>
+          </div>
+          <div class="hcard-mini-row">
+            <span class="hcard-badge badge-blue">98% completion</span>
+            <span class="hcard-badge badge-green">4.9 rating</span>
+          </div>
+        </div>
+        <!-- Float cards -->
+        <div class="hcard hcard-float-1">
+          <div class="hcard-label">Feasibility Check</div>
+          <div class="hcard-badge badge-green" style="font-size:12px;padding:6px 12px">✓ SAFE — Available now</div>
+        </div>
+        <div class="hcard hcard-float-2">
+          <div class="hcard-label">AI Support</div>
+          <div class="hcard-sub">Where is my provider?</div>
+          <div class="hcard-badge badge-green" style="font-size:11px;padding:5px 10px">Replied instantly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORIES / ANIMATED USE CASES ═══ -->
+<section id="stories" class="stories-section">
+  <div class="stories-inner">
+    <div class="eyebrow ew-y reveal">Use Cases · Animated Stories</div>
+    <h2 class="section-h2 reveal d1">Real stories.<br><span class="dim">How SkoFy works.</span></h2>
+    <p class="section-lead reveal d2">See how SkoFy's <strong>AI Engine</strong> connects customers with the right professional — from the moment they tap "post" to the moment the job is done.</p>
+
+    <!-- Story selector tabs -->
+    <div class="story-tabs reveal d3">
+      <div class="story-tab active" data-story="0">
+        <span class="story-tab-icon">❄️</span> AC Repair
+      </div>
+      <div class="story-tab" data-story="1">
+        <span class="story-tab-icon">💻</span> Software Bug
+      </div>
+      <div class="story-tab" data-story="2">
+        <span class="story-tab-icon">🩺</span> Home Nursing
+      </div>
+      <div class="story-tab" data-story="3">
+        <span class="story-tab-icon">📸</span> Event Photo
+      </div>
+      <div class="story-tab" data-story="4">
+        <span class="story-tab-icon">🔧</span> Emergency Plumbing
+      </div>
+    </div>
+
+    <!-- STAGE -->
+    <div class="story-stage reveal d4">
+
+      <!-- ── STORY 0: AC Repair ── -->
+      <div class="scene scene-1 active" id="scene-0">
+        <div class="ground-line"></div><div class="ground"></div>
+        <!-- Always-visible scene props -->
+        <div style="position:absolute;top:28px;right:100px;font-size:44px;animation:float 4s ease-in-out infinite;opacity:0.7">☀️</div>
+        <div style="position:absolute;top:42px;left:50%;transform:translateX(-50%);font-size:36px;opacity:0.18">❄️</div>
+
+        <!-- Customer: Aarav — blue shirt male -->
+        <div class="char-wrap char-customer" id="cust-0">
+          <img class="char-img" src="chars/cust-m-blue.png" alt="Aarav"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#374151"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#374151"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#60A5FA"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#60A5FA" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#F5C890"/>
+            <path d="M85 63 C97 77 95 100 87 108" stroke="#60A5FA" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="87" cy="108" r="11" fill="#F5C890"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#F5C890"/><circle cx="50" cy="28" r="30" fill="#F5C890"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#F5C890"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#F5C890"/>
+            <path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 13 50 15 Q34 13 20 24Z" fill="#1a1a1a"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 14 Q36 9 43 13" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M57 13 Q64 9 73 14" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M37 46 Q50 43 63 46" stroke="#c97c5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Aarav · Customer</div>
+        </div>
+
+        <!-- Provider: Ravi — AC technician -->
+        <div class="char-wrap char-provider" id="prov-0">
+          <img class="char-img" src="chars/prov-ac.png" alt="Ravi"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#1F2937"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#1F2937"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#F59E0B"/><rect x="44" y="52" width="12" height="50" fill="rgba(255,255,255,0.15)"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#F59E0B" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#D97706"/>
+            <path d="M85 63 C97 70 94 84 85 90" stroke="#F59E0B" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="83" cy="91" r="11" fill="#D97706"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#D97706"/><circle cx="50" cy="28" r="30" fill="#D97706"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#D97706"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#D97706"/>
+            <path d="M20 22 Q22 3 50 5 Q78 3 80 22 Q66 12 50 14 Q34 12 20 22Z" fill="#0D0C0A"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 11 45 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M55 13 Q64 11 73 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M34 44 Q50 53 66 44" stroke="#92400E" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Ravi · AC Technician</div>
+        </div>
+
+        <div class="ai-hub" id="hub-0">
+          <div class="ai-hub-circle" id="hub-circle-0"><div class="ai-hub-icon">🤖</div></div>
+          <div class="ai-hub-label">SkoFy AI<br>Matching</div>
+        </div>
+        <div class="speech" id="speech-cust-0" style="left:36px;bottom:314px">My AC broke 😩<br>It's 42°C outside!</div>
+        <div class="speech speech-provider" id="speech-prov-0" style="right:36px;bottom:314px">On my way!<br>ETA 20 mins ✓</div>
+        <div class="float-obj" id="check-0" style="left:50%;bottom:160px;transform:translateX(-50%);font-size:26px">✅</div>
+        <div class="hci-fly" id="hci-fly-0" style="top:18px;left:50%;transform:translateX(-50%)">HCI 847 · Best Match</div>
+      </div>
+
+      <!-- ── STORY 1: Software Dev ── -->
+      <div class="scene scene-2" id="scene-1">
+        <div class="ground-line"></div><div class="ground"></div>
+
+        <!-- Customer: Rohan — software dev customer -->
+        <div class="char-wrap char-customer" id="cust-1" style="left:20px">
+          <img class="char-img" src="chars/cust-f-purple.png" alt="Rohan"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="width:500px;height:700px">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#1F2937"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#1F2937"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#7C3AED"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#7C3AED" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#D4975A"/>
+            <path d="M85 63 C97 72 94 85 82 90" stroke="#7C3AED" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="80" cy="91" r="11" fill="#D4975A"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#D4975A"/><circle cx="50" cy="28" r="30" fill="#D4975A"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#D4975A"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#D4975A"/>
+            <path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 12 50 14 Q34 12 20 24Z" fill="#5B21B6"/>
+            <path d="M20 24 Q16 48 18 76" stroke="#5B21B6" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <path d="M80 24 Q84 48 82 76" stroke="#5B21B6" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 10 44 14" stroke="#3b0a7a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M56 14 Q64 10 73 13" stroke="#3b0a7a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M37 46 Q50 47 63 46" stroke="#c97c5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Rohan · Customer</div>
+        </div>
+
+        <!-- Provider: Ananya — developer -->
+        <div class="char-wrap char-provider" id="prov-1">
+          <img class="char-img" src="chars/prov-dev.png" alt="Ananya"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#111827"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#111827"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#4B5563"/>
+            <rect x="28" y="72" width="44" height="24" rx="12" fill="#374151"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#4B5563" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#C08060"/>
+            <path d="M85 63 C97 72 94 85 82 90" stroke="#4B5563" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="80" cy="91" r="11" fill="#C08060"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#C08060"/><circle cx="50" cy="28" r="30" fill="#C08060"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#C08060"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#C08060"/>
+            <path d="M20 22 Q22 3 50 5 Q78 3 80 22 Q66 12 50 14 Q34 12 20 22Z" fill="#0D0C0A"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 11 45 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M55 13 Q64 11 73 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M34 44 Q50 52 66 44" stroke="#8B4513" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Ananya · Developer</div>
+        </div>
+
+        <div class="ai-hub" id="hub-1">
+          <div class="ai-hub-circle" id="hub-circle-1"><div class="ai-hub-icon">⚙️</div></div>
+          <div class="ai-hub-label">Skill Score<br>Ranking</div>
+        </div>
+        <div class="speech" id="speech-cust-1" style="left:80px;bottom:314px">Login crashes!<br>Launch in 24hrs 😰</div>
+        <div class="speech speech-provider" id="speech-prov-1" style="right:36px;bottom:314px">Saw the issue!<br>Fix in 2 hours ⚡</div>
+        <div class="float-obj" id="check-1" style="left:50%;bottom:160px;transform:translateX(-50%);font-size:26px">✅</div>
+        <div class="hci-fly" id="hci-fly-1" style="top:18px;left:50%;transform:translateX(-50%)">HCI 881 · JS Score 94 · Matched</div>
+      </div>
+
+      <!-- ── STORY 2: Home Nursing ── -->
+      <div class="scene scene-3" id="scene-2">
+        <div class="ground-line"></div><div class="ground"></div>
+
+        <!-- Customer: Priya — lavender top, female -->
+        <div class="char-wrap char-customer" id="cust-2">
+          <img class="char-img" src="chars/cust-f-lavender.png" alt="Priya"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#4B5563"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#4B5563"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#A78BFA"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#A78BFA" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#F5C890"/>
+            <path d="M85 63 C97 77 95 100 87 108" stroke="#A78BFA" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="87" cy="108" r="11" fill="#F5C890"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#F5C890"/><circle cx="50" cy="28" r="30" fill="#F5C890"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#F5C890"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#F5C890"/>
+            <path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 12 50 14 Q34 12 20 24Z" fill="#7C3AED"/>
+            <path d="M20 24 Q16 50 18 80" stroke="#7C3AED" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <path d="M80 24 Q84 50 82 80" stroke="#7C3AED" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 14 Q36 9 43 13" stroke="#5B21B6" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M57 13 Q64 9 73 14" stroke="#5B21B6" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M37 46 Q50 43 63 46" stroke="#c97c5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Priya · Customer</div>
+        </div>
+
+        <!-- Provider: Meena — nurse white uniform -->
+        <div class="char-wrap char-provider" id="prov-2">
+          <img class="char-img" src="chars/prov-nurse.png" alt="Meena"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#4B5563"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#4B5563"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1.5"/>
+            <rect x="42" y="60" width="16" height="5" rx="2" fill="#E11D48"/><rect x="47" y="55" width="6" height="15" rx="2" fill="#E11D48"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#F9FAFB" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#FBBF9A"/>
+            <path d="M85 63 C97 72 94 85 85 90" stroke="#F9FAFB" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="83" cy="91" r="11" fill="#FBBF9A"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#FBBF9A"/><circle cx="50" cy="28" r="30" fill="#FBBF9A"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#FBBF9A"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#FBBF9A"/>
+            <rect x="22" y="4" width="56" height="14" rx="6" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+            <rect x="44" y="2" width="12" height="6" rx="2" fill="#E11D48"/>
+            <path d="M20 24 Q22 12 50 12 Q78 12 80 24 Q66 18 50 19 Q34 18 20 24Z" fill="#1a1a1a"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 11 45 13" stroke="#0D0C0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M55 13 Q64 11 73 13" stroke="#0D0C0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M34 44 Q50 52 66 44" stroke="#c97c5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Meena · Home Nurse</div>
+        </div>
+
+        <div class="ai-hub" id="hub-2">
+          <div class="ai-hub-circle" id="hub-circle-2"><div class="ai-hub-icon">🛡️</div></div>
+          <div class="ai-hub-label">Credential<br>Verified</div>
+        </div>
+        <div class="speech" id="speech-cust-2" style="left:36px;bottom:314px">Mum needs a nurse<br>for 3 days 🙏</div>
+        <div class="speech speech-provider" id="speech-prov-2" style="right:36px;bottom:314px">Credential verified ✓<br>Arriving at 9am</div>
+        <div class="float-obj" id="check-2" style="left:50%;bottom:160px;transform:translateX(-50%);font-size:26px">✅</div>
+        <div class="hci-fly" id="hci-fly-2" style="top:18px;left:50%;transform:translateX(-50%)">HCI 912 · License Verified</div>
+      </div>
+
+      <!-- ── STORY 3: Event Photography ── -->
+      <div class="scene scene-4" id="scene-3">
+        <div class="ground-line"></div><div class="ground"></div>
+
+        <!-- Customer: Rahul — navy suit -->
+        <div class="char-wrap char-customer" id="cust-3">
+          <img class="char-img" src="chars/cust-m-suit.png" alt="Rahul"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="transform:scaleX(-1)">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#111"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#111"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#0F172A"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#0F172A"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#1E3A8A"/>
+            <path d="M50 52 L38 68 L50 62 L62 68 Z" fill="#1E40AF"/>
+            <path d="M50 62 L45 80 L50 84 L55 80 Z" fill="#DC2626"/>
+            <path d="M44 52 L44 64 L50 60 L56 64 L56 52" fill="white"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#1E3A8A" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#C08060"/>
+            <path d="M85 63 C97 77 95 100 87 108" stroke="#1E3A8A" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="87" cy="108" r="11" fill="#C08060"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#C08060"/><circle cx="50" cy="28" r="30" fill="#C08060"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#C08060"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#C08060"/>
+            <path d="M20 22 Q22 3 50 5 Q78 3 80 22 Q66 12 50 14 Q34 12 20 22Z" fill="#0D0C0A"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 12 Q36 9 45 12" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M55 12 Q64 9 73 12" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M33 44 Q50 55 67 44" stroke="#c97c5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Rahul · Customer</div>
+        </div>
+
+        <!-- Provider: Sneha — photographer with camera -->
+        <div class="char-wrap char-provider" id="prov-3">
+          <img class="char-img" src="chars/prov-photo.png" alt="Sneha"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#111"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#111"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#111827"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#111827"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#111827"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#111827" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#D4975A"/>
+            <path d="M85 63 C97 70 94 82 82 87" stroke="#111827" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="80" cy="88" r="11" fill="#D4975A"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#D4975A"/><circle cx="50" cy="28" r="30" fill="#D4975A"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#D4975A"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#D4975A"/>
+            <path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 12 50 14 Q34 12 20 24Z" fill="#0D0C0A"/>
+            <path d="M20 24 Q14 52 16 84" stroke="#0D0C0A" stroke-width="16" fill="none" stroke-linecap="round"/>
+            <path d="M80 24 Q86 52 84 84" stroke="#0D0C0A" stroke-width="16" fill="none" stroke-linecap="round"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 11 45 13" stroke="#0D0C0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M55 13 Q64 11 73 13" stroke="#0D0C0A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M34 44 Q50 53 66 44" stroke="#c97c5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Sneha · Photographer</div>
+        </div>
+
+        <div class="ai-hub" id="hub-3">
+          <div class="ai-hub-circle" id="hub-circle-3"><div class="ai-hub-icon">🎯</div></div>
+          <div class="ai-hub-label">Portfolio<br>Matched</div>
+        </div>
+        <div class="speech" id="speech-cust-3" style="left:36px;bottom:314px">Product launch!<br>Need top photographer 📸</div>
+        <div class="speech speech-provider" id="speech-prov-3" style="right:36px;bottom:314px">Booked! I've done<br>20+ corporate events 📷</div>
+        <div class="float-obj" id="check-3" style="left:50%;bottom:160px;transform:translateX(-50%);font-size:26px">✅</div>
+        <div class="hci-fly" id="hci-fly-3" style="top:18px;left:50%;transform:translateX(-50%)">HCI 866 · Portfolio Verified</div>
+      </div>
+
+      <!-- ── STORY 4: Emergency Plumbing ── -->
+      <div class="scene scene-5" id="scene-4">
+        <div class="ground-line"></div><div class="ground"></div>
+
+        <!-- Customer: Karan — panic, green shirt -->
+        <div class="char-wrap char-customer" id="cust-4">
+          <img class="char-img" src="chars/cust-m-green.png" alt="Karan"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="transform:scaleX(-1)">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#374151"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#374151"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#10B981"/>
+            <path d="M15 63 C5 54 2 44 8 40" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="8" cy="39" r="11" fill="#DEB887"/>
+            <path d="M85 63 C95 54 98 44 92 40" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="92" cy="39" r="11" fill="#DEB887"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#DEB887"/><circle cx="50" cy="28" r="30" fill="#DEB887"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#DEB887"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#DEB887"/>
+            <path d="M20 22 Q22 3 50 5 Q78 3 80 22 Q66 12 50 14 Q34 12 20 22Z" fill="#374151"/>
+            <ellipse cx="36" cy="25" rx="11" ry="10" fill="white"/><circle cx="37" cy="26" r="7" fill="#1a1a1a"/><circle cx="39" cy="24" r="3" fill="white"/>
+            <ellipse cx="64" cy="25" rx="11" ry="10" fill="white"/><circle cx="65" cy="26" r="7" fill="#1a1a1a"/><circle cx="67" cy="24" r="3" fill="white"/>
+            <path d="M25 12 Q36 7 44 10" stroke="#374151" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M56 10 Q64 7 75 12" stroke="#374151" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <ellipse cx="50" cy="47" rx="9" ry="7" fill="#c97c5a"/>
+            <ellipse cx="50" cy="47" rx="5.5" ry="4" fill="#8B4513"/>
+          </svg>
+          <div class="char-label">Karan · Customer</div>
+        </div>
+
+        <!-- Provider: Suresh — plumber, blue uniform -->
+        <div class="char-wrap char-provider" id="prov-4">
+          <img class="char-img" src="chars/prov-plumber.png" alt="Suresh"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+               style="">
+          <svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+            <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.07)"/>
+            <ellipse cx="33" cy="133" rx="14" ry="7" fill="#222"/><ellipse cx="67" cy="133" rx="14" ry="7" fill="#222"/>
+            <rect x="26" y="96" width="20" height="39" rx="9" fill="#1E3A8A"/><rect x="54" y="96" width="20" height="39" rx="9" fill="#1E3A8A"/>
+            <rect x="14" y="52" width="72" height="50" rx="20" fill="#0EA5E9"/>
+            <path d="M15 63 C3 77 5 100 13 108" stroke="#0EA5E9" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="#C08060"/>
+            <path d="M85 63 C97 70 94 82 84 87" stroke="#0EA5E9" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="82" cy="88" r="11" fill="#C08060"/>
+            <rect x="38" y="44" width="24" height="13" rx="7" fill="#C08060"/><circle cx="50" cy="28" r="30" fill="#C08060"/>
+            <ellipse cx="20" cy="31" rx="6" ry="8" fill="#C08060"/><ellipse cx="80" cy="31" rx="6" ry="8" fill="#C08060"/>
+            <path d="M20 22 Q22 3 50 5 Q78 3 80 22 Q66 12 50 14 Q34 12 20 22Z" fill="#0D0C0A"/>
+            <ellipse cx="36" cy="25" rx="9" ry="8" fill="white"/><circle cx="37" cy="26" r="6" fill="#1a1a1a"/><circle cx="39" cy="24" r="2.5" fill="white"/>
+            <ellipse cx="64" cy="25" rx="9" ry="8" fill="white"/><circle cx="65" cy="26" r="6" fill="#1a1a1a"/><circle cx="67" cy="24" r="2.5" fill="white"/>
+            <path d="M27 13 Q36 11 45 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M55 13 Q64 11 73 13" stroke="#0D0C0A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M34 44 Q50 52 66 44" stroke="#7c2d12" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="char-label">Suresh · Plumber</div>
+        </div>
+
+        <div class="ai-hub" id="hub-4">
+          <div class="ai-hub-circle" id="hub-circle-4"><div class="ai-hub-icon">⚡</div></div>
+          <div class="ai-hub-label">Urgent<br>Matching</div>
+        </div>
+        <div class="speech" id="speech-cust-4" style="left:36px;bottom:314px">Pipe burst! Water<br>everywhere!! 🚨</div>
+        <div class="speech speech-provider" id="speech-prov-4" style="right:36px;bottom:314px">Urgent accepted!<br>8 mins away ⚡</div>
+        <div class="float-obj" id="check-4" style="left:50%;bottom:160px;transform:translateX(-50%);font-size:26px">✅</div>
+        <div class="hci-fly" id="hci-fly-4" style="top:18px;left:50%;transform:translateX(-50%)">HCI 793 · Nearest · Urgent</div>
+      </div>
+
+      <!-- INFO PANEL (shared, updates per step) -->
+      <div class="story-info">
+        <div class="si-left">
+          <div class="si-step-row" id="stepRow">
+            <div class="si-step active" data-step="0">Problem</div>
+            <div class="si-step" data-step="1">Request Sent</div>
+            <div class="si-step" data-step="2">AI Matches</div>
+            <div class="si-step" data-step="3">Provider Arrives</div>
+            <div class="si-step" data-step="4">Resolved ✓</div>
+          </div>
+          <div class="si-title" id="storyTitle">AC stopped working in peak summer heat</div>
+          <div class="si-body" id="storyBody">Aarav's AC unit stopped working. He opens SkoFy and describes the problem — no waiting, no calling. Just tap and post.</div>
+        </div>
+        <div class="si-right">
+          <div class="si-facts" id="storyFacts">
+            <div class="si-fact"><div class="sif-val" id="fact1-val">30s</div><div class="sif-l" id="fact1-l">to post a job</div></div>
+            <div class="si-fact"><div class="sif-val" id="fact2-val">0</div><div class="sif-l" id="fact2-l">human dispatchers</div></div>
+            <div class="si-fact"><div class="sif-val" id="fact3-val">AI</div><div class="sif-l" id="fact3-l">selects best match</div></div>
+            <div class="si-fact"><div class="sif-val" id="fact4-val">HCI</div><div class="sif-l" id="fact4-l">score you can trust</div></div>
+          </div>
+          <div class="story-progress"><div class="story-bar" id="storyBar"></div></div>
+        </div>
+      </div>
+    </div><!-- end .story-stage -->
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section id="features" class="section-alt" style="padding:0">
+  <div class="section">
+    <div class="eyebrow ew-t reveal">AI Features · What SkoFy Does</div>
+    <h2 class="section-h2 reveal d1">Six ways the<br><span class="dim">AI works for you.</span></h2>
+    <p class="section-lead reveal d2">SkoFy's AI Engine runs silently in the background — finding the right match, verifying skills, checking schedules, and answering questions. You just get results.</p>
+
+    <div class="features-grid">
+      <div class="feat f1 reveal d1">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title">Smart Matching — Not Just Category + Location</div>
+        <div class="feat-desc">When you post a job, SkoFy's AI scores every nearby eligible provider on skill match, behavioral trust score, distance, and availability. You only see providers who are actually right for your job.</div>
+        <span class="feat-tag">Distribution AI</span>
+      </div>
+      <div class="feat f2 reveal d2">
+        <div class="feat-icon">🏅</div>
+        <div class="feat-title">AI-Verified Skills — Not Self-Reported</div>
+        <div class="feat-desc">Every provider completes AI-generated assessments for their trade — specific to their field. An electrician is tested on wiring theory. A nurse on clinical protocols. You see an actual skill score, not just "5 years experience."</div>
+        <span class="feat-tag">Skill Test AI</span>
+      </div>
+      <div class="feat f3 reveal d3">
+        <div class="feat-icon">📋</div>
+        <div class="feat-title">Ranked Applicants With Full Reasoning</div>
+        <div class="feat-desc">When providers apply to your job, SkoFy ranks them and explains why — skill score, job history, completion rate, any risk flags. You make an informed decision, not a guess based on a profile photo.</div>
+        <span class="feat-tag">Hiring Agent AI</span>
+      </div>
+      <div class="feat f4 reveal d1">
+        <div class="feat-icon">📅</div>
+        <div class="feat-title">No Double-Bookings — Ever</div>
+        <div class="feat-desc">Before a provider can accept your job, SkoFy checks their existing schedule and real travel time using Haversine distance. If it's not feasible, they're blocked from accepting. Your provider shows up. Always.</div>
+        <span class="feat-tag">Feasibility Engine</span>
+      </div>
+      <div class="feat f5 reveal d2">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">A Trust Score That Actually Means Something</div>
+        <div class="feat-desc">The HCI score measures 10 real behavioral dimensions — not just star ratings. Trust, reliability, skill, emotional IQ, consistency. It updates after every job. The more a provider works, the more accurately it reflects who they are.</div>
+        <span class="feat-tag">HCI Engine</span>
+      </div>
+      <div class="feat f6 reveal d3">
+        <div class="feat-icon">💬</div>
+        <div class="feat-title">Support That Actually Knows Your Case</div>
+        <div class="feat-desc">When you need help, SkoFy's AI support already knows your job history, payments, and what's happening in your booking. It answers immediately and accurately — escalating to a human only when truly necessary.</div>
+        <span class="feat-tag">Support AI</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HCI SCORE ═══ -->
+<section id="hci" class="hci-section" style="padding:0">
+  <div class="section">
+    <div class="eyebrow ew-v reveal">HCI · Human Capital Index</div>
+    <h2 class="section-h2 reveal d1">A score that reflects<br><span class="dim">the real person.</span></h2>
+    <p class="section-lead reveal d2">The HCI replaces star ratings with a <strong>living, multi-dimensional behavioral score</strong> that updates after every job. For customers — real trust, not guesswork. For providers — a portable reputation that belongs to them.</p>
+
+    <div class="hci-split">
+      <div class="hci-left reveal d2">
+        <div class="hci-card">
+          <div class="hci-card-header">
+            <div class="hci-provider-info">
+              <div class="hci-avatar">🔧</div>
+              <div>
+                <div class="hci-name">Rajesh Kumar</div>
+                <div class="hci-trade">AC &amp; HVAC Technician · Hyderabad</div>
+              </div>
+            </div>
+            <div class="hci-score-badge">
+              <div class="hsb-n" id="hciDisplayNum">0</div>
+              <div class="hsb-l">HCI Score</div>
+            </div>
+          </div>
+          <div class="hci-dims-mini">
+            <div class="hdm"><div class="hdm-label">Trust</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--teal)" data-w="92"></div></div><div class="hdm-pct" id="dp1">0%</div></div>
+            <div class="hdm"><div class="hdm-label">Skill</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--sky)" data-w="88"></div></div><div class="hdm-pct" id="dp2">0%</div></div>
+            <div class="hdm"><div class="hdm-label">Reliability</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--violet)" data-w="95"></div></div><div class="hdm-pct" id="dp3">0%</div></div>
+            <div class="hdm"><div class="hdm-label">Efficiency</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--orange)" data-w="78"></div></div><div class="hdm-pct" id="dp4">0%</div></div>
+            <div class="hdm"><div class="hdm-label">Emotional IQ</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--rose)" data-w="83"></div></div><div class="hdm-pct" id="dp5">0%</div></div>
+            <div class="hdm"><div class="hdm-label">Adaptability</div><div class="hdm-bar-bg"><div class="hdm-bar" style="background:var(--brand-dk)" data-w="76"></div></div><div class="hdm-pct" id="dp6">0%</div></div>
+          </div>
+          <div class="hci-trajectory">
+            <div class="hci-traj-label">↑ Improving trajectory — up 42 points last 30 days</div>
+            <div class="hci-traj-text">98% completion rate · 4.9 avg customer rating · 0 no-shows</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hci-right reveal d3">
+        <div class="hci-for">
+          <div class="hci-for-title">For Customers</div>
+          <div class="hci-for-desc">You see an actual multi-dimensional score — not just stars. You know if a provider is <strong>improving or declining</strong>, how reliable they are, and if there are any risk flags. Before you hire, not after.</div>
+          <ul class="hci-points">
+            <li>See exactly why a provider is recommended — skill score, distance, rating, reliability</li>
+            <li>Risk flags shown before hire — high no-show rate, low completion rate highlighted upfront</li>
+            <li>Know whether a provider is improving or slipping — live trajectory shown</li>
+            <li>Choose your priority — fastest match, best quality, or give new providers a fair chance</li>
+          </ul>
+        </div>
+        <div class="hci-for">
+          <div class="hci-for-title">For Providers</div>
+          <div class="hci-for-desc">Your HCI score is <strong>portable and permanent</strong> — it belongs to you, not to the platform. Do great work, and your score proves it to every future customer. New providers get a fair start from Day 1.</div>
+          <ul class="hci-points">
+            <li>Your reputation follows you — across jobs, cities, and verticals</li>
+            <li>New providers get fair exposure — HCI's fairness boost ensures new workers see real jobs</li>
+            <li>Specific, actionable feedback — the system tells you exactly what to improve</li>
+            <li>Skill test certificates — AI-verified credentials that customers can trust</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VERTICALS ═══ -->
+<section id="verticals" style="padding:0">
+  <div class="section">
+    <div class="eyebrow ew-o reveal">Verticals · Where SkoFy Works</div>
+    <h2 class="section-h2 reveal d1">One platform.<br><span class="dim">Any skilled field.</span></h2>
+    <p class="section-lead reveal d2">The HCI was built to measure human trustworthiness universally. Skill, reliability, and trust are the same concepts whether you're a plumber, a nurse, or a data analyst. <strong>The platform expands — the AI doesn't change.</strong></p>
+
+    <div class="vert-grid">
+      <div class="vcard vv1 reveal d1">
+        <div class="vc-icon">🏠</div>
+        <div class="vc-name">Home Services</div>
+        <div class="vc-phase vcp1">Available Now</div>
+        <div class="vc-desc">Plumbing, electrical, carpentry, HVAC, cleaning, painting. The highest-volume vertical with the clearest trust problem — now solved by AI matching and behavioral scoring.</div>
+        <div class="vc-tags"><span class="vc-tag">AC Technician</span><span class="vc-tag">Plumber</span><span class="vc-tag">Electrician</span><span class="vc-tag">Carpenter</span></div>
+      </div>
+      <div class="vcard vv2 reveal d2">
+        <div class="vc-icon">🔧</div>
+        <div class="vc-name">Blue-Collar Trades</div>
+        <div class="vc-phase vcp1">Coming Soon</div>
+        <div class="vc-desc">Industrial trades — welders, machinists, drivers, construction, logistics. Skill verification in these fields is nearly impossible today. SkoFy's AI tests make it instant.</div>
+        <div class="vc-tags"><span class="vc-tag">Welder</span><span class="vc-tag">Machinist</span><span class="vc-tag">Driver</span><span class="vc-tag">Construction</span></div>
+      </div>
+      <div class="vcard vv3 reveal d3">
+        <div class="vc-icon">🏥</div>
+        <div class="vc-name">Medical &amp; Healthcare</div>
+        <div class="vc-phase vcp2">Phase 2</div>
+        <div class="vc-desc">Home nurses, caregivers, physiotherapists, elder care. When the stakes are someone's health, the HCI's credential verification and trust scoring matter the most.</div>
+        <div class="vc-tags"><span class="vc-tag">Home Nurse</span><span class="vc-tag">Caregiver</span><span class="vc-tag">Elder Care</span><span class="vc-tag">Physio</span></div>
+      </div>
+      <div class="vcard vv4 reveal d1">
+        <div class="vc-icon">🔬</div>
+        <div class="vc-name">Research &amp; Analytics</div>
+        <div class="vc-phase vcp2">Phase 2</div>
+        <div class="vc-desc">Data analysts, field surveyors, lab assistants, research support. Universities and NGOs currently have no standard way to verify freelance research capability. SkoFy changes that.</div>
+        <div class="vc-tags"><span class="vc-tag">Data Analyst</span><span class="vc-tag">Surveyor</span><span class="vc-tag">Statistician</span></div>
+      </div>
+      <div class="vcard vv5 reveal d2">
+        <div class="vc-icon">📚</div>
+        <div class="vc-name">Education &amp; Tutoring</div>
+        <div class="vc-phase vcp3">Phase 3</div>
+        <div class="vc-desc">Tutors, coaches, trainers, instructors. HCI measures subject depth, student outcomes, reliability, and communication — a far stronger signal than star ratings on tutoring apps.</div>
+        <div class="vc-tags"><span class="vc-tag">Tutor</span><span class="vc-tag">Coach</span><span class="vc-tag">Trainer</span><span class="vc-tag">Instructor</span></div>
+      </div>
+      <div class="vcard vv6 reveal d3">
+        <div class="vc-icon">∞</div>
+        <div class="vc-name">Any Field with Skill &amp; Trust</div>
+        <div class="vc-phase vcpi">Open Horizon</div>
+        <div class="vc-desc">Any profession where trustworthiness, skill, and reliability matter is a SkoFy vertical. Legal, financial, creative, agricultural — the infrastructure is the same. The tests adapt.</div>
+        <div class="vc-tags"><span class="vc-tag">Legal</span><span class="vc-tag">Financial</span><span class="vc-tag">Creative</span><span class="vc-tag">Agriculture</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VISION / C2C ═══ -->
+<section id="vision" class="vision-section">
+  <div class="vision-inner">
+    <div class="vis-grid">
+      <div class="vis-left reveal">
+        <div class="vis-eyebrow">The Open Economy · SkoFy Vision</div>
+        <h2 class="vis-h">Skill is the only<br><em>currency that matters.</em></h2>
+        <p class="vis-body">
+          SkoFy is not a marketplace that owns providers. It is <strong>open trust infrastructure</strong> — any person can be a customer, any person can be a provider. The platform earns only when trust is verified, not when it controls supply. No company lock-in. No monopoly pricing. <strong>Whoever has the best HCI wins the job. That's it.</strong>
+        </p>
+        <div class="vis-pills">
+          <span class="vis-pill vp-y">Nobody owned by the platform</span>
+          <span class="vis-pill vp-t">HCI score belongs to the provider</span>
+          <span class="vis-pill vp-b">Skill wins, not ad spend</span>
+        </div>
+      </div>
+      <div class="vis-right reveal d2">
+        <div class="vis-card">
+          <div class="vis-c2c">
+            <div class="vis-c2c-row">
+              <div>
+                <div class="vis-col-h">Anyone can hire</div>
+                <div class="vis-nodes">
+                  <div class="vis-node"><span class="vn-icon">👩‍💼</span><div><div class="vn-name">Individual</div><div class="vn-sub">Homeowner, patient</div></div></div>
+                  <div class="vis-node"><span class="vn-icon">🏢</span><div><div class="vn-name">Small Business</div><div class="vn-sub">Needs skilled staff</div></div></div>
+                  <div class="vis-node"><span class="vn-icon">🏗️</span><div><div class="vn-name">Enterprise</div><div class="vn-sub">Verified workforce</div></div></div>
+                </div>
+              </div>
+              <div class="vis-hub">
+                <div class="vis-hub-circle"><div class="vis-hub-t">SKOFY<br>HCI</div></div>
+                <div class="vis-arrow">⇄</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);text-align:center">Trust<br>Layer</div>
+              </div>
+              <div>
+                <div class="vis-col-h">Anyone can provide</div>
+                <div class="vis-nodes">
+                  <div class="vis-node rev"><div><div class="vn-name">Electrician</div><div class="vn-sub">HCI-verified</div></div><span class="vn-icon">🔌</span></div>
+                  <div class="vis-node rev"><div><div class="vn-name">Nurse</div><div class="vn-sub">Credential verified</div></div><span class="vn-icon">🩺</span></div>
+                  <div class="vis-node rev"><div><div class="vn-name">Researcher</div><div class="vn-sub">Skill tested</div></div><span class="vn-icon">🔬</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-band">
+  <div class="cta-inner reveal">
+    <div class="cta-kicker">Get Started · SkoFy</div>
+    <h2 class="cta-h">Find your next trusted professional.</h2>
+    <p class="cta-sub">Post a job in 30 seconds. AI finds the best match. You choose, backed by a score that actually means something.</p>
+    <div class="cta-btns">
+      <a href="#stories" class="btn-ink">Watch How It Works</a>
+      <a href="#hci" class="btn-outline">Understand HCI →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Sko<span>Fy</span></div>
+      <div class="footer-tagline">Open trust infrastructure for skilled work. AI-powered matching, verified skills, and behavioral trust scores — for any professional, in any field.</div>
+    </div>
+    <div>
+      <div class="footer-col-h">Product</div>
+      <ul class="footer-links">
+        <li><a href="#stories">Use Cases</a></li>
+        <li><a href="#features">AI Features</a></li>
+        <li><a href="#hci">HCI Score</a></li>
+        <li><a href="#verticals">Verticals</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-h">Company</div>
+      <ul class="footer-links">
+        <li><a href="#vision">Vision</a></li>
+        <li><a href="#vision">C2C Model</a></li>
+        <li><a href="#">For Providers</a></li>
+        <li><a href="#">For Customers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-h">Technology</div>
+      <ul class="footer-links">
+        <li><a href="#">Skill Test AI</a></li>
+        <li><a href="#">Matching Engine</a></li>
+        <li><a href="#">Support AI</a></li>
+        <li><a href="#">HCI Engine</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy"><strong>SkoFy</strong> · Skill Meets Trust · 2026</div>
+    <div class="footer-copy">AI-Powered · Behavior-Verified · Monopoly-Free</div>
+  </div>
+</footer>
+
+<script>
+/* ── REVEAL ── */
+const ro = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ── NAV ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').style.boxShadow = window.scrollY > 40 ? '0 2px 20px rgba(13,12,10,0.08)' : 'none';
+}, {passive:true});
+
+/* ── SMOOTH LINKS ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+
+/* ══════════════════════════
+   STORY ANIMATION ENGINE
+══════════════════════════ */
+const stories = [
+  {
+    name: 'ac',
+    steps: [
+      { title:"Aarav's AC stopped working on a 42°C day", body:"He opens SkoFy, describes the problem in seconds. No phone calls. No waiting. The AI Engine activates the moment he posts.", f1:{v:'30s',l:'to post a job'}, f2:{v:'0',l:'human dispatchers'}, f3:{v:'AI',l:'activates instantly'}, f4:{v:'24/7',l:'available anytime'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"Aarav posts his request on SkoFy", body:"He taps the app, selects 'Urgent', and describes the fault. The AI reads location, skill needed, urgency — and starts matching immediately.", f1:{v:'Urgent',l:'job type selected'}, f2:{v:'<500ms',l:'AI begins matching'}, f3:{v:'Geo',l:'location detected'}, f4:{v:'Skill',l:'AC repair queried'}, cust_speech:"My AC broke 😩\nIt's 42°C outside!", prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"SkoFy AI finds the best match", body:"The Distribution Agent queries nearby providers, filters by skill score and availability, then ranks them by HCI score. The Hiring Agent confirms the best applicant with full reasoning.", f1:{v:'8',l:'providers nearby'}, f2:{v:'4 signals',l:'skill · dist · HCI · fairness'}, f3:{v:'HCI 847',l:'top match score'}, f4:{v:'Risk',l:'flags checked'}, cust_speech:'', prov_speech:'', hub:true, prov_arrive:false, check:false },
+      { title:"Ravi arrives — HCI score visible to Aarav", body:"Ravi is notified via push and accepts. His HCI 847 score, 98% completion rate, and zero no-shows are all visible before Aarav confirms the hire. Informed decision, not guesswork.", f1:{v:'HCI 847',l:"Ravi's trust score"}, f2:{v:'98%',l:'completion rate'}, f3:{v:'0',l:'no-show history'}, f4:{v:'↑',l:'improving trajectory'}, cust_speech:'', prov_speech:"On my way!\nETA 20 mins ✓", hub:false, prov_arrive:true, check:false },
+      { title:"AC fixed. HCI updates. Trust compounds.", body:"Aarav rates Ravi — the feedback flows into Ravi's HCI score within 24 hours. Every completed job makes the next match smarter. The platform learns. Trust grows.", f1:{v:'⭐⭐⭐⭐⭐',l:'Aarav rated Ravi'}, f2:{v:'+12pts',l:'HCI updated'}, f3:{v:'Done',l:'job completed'}, f4:{v:'∞',l:'trust compounds'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:true, check:true }
+    ]
+  },
+  {
+    name: 'dev',
+    steps: [
+      { title:"Rohan's product launch is blocked by a critical bug", body:"Her app crashes on login. Launch is in 24 hours. She can't find a developer through her network in time. She posts on SkoFy.", f1:{v:'24hrs',l:'to product launch'}, f2:{v:'Critical',l:'bug severity'}, f3:{v:'AI',l:'reads tech stack'}, f4:{v:'Fast',l:'freelance dev needed'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"Rohan posts a detailed brief on SkoFy", body:"She specifies the tech stack — React, Node.js — and pastes the error log. SkoFy's AI reads the technical requirements and filters for developers with matching verified skill scores.", f1:{v:'Stack',l:'React + Node.js'}, f2:{v:'AI',l:'reads requirements'}, f3:{v:'Skill',l:'test score matched'}, f4:{v:'<60s',l:'posting time'}, cust_speech:"Login crashes!\nLaunch in 24hrs 😰", prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"AI ranks developers by technical skill test scores", body:"The Hiring Agent ranks applicants by their AI-verified JavaScript and React debugging skill scores — not portfolio photos or years of experience. Only proven ability counts.", f1:{v:'AI Test',l:'skill score ranked'}, f2:{v:'Debug',l:'pattern matched'}, f3:{v:'HCI 881',l:'top developer'}, f4:{v:'3 mins',l:'to first match'}, cust_speech:'', prov_speech:'', hub:true, prov_arrive:false, check:false },
+      { title:"Ananya is matched — HCI 881, 97% delivery rate", body:"Ananya's profile shows HCI 881, JavaScript skill score of 94, and 97% on-time delivery. She reviews the error log, identifies the bug immediately, and accepts the job.", f1:{v:'HCI 881',l:"Ananya's score"}, f2:{v:'97%',l:'on-time delivery'}, f3:{v:'JS 94',l:'skill test score'}, f4:{v:'Bug',l:'identified instantly'}, cust_speech:'', prov_speech:"Saw the issue!\nFix in 2 hours ⚡", hub:false, prov_arrive:true, check:false },
+      { title:"Bug fixed. Launch on time. HCI strengthens.", body:"Ananya delivers the fix in 90 minutes. Rohan rates 5 stars. Her HCI updates. He adds her to his trusted developer shortlist — no agency, no middlemen, just verified trust.", f1:{v:'90 min',l:'fix delivered'}, f2:{v:'⭐⭐⭐⭐⭐',l:'Rohan rated Ananya'}, f3:{v:'+11pts',l:'HCI updated'}, f4:{v:'Launch',l:'happened on time'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:true, check:true }
+    ]
+  },
+  {
+    name: 'nurse',
+    steps: [
+      { title:"Priya's mother needs a home nurse for 3 days", body:"Finding a trustworthy home nurse is stressful. Credentials, experience, background — how do you verify these? Priya opens SkoFy.", f1:{v:'3 days',l:'care needed'}, f2:{v:'Trust',l:'is critical here'}, f3:{v:'AI',l:'credential check'}, f4:{v:'HCI',l:'verified score'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"Priya posts with specific care requirements", body:"She specifies experience with elderly care, the duration, and any medical conditions. SkoFy's AI reads all requirements and begins filtering for qualified, licensed nurses only.", f1:{v:'Medical',l:'requirements read'}, f2:{v:'Verified',l:'nurses only'}, f3:{v:'AI',l:'filters credentials'}, f4:{v:'Safe',l:'background flagged'}, cust_speech:"Mum needs a nurse\nfor 3 days 🙏", prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"AI verifies credentials before matching", body:"SkoFy's AI checks nursing licenses, clinical skill tests, background history, and HCI behavioral score. Only nurses who pass all checks are surfaced to Priya.", f1:{v:'License',l:'verified by AI'}, f2:{v:'Clinical',l:'test score checked'}, f3:{v:'HCI',l:'trust score screened'}, f4:{v:'0',l:'shortcuts taken'}, cust_speech:'', prov_speech:'', hub:true, prov_arrive:false, check:false },
+      { title:"Meena arrives — fully credentialed, HCI 912", body:"Meena's profile shows verified nursing credentials, a clinical skill score, HCI 912, and 100% positive patient feedback. Priya can hire with complete confidence.", f1:{v:'HCI 912',l:"Meena's score"}, f2:{v:'License',l:'govt verified'}, f3:{v:'100%',l:'patient satisfaction'}, f4:{v:'↑',l:'top 5% of nurses'}, cust_speech:'', prov_speech:"Credential verified ✓\nArriving at 9am", hub:false, prov_arrive:true, check:false },
+      { title:"3 days of care. Priya's mother is well.", body:"Priya gives 5 stars. Meena's HCI improves. Her portable reputation grows — scores she can carry to every future patient, on SkoFy and beyond.", f1:{v:'⭐⭐⭐⭐⭐',l:'care completed'}, f2:{v:'+8pts',l:"Meena's HCI up"}, f3:{v:'Safe',l:'family at peace'}, f4:{v:'Portable',l:'reputation built'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:true, check:true }
+    ]
+  },
+  {
+    name: 'photo',
+    steps: [
+      { title:"Rahul needs a photographer for his company event", body:"It's a product launch — 200 guests, press coverage. He needs a reliable professional with corporate event experience, not just an Instagram following.", f1:{v:'200+',l:'guests expected'}, f2:{v:'Portfolio',l:'quality matters'}, f3:{v:'AI',l:'reads brief'}, f4:{v:'Trust',l:'is critical'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"Rahul posts the event brief on SkoFy", body:"He describes the event type, expected deliverables, date, and style reference. SkoFy's AI reads the requirement and filters photographers by skill scores and reliability.", f1:{v:'Brief',l:'event specs posted'}, f2:{v:'AI',l:'reads requirements'}, f3:{v:'Skill',l:'portfolio scored'}, f4:{v:'Verified',l:'professionals only'}, cust_speech:"Product launch!\nNeed top photographer 📸", prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"AI matches photographers with verified event portfolios", body:"The Distribution Agent filters by corporate event skill score, number of completed similar events, HCI reliability score, and schedule availability. No guessing from follower counts.", f1:{v:'Event',l:'category matched'}, f2:{v:'Portfolio',l:'AI-scored'}, f3:{v:'HCI 866',l:'top match'}, f4:{v:'Available',l:'date confirmed'}, cust_speech:'', prov_speech:'', hub:true, prov_arrive:false, check:false },
+      { title:"Sneha is matched — HCI 866, 100% event completion", body:"Sneha's profile shows verified corporate event experience, HCI 866, and 100% client satisfaction. Rahul sees her past work, skill scores, and delivery record before booking.", f1:{v:'HCI 866',l:"Sneha's score"}, f2:{v:'100%',l:'event completion'}, f3:{v:'Verified',l:'event portfolio'}, f4:{v:'Booked',l:'date confirmed'}, cust_speech:'', prov_speech:"Booked! I've done\n20+ corporate events 📷", hub:false, prov_arrive:true, check:false },
+      { title:"Event covered. Stunning photos. HCI grows.", body:"Sneha delivers 300+ edited photos. Rahul gives 5 stars. Her HCI score strengthens. Her portable reputation on SkoFy opens more corporate clients — no platform lock-in, ever.", f1:{v:'300+',l:'photos delivered'}, f2:{v:'⭐⭐⭐⭐⭐',l:'Rahul rated Sneha'}, f3:{v:'+9pts',l:'HCI updated'}, f4:{v:'Portfolio',l:'grows stronger'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:true, check:true }
+    ]
+  },
+  {
+    name: 'plumbing',
+    steps: [
+      { title:"Karan's pipe burst at midnight", body:"Water everywhere. It's midnight. Traditional platforms show a wait of hours. Karan opens SkoFy and hits Urgent.", f1:{v:'12am',l:'midnight emergency'}, f2:{v:'Urgent',l:'mode activated'}, f3:{v:'Nearby',l:'AI checks radius'}, f4:{v:'Fast',l:'match in seconds'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"Urgent post — SkoFy AI activates immediately", body:"The moment Karan posts Urgent, the Distribution Agent shortens its timeout window and immediately pings nearby plumbers with the right skill score. No waiting 30 minutes.", f1:{v:'Urgent',l:'timeout: 10 mins'}, f2:{v:'Nearby',l:'geo-query fired'}, f3:{v:'Skill',l:'pipe work required'}, f4:{v:'Push',l:'notification sent'}, cust_speech:"Pipe burst! Water\neverywhere!! 🚨", prov_speech:'', hub:false, prov_arrive:false, check:false },
+      { title:"AI finds Suresh — 8 minutes away, available", body:"The Feasibility Engine checks Suresh's schedule — no active jobs, 8 minutes away. Qualified, available, HCI 793. The Feasibility Engine clears him instantly. He's the match.", f1:{v:'8 mins',l:'Suresh is away'}, f2:{v:'Available',l:'schedule clear'}, f3:{v:'HCI 793',l:'qualified plumber'}, f4:{v:'Safe',l:'feasibility check'}, cust_speech:'', prov_speech:'', hub:true, prov_arrive:false, check:false },
+      { title:"Suresh accepts and is on his way", body:"Suresh accepts the urgent job. Karan sees his HCI score, completion rate, and exact ETA. No mystery. No anxiety. Just a verified professional on the way.", f1:{v:'HCI 793',l:"Suresh's score"}, f2:{v:'8 mins',l:'live ETA'}, f3:{v:'96%',l:'completion rate'}, f4:{v:'Tracking',l:'live location'}, cust_speech:'', prov_speech:"Urgent accepted!\n8 mins away ⚡", hub:false, prov_arrive:true, check:false },
+      { title:"Pipe fixed before 1am. Crisis over.", body:"Suresh fixes the burst pipe in 40 minutes. Karan rates him 5 stars. The HCI updates. The next midnight emergency will be resolved just as fast — the data flywheel keeps turning.", f1:{v:'40 min',l:'pipe fixed'}, f2:{v:'⭐⭐⭐⭐⭐',l:'Karan rated Suresh'}, f3:{v:'+15pts',l:'HCI updated'}, f4:{v:'Crisis',l:'resolved before 1am'}, cust_speech:'', prov_speech:'', hub:false, prov_arrive:true, check:true }
+    ]
+  }
+];
+
+let currentStory = 0;
+let currentStep = 0;
+let autoTimer = null;
+
+function showStep(storyIdx, stepIdx) {
+  currentStory = storyIdx;
+  currentStep = stepIdx;
+  const s = stories[storyIdx];
+  const step = s.steps[stepIdx];
+
+  // Update step pills
+  document.querySelectorAll('.si-step').forEach((el, i) => el.classList.toggle('active', i === stepIdx));
+
+  // Update text
+  document.getElementById('storyTitle').textContent = step.title;
+  document.getElementById('storyBody').innerHTML = step.body;
+  document.getElementById('fact1-val').textContent = step.f1.v;
+  document.getElementById('fact1-l').textContent = step.f1.l;
+  document.getElementById('fact2-val').textContent = step.f2.v;
+  document.getElementById('fact2-l').textContent = step.f2.l;
+  document.getElementById('fact3-val').textContent = step.f3.v;
+  document.getElementById('fact3-l').textContent = step.f3.l;
+  document.getElementById('fact4-val').textContent = step.f4.v;
+  document.getElementById('fact4-l').textContent = step.f4.l;
+
+  // Handle character animations
+  const custEl = document.getElementById('cust-' + storyIdx);
+  const provEl = document.getElementById('prov-' + storyIdx);
+  const hubEl = document.getElementById('hub-' + storyIdx);
+  const speechCust = document.getElementById('speech-cust-' + storyIdx);
+  const speechProv = document.getElementById('speech-prov-' + storyIdx);
+  const phoneEl = document.getElementById('phone-' + storyIdx);
+  const checkEl = document.getElementById('check-' + storyIdx);
+  const hciFly = document.getElementById('hci-fly-' + storyIdx);
+
+  // Provider arrive/depart
+  if(step.prov_arrive) {
+    provEl.classList.add('arrived');
+  } else {
+    provEl.classList.remove('arrived');
+  }
+
+  // AI Hub
+  if(step.hub) {
+    hubEl.classList.add('show');
+    document.getElementById('hub-circle-' + storyIdx).classList.add('pulse');
+  } else {
+    hubEl.classList.remove('show');
+  }
+
+  // Speech bubbles
+  speechCust.textContent = step.cust_speech;
+  speechCust.innerHTML = step.cust_speech.replace('\n','<br>');
+  if(step.cust_speech) speechCust.classList.add('show');
+  else speechCust.classList.remove('show');
+
+  if(step.prov_speech) speechProv.innerHTML = step.prov_speech.replace('\n','<br>'), speechProv.classList.add('show');
+  else speechProv.classList.remove('show');
+
+  // Phone object
+  if(phoneEl) { if(stepIdx >= 1 && stepIdx <= 2) phoneEl.classList.add('show'); else phoneEl.classList.remove('show'); }
+
+  // Check mark / celebration
+  if(step.check) checkEl.classList.add('show');
+  else checkEl.classList.remove('show');
+
+  // HCI badge
+  if(stepIdx === 2 || stepIdx === 3) hciFly.classList.add('show');
+  else hciFly.classList.remove('show');
+
+  // Customer animation on step 4 (celebrate)
+  if(stepIdx === 4) {
+    custEl.style.animation = 'bounce 0.6s ease 2';
+    provEl.style.animation = 'bounce 0.6s ease 0.15s 2';
+  } else {
+    custEl.style.animation = '';
+    if(provEl.classList.contains('arrived')) provEl.style.animation = '';
+  }
+
+  // Progress bar
+  resetBar();
+}
+
+function resetBar() {
+  const bar = document.getElementById('storyBar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bar.style.transition = 'width 4s linear';
+    bar.style.width = '100%';
+  }));
+}
+
+function startAuto() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => {
+    const next = (currentStep + 1) % stories[currentStory].steps.length;
+    showStep(currentStory, next);
+  }, 4200);
+}
+
+function switchStory(idx) {
+  document.querySelectorAll('.scene').forEach((s,i) => s.classList.toggle('active', i === idx));
+  [0,1,2,3,4].forEach(i => {
+    ['prov-','hub-','hub-circle-','speech-cust-','speech-prov-','phone-','check-','hci-fly-'].forEach(pfx => {
+      const el = document.getElementById(pfx + i);
+      if(el) { el.classList.remove('show','arrived','pulse'); el.style.animation = ''; }
+    });
+  });
+  showStep(idx, 0);
+  startAuto();
+}
+
+// Tab clicks
+document.querySelectorAll('.story-tab').forEach((tab, i) => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.story-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    switchStory(i);
+  });
+});
+
+// Step pill clicks
+document.querySelectorAll('.si-step').forEach((pill, i) => {
+  pill.addEventListener('click', () => { showStep(currentStory, i); startAuto(); });
+});
+
+// Start on journey visible
+const jObs = new IntersectionObserver(es => {
+  if(es[0].isIntersecting) { switchStory(0); startAuto(); }
+  else clearInterval(autoTimer);
+}, {threshold: 0.2});
+const jEl = document.getElementById('stories');
+if(jEl) jObs.observe(jEl);
+
+/* ── HCI CARD ANIMATION ── */
+let hciDone = false;
+const hciObs = new IntersectionObserver(es => {
+  if(es[0].isIntersecting && !hciDone) {
+    hciDone = true;
+    // Animate number
+    let c = 0; const target = 847;
+    const t = setInterval(() => {
+      c += 14; if(c >= target){c=target;clearInterval(t);}
+      document.getElementById('hciDisplayNum').textContent = c;
+    }, 18);
+    // Animate bars
+    const bars = [92,88,95,78,83,76];
+    document.querySelectorAll('.hdm-bar').forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.width = bars[i] + '%';
+        const id = 'dp' + (i+1);
+        const el = document.getElementById(id);
+        let n = 0;
+        const t2 = setInterval(() => {
+          n++; if(n >= bars[i]){clearInterval(t2);}
+          el.textContent = n + '%';
+        }, 1500/bars[i]);
+      }, 200 + i * 120);
+    });
+  }
+}, {threshold:0.3});
+const hciSec = document.getElementById('hci');
+if(hciSec) hciObs.observe(hciSec);
+
+/* ── HERO CARD FLOATING ── */
+const cards = document.querySelectorAll('.hcard');
+cards.forEach((c, i) => {
+  c.style.animation = `float ${3 + i * 0.8}s ease-in-out infinite ${i * 0.5}s`;
+});
+
+/* ══════════════════════════════════════════════
+   GRADIENT 3D CHARACTER GENERATOR
+   — replaces flat SVG fallbacks with shaded
+     gradient characters that look 3D
+══════════════════════════════════════════════ */
+const CHAR_DEFS = {
+  aarav:  {sk:['#FFDCB0','#F5B870','#C98C40'],sh:['#93C5FD','#1D4ED8'],pg:['#6B7280','#1F2937'],hr:['#2A2A2A','#0A0A0A'],hT:'ms',ex:'worried',ac:''},
+  rohan:  {sk:['#F0C090','#D4975A','#A86830'],sh:['#C4B5FD','#5B21B6'],pg:['#374151','#111827'],hr:['#1A1A1A','#050505'],hT:'ms',ex:'frustrated',ac:''},
+  priya:  {sk:['#FFDCB0','#F5B870','#C98C40'],sh:['#C4B5FD','#7C3AED'],pg:['#4B5563','#1F2937'],hr:['#7C3AED','#3730A3'],hT:'fl',ex:'worried',ac:''},
+  rahul:  {sk:['#E8B080','#C08060','#8A5030'],sh:['#3B82F6','#1E3A8A'],pg:['#0F172A','#020617'],hr:['#1A1A1A','#050505'],hT:'ms',ex:'excited',ac:'tie'},
+  karan:  {sk:['#FFDCB0','#E8B880','#C07840'],sh:['#6EE7B7','#059669'],pg:['#374151','#1F2937'],hr:['#374151','#1F2937'],hT:'ms',ex:'panic',ac:''},
+  ravi:   {sk:['#F0C090','#D4975A','#A86830'],sh:['#FCD34D','#D97706'],pg:['#1F2937','#0F172A'],hr:['#1A1A1A','#050505'],hT:'ms',ex:'smile',ac:'wrench'},
+  ananya: {sk:['#F0C090','#D4975A','#A86830'],sh:['#9CA3AF','#374151'],pg:['#111827','#020617'],hr:['#1A1A1A','#050505'],hT:'fl',ex:'focused',ac:'glasses'},
+  meena:  {sk:['#FFD5B5','#FBBF9A','#D08860'],sh:['#F0F9FF','#BAE6FD'],pg:['#4B5563','#374151'],hr:['#1A1A1A','#050505'],hT:'nh',ex:'smile',ac:'nurseKit'},
+  sneha:  {sk:['#F0C090','#D4975A','#A86830'],sh:['#374151','#111827'],pg:['#111827','#020617'],hr:['#1A1A1A','#050505'],hT:'fl',ex:'smile',ac:'camera'},
+  suresh: {sk:['#E8B080','#C08060','#8A5030'],sh:['#7DD3FC','#0284C7'],pg:['#1E3A8A','#1E1B4B'],hr:['#1A1A1A','#050505'],hT:'ms',ex:'determined',ac:'wrench'},
+};
+
+function buildCharSVG(nm) {
+  const c = CHAR_DEFS[nm]; if(!c) return '';
+  const id = nm;
+
+  /* arms */
+  let la,ra;
+  if(c.ex==='panic'){
+    la=`<path d="M15 63 C5 52 2 42 8 38" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="8" cy="37" r="11" fill="url(#${id}-sk)"/>`;
+    ra=`<path d="M85 63 C95 52 98 42 92 38" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="92" cy="37" r="11" fill="url(#${id}-sk)"/>`;
+  } else if(['wrench','camera','glasses'].includes(c.ac)){
+    la=`<path d="M15 63 C3 77 5 100 13 108" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="url(#${id}-sk)"/>`;
+    ra=`<path d="M85 63 C97 70 94 84 85 90" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="83" cy="91" r="11" fill="url(#${id}-sk)"/>`;
+  } else {
+    la=`<path d="M15 63 C3 77 5 100 13 108" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="13" cy="108" r="11" fill="url(#${id}-sk)"/>`;
+    ra=`<path d="M85 63 C97 77 95 100 87 108" stroke="url(#${id}-sh)" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="87" cy="108" r="11" fill="url(#${id}-sk)"/>`;
+  }
+
+  /* hair */
+  let hair;
+  if(c.hT==='ms'){
+    hair=`<path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 13 50 15 Q34 13 20 24Z" fill="url(#${id}-hg)"/>
+    <path d="M28 14 Q50 7 72 14 Q60 10 50 11 Q40 10 28 14Z" fill="rgba(255,255,255,0.14)"/>`;
+  } else if(c.hT==='fl'){
+    hair=`<path d="M20 24 Q22 3 50 5 Q78 3 80 24 Q66 13 50 15 Q34 13 20 24Z" fill="url(#${id}-hg)"/>
+    <path d="M20 24 Q13 52 15 90" stroke="url(#${id}-hg)" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <path d="M80 24 Q87 52 85 90" stroke="url(#${id}-hg)" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <path d="M28 14 Q50 7 72 14 Q60 10 50 11 Q40 10 28 14Z" fill="rgba(255,255,255,0.12)"/>`;
+  } else {
+    hair=`<path d="M20 24 Q22 14 50 14 Q78 14 80 24 Q66 18 50 19 Q34 18 20 24Z" fill="url(#${id}-hg)"/>
+    <rect x="19" y="3" width="62" height="16" rx="6" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="43" y="1" width="14" height="8" rx="3" fill="#E11D48"/>
+    <path d="M43 8 L57 8 M50 1 L50 8" stroke="white" stroke-width="1.5" fill="none"/>`;
+  }
+
+  /* eyebrows */
+  const hc=c.hr[1];
+  let brows;
+  if(c.ex==='worried')   brows=`<path d="M27 14 Q36 9 43 13" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M57 13 Q64 9 73 14" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M48 16 Q50 12 52 16" stroke="${hc}" stroke-width="1.8" fill="none"/>`;
+  else if(c.ex==='frustrated') brows=`<path d="M27 13 Q36 10 44 14" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 14 Q64 10 73 13" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  else if(c.ex==='panic')      brows=`<path d="M25 12 Q36 6 44 10" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 10 Q64 6 75 12" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  else if(c.ex==='excited')    brows=`<path d="M27 12 Q36 9 45 12" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M55 12 Q64 9 73 12" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  else brows=`<path d="M27 13 Q36 11 45 13" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M55 13 Q64 11 73 13" stroke="${hc}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+
+  /* mouth */
+  let mouth;
+  if(c.ex==='worried')    mouth=`<path d="M37 46 Q50 43 63 46" stroke="#c97c5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  else if(c.ex==='frustrated') mouth=`<path d="M38 47 Q50 48 62 47" stroke="#c97c5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  else if(c.ex==='panic') mouth=`<ellipse cx="50" cy="47" rx="9" ry="7" fill="#c97c5a"/><ellipse cx="50" cy="47" rx="5.5" ry="4" fill="#8B3A1A"/>`;
+  else if(c.ex==='excited') mouth=`<path d="M33 44 Q50 58 67 44" stroke="#c97c5a" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  else mouth=`<path d="M34 44 Q50 55 66 44" stroke="#c97c5a" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+
+  /* accessories */
+  let acc='';
+  if(c.ac==='wrench')   acc=`<rect x="77" y="71" width="9" height="27" rx="4" fill="#9CA3AF" transform="rotate(-28 81 84)"/><rect x="72" y="69" width="19" height="7" rx="3.5" fill="#6B7280" transform="rotate(-28 81 72)"/><rect x="73" y="83" width="19" height="7" rx="3.5" fill="#6B7280" transform="rotate(-28 82 86)"/>`;
+  else if(c.ac==='glasses') acc=`<rect x="24" y="21" rx="5" ry="5" width="20" height="13" fill="rgba(156,163,175,0.15)" stroke="#9CA3AF" stroke-width="2.5"/><rect x="56" y="21" rx="5" ry="5" width="20" height="13" fill="rgba(156,163,175,0.15)" stroke="#9CA3AF" stroke-width="2.5"/><line x1="44" y1="27" x2="56" y2="27" stroke="#9CA3AF" stroke-width="2.5"/><rect x="61" y="82" width="30" height="21" rx="3" fill="#0F172A"/><rect x="63" y="84" width="26" height="16" rx="2" fill="#064E3B"/><text x="65" y="95" font-size="8" fill="#34D399" font-family="monospace">&lt;/&gt;</text>`;
+  else if(c.ac==='camera') acc=`<rect x="59" y="73" width="33" height="24" rx="5" fill="#1F2937"/><rect x="61" y="75" width="29" height="20" rx="4" fill="#374151"/><circle cx="75.5" cy="85" r="8.5" fill="#111827"/><circle cx="75.5" cy="85" r="6" fill="#1E3A8A"/><circle cx="75.5" cy="85" r="3" fill="#93C5FD"/><ellipse cx="75.5" cy="85" rx="1.2" ry="1.2" fill="rgba(255,255,255,0.7)"/><rect x="67" y="69" width="15" height="6" rx="2" fill="#111827"/>`;
+  else if(c.ac==='nurseKit') acc=`<rect x="71" y="84" width="24" height="20" rx="4" fill="#DC2626"/><rect x="77" y="80" width="12" height="7" rx="2" fill="#DC2626"/><rect x="78" y="88" width="12" height="4" rx="2" fill="white"/><rect x="82" y="85" width="4" height="10" rx="2" fill="white"/><rect x="42" y="59" width="16" height="5" rx="2" fill="#E11D48"/><rect x="47" y="54" width="6" height="15" rx="2" fill="#E11D48"/>`;
+  else if(c.ac==='tie')    acc=`<path d="M46 52 L38 66 L50 60 L62 66 L54 52Z" fill="white"/><path d="M50 60 L45 80 L50 85 L55 80Z" fill="#DC2626"/><path d="M46 60 L50 57 L54 60" fill="#1D4ED8"/>`;
+
+  return `<svg class="char-svg" viewBox="0 0 100 145" style="display:none">
+  <defs>
+    <radialGradient id="${id}-sk" cx="40%" cy="32%" r="62%"><stop offset="0%" stop-color="${c.sk[0]}"/><stop offset="60%" stop-color="${c.sk[1]}"/><stop offset="100%" stop-color="${c.sk[2]}"/></radialGradient>
+    <linearGradient id="${id}-sh" x1="12%" y1="0%" x2="92%" y2="100%"><stop offset="0%" stop-color="${c.sh[0]}"/><stop offset="100%" stop-color="${c.sh[1]}"/></linearGradient>
+    <linearGradient id="${id}-pg" x1="0%" y1="0%" x2="22%" y2="100%"><stop offset="0%" stop-color="${c.pg[0]}"/><stop offset="100%" stop-color="${c.pg[1]}"/></linearGradient>
+    <linearGradient id="${id}-hg" x1="35%" y1="0%" x2="65%" y2="100%"><stop offset="0%" stop-color="${c.hr[0]}"/><stop offset="100%" stop-color="${c.hr[1]}"/></linearGradient>
+  </defs>
+  <ellipse cx="50" cy="142" rx="28" ry="5" fill="rgba(0,0,0,0.09)"/>
+  <ellipse cx="33" cy="133" rx="15" ry="7" fill="#111"/><ellipse cx="67" cy="133" rx="15" ry="7" fill="#111"/>
+  <ellipse cx="29" cy="130" rx="8" ry="3" fill="rgba(255,255,255,0.1)"/><ellipse cx="63" cy="130" rx="8" ry="3" fill="rgba(255,255,255,0.1)"/>
+  <rect x="26" y="96" width="20" height="39" rx="9" fill="url(#${id}-pg)"/><rect x="54" y="96" width="20" height="39" rx="9" fill="url(#${id}-pg)"/>
+  <rect x="29" y="99" width="4" height="30" rx="2" fill="rgba(255,255,255,0.07)"/><rect x="57" y="99" width="4" height="30" rx="2" fill="rgba(255,255,255,0.07)"/>
+  <rect x="14" y="52" width="72" height="50" rx="20" fill="url(#${id}-sh)"/>
+  <ellipse cx="50" cy="57" rx="29" ry="9" fill="rgba(255,255,255,0.18)"/>
+  <rect x="14" y="82" width="72" height="20" rx="0" fill="rgba(0,0,30,0.06)"/>
+  ${la}
+  ${ra}
+  ${c.ac==='tie' ? acc : ''}
+  <rect x="38" y="44" width="24" height="13" rx="7" fill="url(#${id}-sk)"/>
+  <circle cx="50" cy="28" r="30" fill="url(#${id}-sk)"/>
+  <ellipse cx="37" cy="17" rx="12" ry="9" fill="rgba(255,255,255,0.17)" transform="rotate(-20 37 17)"/>
+  <ellipse cx="20" cy="31" rx="6.5" ry="8.5" fill="url(#${id}-sk)"/><ellipse cx="20" cy="31" rx="3" ry="4.5" fill="rgba(0,0,0,0.07)"/>
+  <ellipse cx="80" cy="31" rx="6.5" ry="8.5" fill="url(#${id}-sk)"/><ellipse cx="80" cy="31" rx="3" ry="4.5" fill="rgba(0,0,0,0.07)"/>
+  ${hair}
+  <ellipse cx="36" cy="25" rx="9" ry="8.5" fill="white"/><ellipse cx="36" cy="25" rx="9" ry="8.5" fill="rgba(240,248,255,0.4)"/>
+  <circle cx="36.5" cy="26" r="6.5" fill="#3A2818"/><circle cx="36.5" cy="26" r="4.5" fill="#120808"/>
+  <circle cx="38.5" cy="23.5" r="2.5" fill="white"/><circle cx="39.5" cy="24" r="1" fill="rgba(255,255,255,0.8)"/>
+  <ellipse cx="64" cy="25" rx="9" ry="8.5" fill="white"/><ellipse cx="64" cy="25" rx="9" ry="8.5" fill="rgba(240,248,255,0.4)"/>
+  <circle cx="64.5" cy="26" r="6.5" fill="#3A2818"/><circle cx="64.5" cy="26" r="4.5" fill="#120808"/>
+  <circle cx="66.5" cy="23.5" r="2.5" fill="white"/><circle cx="67.5" cy="24" r="1" fill="rgba(255,255,255,0.8)"/>
+  ${brows}
+  <path d="M47 37 Q50 41.5 53 37" stroke="rgba(0,0,0,0.18)" stroke-width="1.5" fill="none"/>
+  <ellipse cx="46.5" cy="38.5" rx="2.8" ry="1.8" fill="rgba(0,0,0,0.07)"/><ellipse cx="53.5" cy="38.5" rx="2.8" ry="1.8" fill="rgba(0,0,0,0.07)"/>
+  ${mouth}
+  ${c.ac!=='tie' ? acc : ''}
+</svg>`;
+}
+
+/* map element IDs → character names */
+const charIdMap = {
+  'cust-0':'aarav','cust-1':'rohan','cust-2':'priya','cust-3':'rahul','cust-4':'karan',
+  'prov-0':'ravi', 'prov-1':'ananya','prov-2':'meena','prov-3':'sneha','prov-4':'suresh'
+};
+Object.entries(charIdMap).forEach(([wrapId, charName]) => {
+  const wrap = document.getElementById(wrapId);
+  if(!wrap) return;
+  const oldSvg = wrap.querySelector('svg.char-svg');
+  if(!oldSvg) return;
+  const img = wrap.querySelector('img.char-img');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildCharSVG(charName);
+  const newSvg = tmp.firstElementChild;
+  if(!newSvg) return;
+  oldSvg.replaceWith(newSvg);
+  // If img already errored (onerror fired before this script), show the gradient SVG now
+  const imgFailed = !img || img.style.display === 'none' || (img.complete && img.naturalHeight === 0);
+  if(imgFailed) newSvg.style.display = 'block';
+});
+</script>
+</body>
+</html>
