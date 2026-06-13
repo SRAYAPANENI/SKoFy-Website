@@ -1,0 +1,44 @@
+SKOFY WEBSITE — 3D CHARACTER DOWNLOAD GUIDE
+============================================
+
+Download these 9 images from lummi.ai (free, no attribution needed)
+and save them with EXACTLY these filenames in this /chars/ folder.
+
+HOW TO DOWNLOAD FROM LUMMI.AI:
+  1. Go to https://www.lummi.ai/3d
+  2. Search for each term below
+  3. Pick a character you like
+  4. Click Download → PNG (transparent background)
+  5. Rename the file as specified below
+
+─────────────────────────────────────────────────────────
+  FILE NAME              SEARCH TERM ON LUMMI.AI
+─────────────────────────────────────────────────────────
+
+CUSTOMER CHARACTERS (casual poses, standing)
+  cust-m-blue.png      → "3d man blue shirt standing"
+  cust-m-suit.png      → "3d businessman suit" or "3d man navy suit"
+  cust-m-green.png     → "3d man casual green" or "3d man standing"
+  cust-f-purple.png    → "3d woman purple outfit standing"
+  cust-f-lavender.png  → "3d woman casual standing" (lavender/light purple)
+
+PROVIDER CHARACTERS (professional poses, with tools/props)
+  prov-ac.png          → "3d technician worker" or "3d repairman"
+  prov-dev.png         → "3d man laptop developer" or "3d programmer"
+  prov-nurse.png       → "3d nurse woman" or "3d woman nurse uniform"
+  prov-photo.png       → "3d woman photographer camera"
+  prov-plumber.png     → "3d worker plumber" or "3d man tools"
+
+─────────────────────────────────────────────────────────
+
+ALTERNATIVE SOURCES:
+  • https://www.craftwork.design (free packs available)
+  • https://icons8.com/illustrations → select "3D" style
+  • https://blush.design (customize colors online before downloading)
+
+TIPS:
+  - Always download PNG with TRANSPARENT background
+  - Character should face forward or slightly to one side
+  - Avoid characters with heavy shadows baked in
+  - Ideal image size: 400x600px or larger (they'll scale down fine)
+  - For color variety: Blush.design lets you pick outfit colors before export
