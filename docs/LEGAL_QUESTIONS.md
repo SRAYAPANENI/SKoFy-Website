@@ -179,6 +179,13 @@ See [MONEY_RULES_DESIGN.md](MONEY_RULES_DESIGN.md) §14 and
 
 ## 11. Business providers and their staff (added 2026-10-23)
 
+> **Status: pending — to be taken to the lawyer later.** The owner decided on
+> 2026-10-23 to switch business providers on before this review. Anything
+> the lawyer changes is applied afterwards: the notice and disclosure
+> wording, the insurance minimum, the no-poaching rule, the business terms.
+> Questions §1 (classification) are also still open. Switching off again is
+> one setting: `BUSINESS_ACCOUNTS_ENABLED=false`, then restart.
+
 See [BUSINESS_PROVIDERS_DESIGN.md](BUSINESS_PROVIDERS_DESIGN.md).
 
 - **Location tracking of a business's employees.** The owner sees a member's

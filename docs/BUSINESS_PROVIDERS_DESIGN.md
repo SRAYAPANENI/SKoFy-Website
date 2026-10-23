@@ -1,9 +1,10 @@
 # Business providers: companies with staff, alongside individuals
 
-**Status:** built 2026-10-23 (migrations 077–080), **switched off**:
-`BUSINESS_ACCOUNTS_ENABLED=false` until the lawyer answers
-[LEGAL_QUESTIONS.md](LEGAL_QUESTIONS.md) §1 and §11. With it off, nothing
-changes for anyone. Smoke-tested against a copy of the real database
+**Status:** built 2026-10-23 (migrations 077–080). Being switched on before
+the lawyer's review (owner's decision, 2026-10-23). The lawyer's answers to
+[LEGAL_QUESTIONS.md](LEGAL_QUESTIONS.md) §1 and §11 are pending and will be
+applied when they come. `BUSINESS_ACCOUNTS_ENABLED=false` switches it off
+again, and with it off nothing changes for anyone. Smoke-tested against a copy of the real database
 (`scripts/smoke_business_providers.py`, 37 checks, rolled back).
 
 **Not in this first version, on purpose:**
