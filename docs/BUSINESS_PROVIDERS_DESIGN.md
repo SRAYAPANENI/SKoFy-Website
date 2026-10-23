@@ -79,6 +79,10 @@ the state and the insurance certificate.
 - **Matching** reaches the business by its members' verified skills and
   locations, as it does for individuals (`DistributionAgent`). One business
   appears once per job, not once per member.
+- **The team is told.** The first time a new job reaches anyone on the team,
+  the owner and dispatchers get "A new job for your team" (`TeamJobAlerts`).
+  It's sent once per job per business, and never for direct requests or the
+  team's own jobs.
 - **The business applies.** Rates and hosting work per business, as on the
   individual rate card ([JOB_SHAPE_DESIGN.md](JOB_SHAPE_DESIGN.md) phase 4).
 - **Assigning.** Once hired, an owner or dispatcher assigns a member who has
