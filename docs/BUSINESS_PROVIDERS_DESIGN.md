@@ -127,6 +127,21 @@ What the owner (and a dispatcher) can follow:
 - **Money:** earnings per job and per member, fees against the cap or the
   fixed plan, and payouts. Owner only.
 
+**Where it shows in the provider app.** The business sits on the home screen,
+not only under Profile (`components/business/business-home-card.tsx`, fed by
+`hooks/use-my-business.ts`). The card shows:
+- **Owner or dispatcher:** open jobs for the team and jobs under way, with
+  Team jobs and Team map buttons.
+- **Owner, business not yet approved:** what's still needed.
+- **Worker:** whose team they're on.
+- **Someone invited:** the invite.
+
+Jobs the team can take carry a "For your team" badge in the feed. On job
+details they show **Apply as [business]**, which opens Team jobs with that
+job's member picker, beside **Apply for myself**. The personal button is
+hidden for someone who takes jobs only through the business. A team-job
+alert opens the same picker.
+
 ## 5. Live location: what's tracked, and when
 
 The owner sees the same live location the customer already gets: the provider
