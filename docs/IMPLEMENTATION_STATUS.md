@@ -96,3 +96,35 @@ Built and deployed from [MONEY_RULES_DESIGN.md](MONEY_RULES_DESIGN.md) (migratio
 - **Deposits.** On a quote of $1,000+, up to 50%, paid when work starts; the rest on completion; both counted as one job for the fee.
 - **Re-check fixes:** a reopen after an inspection report would have refunded the provider's earned, still-held visiting fee (now: no reopen after a report); a credit could be used twice when both the webhook and the status check reported the same payment, and wasn't given back on a refund; earnings "pending" counted a paid deposit twice; "on the way" now needs the provider to have moved closer (migration 070).
 - **Fixed on the way:** the job row never returned `navigation_started_at`, so "Set off" was re-recorded on every call and the no-show guard couldn't see it.
+
+## Business providers (2026-10-23)
+
+Built and switched off (`BUSINESS_ACCOUNTS_ENABLED=false`) — see
+[BUSINESS_PROVIDERS_DESIGN.md](BUSINESS_PROVIDERS_DESIGN.md). Migrations 077–080.
+
+- **Account (step 1).**
+  - `BusinessService`, and `BusinessPayoutService` with a Stripe Connect company account.
+  - Documents reviewed in Portal → Businesses (`BusinessReviewService`).
+  - Readiness worked out in `app/domain/business.py`.
+  - A daily expiry check (`check_business_document_expiries`).
+  - Stripe onboarding for individuals moved onto the shared `ConnectGateway`.
+- **Team (step 2).**
+  - Invites by phone, with the location notice acknowledged on joining (`BusinessTeamService`).
+  - Dodorez orders background checks; `BusinessCheckCharges` settles them when a check finishes. The first 3 per business are free; after that they're recovered from the business's payouts through `provider_recoveries`.
+- **Jobs (step 3).**
+  - `JobService.apply_for_business` and `reassign_for_business`; `BusinessHiring` decides readiness and prices.
+  - `jobs`, `job_applications` and `payments` carry `business_id`.
+  - `app/domain/earner.py` keeps a business's money apart from a person's: payouts (`PaymentService._payout_account`), the fee cap (`FeeService`), recoveries and earnings.
+- **Owner's view (step 4).**
+  - `BusinessDashboardService`: positions only within the job window (`shares_location`), job timelines, earnings.
+  - `BusinessNotifier` sends the alerts.
+  - Owners and dispatchers can read and write the job chat.
+- **Two hats (step 5).**
+  - `works_for_self` / `works_for_self_sql` decide whether someone takes their own jobs.
+  - The 12-month no-poaching rule.
+  - The personal feed, alerts, the customer map and direct requests all respect it.
+- **Apps.**
+  - Provider: Business account, Team jobs, the job timeline and conversation, the team map.
+  - Customer: business applicants, the tracking label, the chat notice.
+  - Portal: Businesses.
+

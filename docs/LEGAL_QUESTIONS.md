@@ -176,3 +176,30 @@ See [MONEY_RULES_DESIGN.md](MONEY_RULES_DESIGN.md) §14 and
 - **Photo updates.** Photos of the customer's pet or home are stored and
   shown to the customer. How long may we keep them, and what consent is
   needed?
+
+## 11. Business providers and their staff (added 2026-10-23)
+
+See [BUSINESS_PROVIDERS_DESIGN.md](BUSINESS_PROVIDERS_DESIGN.md).
+
+- **Location tracking of a business's employees.** The owner sees a member's
+  live location while they're on a job, never off duty. What notice and
+  consent must the business give, and Dodorez show? New York, Connecticut
+  and Delaware have monitoring-notice laws; California employee data falls
+  under CPRA. Is Dodorez the business's service provider for this data?
+- **The owner reading job chats and calls.** The customer is told. Is that
+  enough, and what about recorded calls?
+- **Insurance:** $1M general liability is required for on-site work. Is
+  that enough, and should Dodorez require workers' comp proof?
+- **Background checks ordered by Dodorez for a business's staff,** paid from
+  the business's payouts. The disclosure and authorisation wording shown on
+  joining is `BACKGROUND_CHECK_DISCLOSURE` in `app/domain/business.py`. Is it
+  enough as a standalone FCRA disclosure? What Fair Credit Reporting Act disclosure,
+  authorisation and adverse-action process do we need, and can a check be
+  reused for the same person across businesses?
+- **The business terms of service:** indemnity, insurance, the business's
+  duties to its staff (tips passed on, wage law), and recovering chargebacks
+  from its payouts.
+- **One person, two hats.** A member also works for themselves, with a
+  12-month rule against taking the business's customers. Is that
+  enforceable, and fair to both sides?
+
