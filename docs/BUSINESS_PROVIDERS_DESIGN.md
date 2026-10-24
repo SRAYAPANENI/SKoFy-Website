@@ -128,13 +128,19 @@ What the owner (and a dispatcher) can follow:
   fixed plan, and payouts. Owner only.
 
 **Where it shows in the provider app.** The business sits on the home screen,
-not only under Profile (`components/business/business-home-card.tsx`, fed by
-`hooks/use-my-business.ts`). The card shows:
-- **Owner or dispatcher:** open jobs for the team and jobs under way, with
-  Team jobs and Team map buttons.
-- **Owner, business not yet approved:** what's still needed.
-- **Worker:** whose team they're on.
-- **Someone invited:** the invite.
+not only under Profile; `hooks/use-my-business.ts` feeds all of it.
+- **Owner or dispatcher of an approved business:** a **Myself | [business]**
+  switch (`workspace-switch.tsx`), remembered between visits. The Team side
+  swaps the job feed for `team-panel.tsx`:
+  - open jobs, each with **Assign**;
+  - jobs under way, with their stage;
+  - shortcuts to Team jobs, Map and Business;
+  - a warning if the team can't be hired.
+- **Everyone else with a business tie** gets a one-line row
+  (`business-home-card.tsx`):
+  - **Owner, not yet approved:** what's still needed.
+  - **Worker:** whose team they're on.
+  - **Someone invited:** the invite.
 
 Jobs the team can take carry a "For your team" badge in the feed. On job
 details they show **Apply as [business]**, which opens Team jobs with that
@@ -216,7 +222,9 @@ switched on with teams (§9, step 3).
   the business's Connect account. Stripe Connect is still to be enabled on
   the account.
 - **Fees:** Fair Cap, or the fixed monthly plan (MONEY_RULES_DESIGN.md: for
-  "businesses that know they'll hit the cap"). The cap counts per business.
+  "businesses that know they'll hit the cap"). Each member has their own
+  monthly cap for the work they do for the business, so the business's cap is
+  one cap per member who earned (decided 2026-10-24, MONEY_RULES_DESIGN.md §1).
 - **Tips** go to the business. Passing them on to the member is the
   business's duty under US tip law, and the terms must say so.
 - **Chargebacks, the guarantee and recoveries** are taken from the

@@ -96,6 +96,25 @@ $20,000 a month paid the same $249 as one earning $2,500, so revenue stopped
 growing with the busiest providers. At 2% it keeps growing, and 2% is still far
 too little to be worth leaving the platform over.
 
+**Decided 2026-10-24: in a business, each member has their own monthly cap.**
+A business is one payee, so with a single cap a 10-person company paid at most
+$249 a month, the same as one person. Individuals could also form a "business"
+just to share a cap. Instead, **each member's fees for the business count
+against their own $249 cap**. Past it, their work pays 2% for the rest of the
+month. The business's cap is therefore $249 × the members who earned for it
+that month. A one-person business pays what an individual does, and a team
+pays exactly what its people would pay alone.
+
+Not one shared pot of $249 × members: with uneven earnings that charges the
+busy member full fees on the quiet member's unused room, so the team pays more
+than its people would alone. It is still one bill and one cap figure on the
+owner's earnings screen. A member's own work (two hats) has its own separate
+cap. The per-job cap ($119) is unchanged.
+
+Code: `FeeRepository.fee_context` counts the member's share,
+`member_month_fees` and `business_month()` give the owner's figure.
+`scripts/smoke_fee_cap.py` was run against a copy of the database.
+
 The monthly cap works like transit fare capping: pay per ride until the cap,
 then ride for a token fare. It's a subscription the provider never buys in
 advance. It is also the answer to leakage (ROADMAP #6): the busiest providers
