@@ -218,3 +218,22 @@ See [BUSINESS_PROVIDERS_DESIGN.md](BUSINESS_PROVIDERS_DESIGN.md).
   period like this fine for at-will employees and for contractors? Does
   holding someone until their last job is done ever cross a line?
 
+## 12. Deleting accounts and what's kept (added 2026-10-24)
+
+See [ACCOUNT_DELETION_DESIGN.md](ACCOUNT_DELETION_DESIGN.md). Built: the account
+closes at once and identity is removed after 30 days. Jobs, payments, reviews,
+disputes and claims are kept under "Former customer" / "Former provider".
+
+- **Is that de-identified enough** under CCPA/CPRA and other states' laws? It
+  keeps the same internal ID, the city, and job locations rounded to about 1 km.
+- **Retention periods:** payments and tax (about 7 years?), disputes and claims,
+  strikes, background-check order records (FCRA), insurance certificates of
+  closed businesses (liability claims can come years later).
+- **Chat and support messages** are blanked at 30 days. Should some be kept
+  longer for disputes or safety?
+- **Banned numbers** are kept as a keyed fingerprint to stop re-registration.
+  Is that a lawful fraud-prevention purpose?
+- **Backups:** how long, and what the privacy policy must say about them.
+- **Legal hold:** who may set it, and is a written reason needed?
+- **Privacy policy wording** for all of the above.
+
