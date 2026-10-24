@@ -54,6 +54,29 @@ Dodorez still sets no prices.
   licensed and insured badges.
 - **One person, two hats** (decided 2026-10-23). A team member may also work
   on their own as an individual, if the business allows it. See §7.
+- **Teams are of individual providers, never businesses** (decided
+  2026-10-24), so there are no chains of businesses inside businesses.
+  Someone who runs a business can't be invited to another one, or accept an
+  invite. A member can't register a business while on a team, and is on one
+  team at a time.
+- **Leaving is on notice; the owner can't hold anyone** (decided 2026-10-24).
+  A member asks to leave and goes `BUSINESS_LEAVE_NOTICE_DAYS` (7) days later,
+  or sooner if the owner taps **Release now**. They can change their mind
+  until then.
+  - **During the notice:** they can only be given jobs that start before
+    their last day.
+  - **When they ask,** both sides are told how many of their team jobs fall
+    after the leave date.
+  - **On the leave date,** an hourly task (`finish_due_leaves`) completes the
+    leave and turns their own jobs back on:
+    - **A team job they're doing** (on their way or working) keeps them
+      until it's done.
+    - **One they haven't set off for** goes back to the owner, who gives it
+      on (`JobService.hand_back_to_owner`). So no owner can hold someone by
+      booking them past their notice.
+    - **A disputed job** keeps nobody: Dodorez settles it without them.
+  - **The owner removing someone** is still immediate.
+  - **After leaving:** the 12-month no-poaching rule (§7) still applies.
 
 ## 2. US onboarding and verification
 
@@ -183,6 +206,33 @@ screens.
 | Insured badge | Yes, the business's insurance | Only with their own certificate |
 | Background check | One check, reused | Same check |
 | Visible to the business | Yes (§4) | No |
+
+**Who may (decided 2026-10-24).** The owner allows it per member
+(`business_members.own_work_allowed`, migration 081). **"All members"**
+(`businesses.allow_independent_work`) sets everyone at once and is what new
+members start with. Turning any one member off turns "all members" off. An
+allowed member then chooses with their own switch (`providers.works_independently`).
+That switch is **opt-in** on a team: joining turns it off, and leaving or
+being removed turns it back on. Being allowed never starts someone's own jobs
+by itself.
+A member works for themselves only when both are on (`works_for_self_sql`).
+Both rules are checked when they apply and again at hire, because the owner
+may turn someone off in between.
+
+**No poaching, whoever they work for (2026-10-24).** A person can be on one
+team at a time, and can't register a business while on one. The 12-month
+rule follows the **person doing the work**, not who they work for. Someone
+who served a customer for ABC can't serve that customer for 12 months in any
+of these ways:
+- for themselves;
+- through a business they start after leaving;
+- through another team.
+
+This is checked when a business applies, when it is hired, and when it hands
+a job to another member (`BusinessHiring.ensure_not_poaching`). Serving the
+same business's customers again is fine. The customer is always free to book
+anyone else.
+`scripts/smoke_member_own_work.py` was run against a copy of the database.
 
 Guardrails:
 1. **One calendar per person,** so no double-booking across both hats (the

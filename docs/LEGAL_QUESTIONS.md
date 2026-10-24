@@ -208,5 +208,13 @@ See [BUSINESS_PROVIDERS_DESIGN.md](BUSINESS_PROVIDERS_DESIGN.md).
   from its payouts.
 - **One person, two hats.** A member also works for themselves, with a
   12-month rule against taking the business's customers. Is that
-  enforceable, and fair to both sides?
+  enforceable, and fair to both sides? Since 2026-10-24 it follows the
+  person whoever they work for, including a business they start after
+  leaving. Several states limit non-solicitation of former employers'
+  customers (California especially). Is a platform rule enforceable there?
+- **Leaving a team on notice (2026-10-24).** A member who asks to leave goes
+  after 7 days, sooner if the owner releases them. The owner can't refuse,
+  and unfinished team jobs must be finished or handed on first. Is a notice
+  period like this fine for at-will employees and for contractors? Does
+  holding someone until their last job is done ever cross a line?
 
