@@ -337,3 +337,30 @@ screens.
    business pays from its earnings** (§8).
 4. Whether the owner can read the job chat by default, or only when a
    member asks for help. *Suggested: by default, with the customer told.*
+
+## 12. Closing a business (2026-10-25)
+
+The owner closes it in the provider app: Business → **Close business**.
+
+- **Blocked while anything is open,** each reason shown:
+  - a team job not finished;
+  - a dispute;
+  - money held;
+  - an open guarantee claim;
+  - money owed to Dodorez (recoveries, background-check charges).
+- **Confirming:** the owner types the business's name.
+- **Then, at once:**
+  - status `CLOSED` (migration 084, `closed_at`);
+  - pending applications withdrawn;
+  - every member released without notice, back on their own;
+  - invites withdrawn;
+  - the owner off it too;
+  - its Stripe account closed (best effort; Stripe refuses while a balance remains, and support finishes it).
+- **Kept:** its jobs, payments, insurance and licences, because liability
+  claims can come years later. No more certificate-expiry reminders.
+- **Afterwards,** the owner can delete their own account
+  ([ACCOUNT_DELETION_DESIGN.md](ACCOUNT_DELETION_DESIGN.md)).
+
+Code: `BusinessClosureService`, `BusinessTeamService.release_everyone`,
+`ConnectGateway.close_account`, `components/business/close-business.tsx`.
+

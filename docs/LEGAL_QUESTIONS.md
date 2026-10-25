@@ -236,4 +236,14 @@ disputes and claims are kept under "Former customer" / "Former provider".
 - **Backups:** how long, and what the privacy policy must say about them.
 - **Legal hold:** who may set it, and is a written reason needed?
 - **Privacy policy wording** for all of the above.
+- **The privacy policy draft** at `/v1/legal/privacy`
+  (`skofy-backend/app/legal/privacy_policy.html`, 2026-10-25) needs review
+  before launch. It was written from what the apps do. Points to check:
+  - **Storage in India:** our servers run on AWS in India. Is that fine for
+    US users, and is the wording right?
+  - **Age 18+.**
+  - **AI processing by Groq.**
+  - **The list of state rights.**
+  - **"Backups are replaced":** a backup retention period is still to set.
+  - **Contact email:** a placeholder.
 

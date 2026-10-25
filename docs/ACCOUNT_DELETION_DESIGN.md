@@ -1,8 +1,9 @@
 # Deleting an account
 
 **Status:** built 2026-10-24 (migration 083). Customer and provider accounts
-can be deleted. **Closing a business is not built yet:** an owner can't
-delete their account until it is, and is told to ask support.
+can be deleted. A business owner closes the business first
+(BUSINESS_PROVIDERS_DESIGN.md §12, built 2026-10-25), then can delete their
+account. The privacy policy at `/v1/legal/privacy` states what's kept.
 
 ## Why
 
@@ -78,7 +79,7 @@ stated in the privacy policy, with how long backups are kept.
 - `GET /v1/admin/account-deletions`: closed accounts waiting for their date.
 - `PUT /v1/admin/account-deletions/{id}/legal-hold`: stops anonymising for
   an investigation or lawsuit.
-- Both need `customers.manage`. The portal screen is still to do.
+- Both need `customers.manage`. Portal: **Account Deletions** in the sidebar.
 
 ## Code
 
@@ -94,6 +95,7 @@ stated in the privacy policy, with how long backups are kept.
 
 ## Still to do
 
-- Close a business (§2 of the plan), then let owners delete their accounts.
-- The admin portal screen for the queue and legal hold.
-- Privacy policy wording, and the lawyer's answers (LEGAL_QUESTIONS.md §12).
+- The lawyer's review of the privacy policy and these rules (LEGAL_QUESTIONS.md §12).
+- A real privacy mailbox: `PRIVACY_CONTACT_EMAIL` is a placeholder.
+- A backup retention period, so the policy's "backups are replaced" is true:
+  `~/db-backups` on the server is kept indefinitely today.
