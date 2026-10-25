@@ -34,7 +34,9 @@ that: the history tables' links to a person are `RESTRICT`, not
    - an open guarantee claim;
    - money owed to Dodorez;
    - a regular booking;
-   - running a business.
+   - running a business: close it first in Business → Close business. While
+     business accounts are switched off, the owner can't reach that screen,
+     so deleting the account closes the business too, under the same rules.
 3. **Closed at once.** Signed out on every phone in both apps, push tokens
    gone, off job matching, pending applications withdrawn. A team member
    leaves their team straight away, without notice.
@@ -59,8 +61,10 @@ that: the history tables' links to a person are `RESTRICT`, not
 | Saved addresses; their jobs' street addresses and notes; exact job location (rounded to about 1 km) | Reviews and ratings, attributed to the former name |
 | Saved cards (the Stripe customer is deleted; Stripe keeps its own legally required records) | Disputes, claims and strikes |
 | Device tokens, sessions, notifications | Skill categories and the record of skill tests (answers removed) |
-| Their chat and support messages → "[deleted]" | |
-| Live location, base address, payout account link | |
+| Their chat and support messages, and their support tickets' subjects → "[deleted]" | |
+| Live location, base address; their Stripe payout account is closed | |
+| What they typed asking for a service Dodorez didn't offer | |
+| Team invites sent to their number; the contact details of a business they closed | |
 
 **Banned people** (an admin disabled them) keep only a keyed fingerprint of
 their number (`banned_phone_fingerprints`), so the same number can't sign up

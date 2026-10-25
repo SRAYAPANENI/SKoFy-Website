@@ -347,7 +347,8 @@ The owner closes it in the provider app: Business → **Close business**.
   - a dispute;
   - money held;
   - an open guarantee claim;
-  - money owed to Dodorez (recoveries, background-check charges).
+  - money owed to Dodorez (recoveries, background-check charges);
+  - a member's background check still running (it would be charged to the business).
 - **Confirming:** the owner types the business's name.
 - **Then, at once:**
   - status `CLOSED` (migration 084, `closed_at`);
