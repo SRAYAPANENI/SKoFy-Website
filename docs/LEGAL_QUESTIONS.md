@@ -235,6 +235,13 @@ disputes and claims are kept under "Former customer" / "Former provider".
   Is that a lawful fraud-prevention purpose?
 - **Backups:** how long, and what the privacy policy must say about them.
 - **Legal hold:** who may set it, and is a written reason needed?
+- **Removal delayed past the 30 days** (built 2026-10-27): a dispute, guarantee
+  claim or bank chargeback from a finished job holds removal back until it's
+  settled, however long. Money owed to Dodorez holds it back **90 days at
+  most** (`ACCOUNT_DELETION_OWED_WAIT_DAYS`); then the identity goes and the
+  debt record stays without a name, so it can no longer be collected. Is 90
+  days reasonable, and may the identity be kept longer to collect a debt? The
+  person is texted once that removal is delayed and why.
 - **Privacy policy wording** for all of the above.
 - **The privacy policy draft** at `/v1/legal/privacy`
   (`skofy-backend/app/legal/privacy_policy.html`, 2026-10-25) needs review

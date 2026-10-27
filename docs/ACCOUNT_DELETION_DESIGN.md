@@ -47,9 +47,20 @@ that: the history tables' links to a person are `RESTRICT`, not
    Logging in again cancels it, and the app says "Welcome back"
    (`account_restored` on login).
 5. **Then anonymised:** the daily `purge_deleted_accounts` task, skipped
-   while an admin has set a **legal hold**. The task checks again on the day:
-   a dispute or guarantee claim raised during the 30 days, on a job they'd
-   finished, is settled first.
+   while an admin has set a **legal hold**. The task checks again on the day
+   (`removal_waits_on`): something raised during the 30 days on a job they'd
+   finished — a dispute, a guarantee claim, a bank chargeback, held money —
+   is settled first, checked again every day.
+   - **Money owed** holds it back `ACCOUNT_DELETION_OWED_WAIT_DAYS` (90) at
+     most, so support has time to collect or write it off; then removal goes
+     ahead and the debt record stays without a name (LEGAL_QUESTIONS.md §12).
+   - **They're told once** by text (they're signed out, so no push): why it's
+     delayed, and that logging in keeps the account
+     (`users.deletion_delay_told_at`, migration 085; cleared if they log in).
+   - **The admin queue** (portal → Account deletions) shows each account's
+     state — Closing, Due, Waiting, Legal hold — and what it's waiting on.
+   - **The number stays theirs while it waits:** logging in restores the
+     account, and Register says it's already registered.
 
 ## What's removed and what's kept
 
