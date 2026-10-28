@@ -136,6 +136,14 @@ All strategies also filter on `requirements` (matched against provider profile t
 
 `pricing_unit` × quantity derived from timing (nights between `starts_at` and `ends_at`, hours in a window, occurrences of a recurrence) × the provider's rate for that unit. `QUOTE` keeps today's inspection-fee → invoice flow. Providers get a small **rate card** (per visit / hour / day / night / item) instead of only `visiting_fee` and `hourly_rate`.
 
+**Long stays and day prices** (built 2026-10-28, `best_price` in `app/domain/rate_card.py`):
+- The rate card can also carry a **per week** and a **per month** price for each skill.
+- A job is never priced per week. The customer picks dates, and each provider's total is the cheapest their prices allow:
+  - **Stays:** 7 nights or days can be one week and 30 can be one month, mixed with the rest ("1 week × $250 + 3 nights × $40"). A stay rounds up to a week when that's cheaper.
+  - **A few hours** can use the day price when it's cheaper (a day of daycare).
+- **What applicants show:** each applicant shows the breakdown under their total.
+- **Stay length:** stays of items can run 365 days; pets and homes stay at 90.
+
 ### 4.4a What's left in care, and what a host takes in
 
 Built 2026-10-28 (`app/domain/care_sheet.py`, migration 087).
