@@ -136,6 +136,24 @@ All strategies also filter on `requirements` (matched against provider profile t
 
 `pricing_unit` × quantity derived from timing (nights between `starts_at` and `ends_at`, hours in a window, occurrences of a recurrence) × the provider's rate for that unit. `QUOTE` keeps today's inspection-fee → invoice flow. Providers get a small **rate card** (per visit / hour / day / night / item) instead of only `visiting_fee` and `hourly_rate`.
 
+### 4.4a What's left in care, and what a host takes in
+
+Built 2026-10-28 (`app/domain/care_sheet.py`, migration 087).
+
+- **Care sheet** (`jobs.care_sheet`), asked when the customer picks "A pet" or "An item":
+  - **Pets:** for each pet (up to 6) the kind, name, breed, size (dogs), age, vaccinated, spayed/neutered, and how they are with dogs, cats and children; food (who brings it — the owner, or the host — what and when); medicines; walks; notes; the vet; an emergency contact. Required: kind, name, a dog's size, the vaccination answer, who brings the food.
+  - **Items:** what, how many (up to 50), the size (bag / box / car trunk / van), the value, whether it's fragile.
+  - Optional on the server: the AI assistant and older apps send none, and providers see the assistant's free-form notes instead.
+  - Applicants see everything except the vet and the emergency contact (`care_sheet_for`).
+- **Host preferences** (`providers.hosting_prefs`):
+  - **Customers can come** at all, with a limit on bookings at once.
+  - **Pets:** which kinds, the biggest dog, pets at once, whether they provide food.
+  - **Items:** items at once, the biggest size.
+  - Limits count animals and items, not bookings: three dogs take three places, and pets and items each have their own limit (`host_refusal`).
+  - Matching skips hosts whose preferences rule a job out. Hosts who haven't set hosting up are still asked to.
+  - Empty preferences mean the old behaviour: a host takes anything up to `host_capacity` (`effective_prefs`).
+- **Not yet:** a house-sitting sheet ("My home": keys, alarm, plants, pets in the home, mail). The description covers it for now.
+
 ### 4.5 The skills catalogue grows from demand
 
 1. The AI maps each request to existing skills when it can.
