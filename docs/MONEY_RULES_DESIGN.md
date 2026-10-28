@@ -649,6 +649,10 @@ card instead of a visit and a quote. There's no visiting fee.
   (at least 1), days include both ends, and hours round up to the half-hour
   (at least 1). Units are counted in the customer's time zone. Rates are
   $5–$5,000 per unit, only for skills the provider is verified in.
+- **Long stays and day prices** (2026-10-28):
+  - **Weekly and monthly prices:** a provider can add these per skill, and the total is the cheapest mix of their prices ("1 week + 3 nights"). The customer sees the breakdown under each applicant.
+  - **A long few hours:** it can use the day price (daycare).
+  - **No per-hour price on a skill:** it uses the provider's usual hourly rate.
 - **Paying.** The full price is paid when the customer books, and held until
   the job is done. The usual fees apply at payout (§1).
 - **Not paid in time.** After hiring, the customer has 60 minutes to book and
@@ -668,14 +672,17 @@ card instead of a visit and a quote. There's no visiting fee.
   customer's place, the usual "Customer not here" wait applies (§3).
 - **Picked up early.** The provider is paid for the units used plus one, and
   the rest is refunded.
+  - **When a weekly or monthly price was used,** those units are paid at the provider's regular price, kept on the booking at hire (`upfront_base_rate`, migration 088). The discount was for the whole stay.
+  - **Example:** 14 nights at the 2-week price of $500, at $40 a night regular, picked up after 3 nights. The provider gets 4 × $40 = $160 and $340 comes back.
+  - **Cap:** never more than was paid.
+  - **The one unit** for a late cancellation or a no-show works the same way.
 - **The provider cancels.** Full refund, and a lapse for the provider (§3).
 - **The provider isn't there.** At their place, 15 minutes after the start
   (`HOST_WAIT_MINUTES`), the customer can report "nobody's answering" from
   there. The booking is called off with a full refund and a credit, and it
   counts as a no-show for the provider. At the customer's place, a provider
   running late makes cancelling free, with a credit, as for a visit (§3).
-- **How long.** "A few hours" is up to 24 hours; a stay is up to 90 days,
-  so a mistyped date can't turn into an outsized charge.
+- **How long.** "A few hours" is up to 24 hours. A stay is up to 90 days, or 365 days for things left in storage, so a mistyped date can't turn into an outsized charge.
 - **Dates are fixed once priced.** After providers apply, the customer
   can't move the start, since every applicant's total is for those dates.
   They cancel and post again.

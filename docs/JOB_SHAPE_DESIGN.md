@@ -162,6 +162,16 @@ Built 2026-10-28 (`app/domain/care_sheet.py`, migration 087).
   - Empty preferences mean the old behaviour: a host takes anything up to `host_capacity` (`effective_prefs`).
 - **Not yet:** a house-sitting sheet ("My home": keys, alarm, plants, pets in the home, mail). The description covers it for now.
 
+### 4.4b The US catalogue
+
+Loaded 2026-10-28 by `scripts/load_catalogue_v2.py` from `data/catalogue/`:
+- **Size:** 1,418 skills in 341 professions and 32 categories (`skills.category`, migration 089). Each skill's customer phrases are stored as its description, and the AI's skill matching reads them.
+- **Kept skills:** a skill with the same name as before is kept and updated, so providers' skills and past jobs carry on.
+- **Hidden skills:** India-era skills the catalogue doesn't have are hidden (`is_active = false`), never deleted. "Personal Errands" stays, because the Pickup & Delivery switch uses it.
+- **Carried providers:** a provider verified in a hidden skill's profession got its catalogue profession's skills, verified (`PROFESSION_MAP`). Every provider was a test or demo account then.
+- **The pickers** filter by category.
+- **The voice assistant** is given profession names only, by category. The model describes the task, and the server matches it to a skill of that profession.
+
 ### 4.5 The skills catalogue grows from demand
 
 1. The AI maps each request to existing skills when it can.
