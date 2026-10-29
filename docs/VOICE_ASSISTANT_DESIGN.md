@@ -1,6 +1,14 @@
 # Voice assistant: the server asks, the model talks (design)
 
-**Status (2026-10-29):** proposed. Quick fixes are built: the safety check runs alongside the reply, transcription uses Whisper turbo, the catalogue is held in memory, a rejected tool-call reply is retried once, voice requests get 60 seconds, and the silence wait is 1.2 seconds. The redesign below waits for approval.
+**Status (2026-10-29):** built, not yet deployed. Code: `app/domain/voice_intake.py` (the checklist), `app/services/voice_assistant.py` (the turns), `app/api/v1/ai.py` (`/ai/voice-chat`). Tests: `tests/domain/test_voice_intake.py`, `tests/api/test_ai_voice_chat.py`. Earlier quick fixes stay: the safety check runs alongside the reply, transcription uses Whisper turbo, the catalogue is held in memory, a rejected tool-call reply is retried once, voice requests get 60 seconds, and the silence wait is 1.2 seconds.
+
+**Built differently from the proposal below:**
+- **The state is kept on the server**, in Redis for an hour, keyed by the customer and their first message. The app sends only the conversation, as before. So the current APKs work without a rebuild. If the state is lost, the job is worked out again from the conversation. A shorter conversation with the same first words starts fresh.
+- **The shortlist falls back to the whole list.** If none of the 10 likely professions fits, the model looks again at all of them before saying "coming soon". That costs one extra call, only on a miss.
+- **One model call a turn, usually.** The model reads the answers and asks the next item in the same call. It also says which item it asked about. If that isn't the item the server says is next, a short second call phrases the right one.
+- **Food is asked for every pet job**, not only stays. The care sheet needs it (`clean_care_sheet`).
+- **Pick-up and delivery** stops after the confirmation. The app hands it to the Pickup & Drop flow, as before.
+- **Time zone:** the app now sends the phone's time zone, so "tomorrow at 9" means the customer's 9. Older APKs fall back to UTC, as before.
 
 ## Why
 
