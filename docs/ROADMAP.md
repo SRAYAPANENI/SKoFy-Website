@@ -162,6 +162,20 @@ A real prerequisite bug was found and fixed along the way: the provider app defa
 
 **Still open — needed before launch to make the breadth real**: seeding online professions/skills (software development, web/graphic design, online tutoring…) into the skills catalogue; widening the voice assistant's prompts in `app/api/v1/ai.py`, which still describe Dodorez as a "home services platform" and refuse other requests; and the inspection-fee-for-remote-jobs revenue question flagged above.
 
+### 8. Lowering card and payout costs (raised 2026-10-29 — to discuss with the team)
+
+Every US platform pays card fees. TaskRabbit, Rover and Angi build them into their fees; Thumbtack mostly takes no payments. Dodorez's 3% customer fee roughly covers the card cost (2.9% + 30¢) on jobs of about $100 and up. On a $25 visit it falls short by about 28¢, and the provider's Fair Cap fee covers the rest.
+
+Options, best first:
+1. **Lower the bank-payment (ACH) minimum.** ACH costs 0.8%, at most $5, against about 3% by card. It's already built and on, but only for $500+ (`ACH_MIN_AMOUNT`). Lowering it to about $100 would help. Trade-off: ACH clears in 2–4 days, so it suits booked-ahead jobs, not same-day ones.
+2. **Pay providers weekly by default.** Stripe charges about 0.25% + 25¢ per payout to a provider's bank, so one payout a week saves that on every job. Offer "get paid faster" for providers who want it.
+3. **Ask Stripe for wholesale (interchange-plus) pricing** once volume passes about $80k a month. US debit cards then cost far less than 2.9%.
+4. **Not now:**
+   - **Card surcharges:** state limits; LEGAL_QUESTIONS.md §5.
+   - **Prepaid wallet balances:** money-transmitter rules.
+
+Also decided 2026-10-29: **no weekly billing for repeat visits.** Each visit is charged on its own. Batching would only have saved card fees, and repeats are at most one visit a week today.
+
 ## Data flywheel dependency chain
 
 This is the order things have to happen in, regardless of calendar time, because each step's data feeds the next:

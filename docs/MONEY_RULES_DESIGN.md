@@ -690,3 +690,19 @@ card instead of a visit and a quote. There's no visiting fee.
   photo update at least every 24 hours (`CARE_UPDATE_HOURS`). They're
   reminded when one is due. If it's 6 hours late (`CARE_UPDATE_GRACE_HOURS`),
   the customer is told and can call.
+
+## 15. One standard way to price each profession
+
+Decided 2026-10-29 (`app/domain/skill_pricing.py`, `data/catalogue/pricing.py`, migration 090; reviewed in `dodorez_pricing_by_profession.xlsx`). Every profession is priced one of five ways. The customer is only asked what that way needs, the provider only sets that price, and the server refuses anything else (`fit_shape`).
+
+| Type | How it works | Professions |
+|---|---|---|
+| Quote after seeing it | Visiting fee at hire when the provider travels (§3, it counts toward the job), then their invoice. Online or at their shop: just the quote. | 171 |
+| Per hour | Hourly price (or their usual hourly rate) × the hours booked, paid when booking (§14) | 95 |
+| Per visit | One set price per visit or session, paid when booking (§14) | 67 |
+| Stay, per night | Per night, with weekly or monthly prices when cheaper (§14) | 4 |
+| Stay, per day | Per day, with weekly or monthly prices when cheaper (§14) | 4 |
+
+- **Fair Cap is the same for all five (§1–2):** the provider's banded fee capped per job and per month, and the customer's 3% capped at $15, on whatever is paid.
+- **Shop-only quote work** (Auto Repair Shop, Tattoo & Piercing, Custom Furniture Maker) waits for a drop-off-and-quote flow.
+- **Commission-paid professions** (Insurance Agent, Real Estate Agent and similar) can only be booked as a quoted fee.
