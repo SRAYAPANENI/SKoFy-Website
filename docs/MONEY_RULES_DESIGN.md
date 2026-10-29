@@ -703,6 +703,8 @@ Decided 2026-10-29 (`app/domain/skill_pricing.py`, `data/catalogue/pricing.py`, 
 | Stay, per night | Per night, with weekly or monthly prices when cheaper (§14) | 4 |
 | Stay, per day | Per day, with weekly or monthly prices when cheaper (§14) | 4 |
 
+- **Places:** each skill also says where its work happens: at the customer's place, at the provider's place, online, or pick-up and drop-off (`skills.venues`, migration 091). The apps only offer those places, and the server refuses others. So a plumber can't be booked online. Pick-up and drop-off work (movers, towing, a courier) can also be booked at the customer's place, where it collects.
+- **Quote work leaves nothing in care:** the customer is there for it.
 - **Fair Cap is the same for all five (§1–2):** the provider's banded fee capped per job and per month, and the customer's 3% capped at $15, on whatever is paid.
 - **Shop-only quote work** (Auto Repair Shop, Tattoo & Piercing, Custom Furniture Maker) waits for a drop-off-and-quote flow.
 - **Commission-paid professions** (Insurance Agent, Real Estate Agent and similar) can only be booked as a quoted fee.
