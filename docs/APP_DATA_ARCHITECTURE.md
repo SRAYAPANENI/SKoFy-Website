@@ -68,6 +68,7 @@ Things that redrew a whole big screen over and over, found while splitting:
 | Customer Home | Each 15 s refresh replaced the providers, jobs and regular providers with new copies, redrawing Home with nothing new, and looked each map-tapped job's address up again | A refresh with nothing new keeps what's shown (`keepIfSame`); a job's address is looked up once |
 | Customer Home | Profile and saved addresses fetched twice on opening, and the bottom bar fetched the profile and jobs a third time | One request each, shared through the data layer |
 | Rates & hosting | A provider with every skill got a full card per skill, all drawn at once — thousands of price boxes: slow to open, stuck while scrolling | A list drawn as it scrolls (`FlatList`); each skill one line with its prices until tapped; a search over the skills; skills priced by quote named together in one card |
+| Home (Myself) | The skill filter drew a chip for every skill at once — hundreds — redrew them with any change on Home, and was rebuilt from nothing on switching back from the team view; the job alerts sheet listed every skill at once too | Chips drawn as they scroll (`FlatList`), the bar memoised with stable inputs and kept (hidden) on the team view; the alerts sheet's list drawn as it scrolls |
 | Track provider | The vehicle's glide redrew the whole 1,900-line screen 20 times a second | `GlidingProviderMarker` redraws only the marker; standing still draws nothing |
 
 Still redrawing each second, only while running: the call timer in both chats.
