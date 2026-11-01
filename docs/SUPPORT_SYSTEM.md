@@ -46,6 +46,14 @@ Every move is one row in `ticket_escalations` (department moves have `from_depar
 - A department that is some role's **only** department can't be removed (the role would silently become "all departments").
 - Removing one moves its closed tickets to the fallback first, then deletes it (tickets reference departments).
 
+## Photos and PDFs in the chat
+
+- **The person** taps the paperclip in either app: camera or gallery, one photo, with whatever is typed as its caption. No ticket yet → one is opened first (automatic note "Started with a photo"), then the photo goes on it.
+- **The agent** attaches a photo or PDF to a reply in the portal (not to private notes); the push says "Sent a photo" / "Sent a PDF" when there's no caption.
+- JPEG, PNG, WEBP or PDF, under 25MB, content checked against the claimed type (`media_upload.upload_support_attachment`). Stored as `support_ticket_messages.attachment_url`; the message text is the caption and may be empty.
+- A photo on a closed ticket reopens it like any message. Anonymising an account removes its attachments (the link and the file).
+- Photos open full screen (app: tap; portal: the image viewer, paging through every photo in the ticket); PDFs open in the browser.
+
 ## Code map
 
 | Layer | Files |
@@ -53,7 +61,7 @@ Every move is one row in `ticket_escalations` (department moves have `from_depar
 | Rules (pure) | `app/domain/support_departments.py`, `app/domain/ticket_escalation.py` |
 | SQL | `support_department_repo.py`, `support_level_repo.py`, `support_ticket_repo.py` |
 | Decisions | `support_ticket_service.py`, `support_department_service.py`, `support_scope_service.py`, `support_level_service.py` |
-| API | `/support-tickets/admin/*` (incl. `/transfer`), `/support-departments`, `/support-levels` |
+| API | `/support-tickets/admin/*` (incl. `/transfer`, `/attachments`), `/support-tickets/{id}/attachments`, `/support-departments`, `/support-levels` |
 | Portal | `pages/SupportDepartments.tsx`, `pages/SupportLevels.tsx`, `pages/SupportTickets.tsx`, `pages/SupportTicketDetail.tsx`, `components/ticket/*` |
 | Apps | `app/support-chat.tsx` (`CATEGORY_TOPICS`) in both apps |
-| Migrations | 057–058 (levels), 059 (calls), 061 (departments) |
+| Migrations | 057–058 (levels), 059 (calls), 061 (departments), 095 (attachments) |
