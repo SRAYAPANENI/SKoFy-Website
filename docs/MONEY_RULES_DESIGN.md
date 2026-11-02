@@ -697,14 +697,24 @@ Decided 2026-10-29 (`app/domain/skill_pricing.py`, `data/catalogue/pricing.py`, 
 
 | Type | How it works | Professions |
 |---|---|---|
-| Quote after seeing it | Visiting fee at hire when the provider travels (§3, it counts toward the job), then their invoice. Online or at their shop: just the quote. | 171 |
+| Quote after seeing it | Visiting fee at hire when the provider travels (§3, it counts toward the job), then their invoice. Online or at their shop: just the quote. | 163 |
 | Per hour | Hourly price (or their usual hourly rate) × the hours booked, paid when booking (§14) | 95 |
-| Per visit | One set price per visit or session, paid when booking (§14) | 67 |
-| Stay, per night | Per night, with weekly or monthly prices when cheaper (§14) | 4 |
-| Stay, per day | Per day, with weekly or monthly prices when cheaper (§14) | 4 |
+| Per visit | One set price per visit or session, paid when booking (§14) | 75 |
+| Stay, per night | Per night, with weekly or monthly prices when cheaper (§14) | 3 |
+| Stay, per day | Per day, with weekly or monthly prices when cheaper (§14) | 5 (Neighbor Storage moved here 2026-11-02) |
 
 - **Places:** each skill also says where its work happens: at the customer's place, at the provider's place, online, or pick-up and drop-off (`skills.venues`, migration 091). The apps only offer those places, and the server refuses others. So a plumber can't be booked online. Pick-up and drop-off work (movers, towing, a courier) can also be booked at the customer's place, where it collects.
 - **Quote work leaves nothing in care:** the customer is there for it.
 - **Fair Cap is the same for all five (§1–2):** the provider's banded fee capped per job and per month, and the customer's 3% capped at $15, on whatever is paid.
-- **Shop-only quote work** (Auto Repair Shop, Tattoo & Piercing, Custom Furniture Maker) waits for a drop-off-and-quote flow.
+- **A skill can differ from its profession** (`SKILL_OVERRIDE`, reviewed skill by skill 2026-11-02). The test for each skill: can the price be known before anyone sees the job?
+  - **No:** a visit, then a quote.
+  - **A standard job:** per visit. Inspections, tune-ups, an oil change, hemming, a phone screen, an individual tax return, a TV mount.
+  - **Time is the measure:** per hour (party henna, tattoos, a photo booth).
+  - **Something or someone left in care over days:** a stay. Board & train is per night. A live-in nanny or caregiver is per day, because an hourly booking stops at 24 hours.
+  - **Drop-ins while someone's away** (house sitter mail, check-ins and plant watering; daily check-ins on a parent) are **per day**, not per night: nobody stays over. They aren't per visit either, because per visit books one visit and a repeat booking is weekly at most. Per day covers one day or a two-week trip in one booking.
+  - **A half day of doggy day care** is a visit, not a full day.
+  - **The result:** 106 skills differ from their profession. 653 skills are quoted, 401 hourly, 337 per visit, 18 per day and 9 per night.
+  - **When the loader changes a skill's type,** that skill's old prices no longer apply. Its providers can't apply for its jobs until they set the new price; the app tells them so when they try. The loader's dry run lists each change and how many verified providers it affects. `read_catalogue` fails if an exception names a skill that isn't there.
+- **Pickup & Delivery** ("Personal Errands", outside the catalogue) is a quote: it has no price boxes (`KEEP_PRICING`).
+- **Shop-only quote work:** only the Auto Repair Shop's six repairs are left (`test_every_catalogue_skill_can_be_booked_somewhere`). They wait for a drop-off-and-quote flow. Tattoos are now booked by the hour at the studio and piercing per visit. The custom furniture maker also comes to measure.
 - **Commission-paid professions** (Insurance Agent, Real Estate Agent and similar) can only be booked as a quoted fee.
