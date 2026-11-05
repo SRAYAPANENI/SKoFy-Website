@@ -108,6 +108,11 @@ the state and the insurance certificate.
   team's own jobs.
 - **The business applies.** Rates and hosting work per business, as on the
   individual rate card ([JOB_SHAPE_DESIGN.md](JOB_SHAPE_DESIGN.md) phase 4).
+- **Withdrawing** (2026-11-05): the owner or a dispatcher can take back the
+  business's application while the customer hasn't chosen (Team jobs →
+  Withdraw). It's final, as for an individual: the business can't apply for
+  that job again, naming anyone, and the board shows it as withdrawn. A
+  member can't withdraw an application their business made naming them.
 - **Assigning.** Once hired, an owner or dispatcher assigns a member who has
   the skill and a clear background check. That member does every step:
   - setting off, arrival, check-in and hand-back codes;
@@ -207,17 +212,19 @@ screens.
 | Background check | One check, reused | Same check |
 | Visible to the business | Yes (§4) | No |
 
-**Who may (decided 2026-10-24).** The owner allows it per member
-(`business_members.own_work_allowed`, migration 081). **"All members"**
-(`businesses.allow_independent_work`) sets everyone at once and is what new
-members start with. Turning any one member off turns "all members" off. An
-allowed member then chooses with their own switch (`providers.works_independently`).
-That switch is **opt-in** on a team: joining turns it off, and leaving or
-being removed turns it back on. Being allowed never starts someone's own jobs
-by itself.
-A member works for themselves only when both are on (`works_for_self_sql`).
-Both rules are checked when they apply and again at hire, because the owner
-may turn someone off in between.
+**Which hat, when (2026-11-05): agreed work hours.** The hat is picked by
+the clock, never by a switch ([EMPLOYER_PARTNERS_DESIGN.md](EMPLOYER_PARTNERS_DESIGN.md)).
+- **How the hours are agreed:** a member agrees days and hours with the
+  business. The invite offers them, and the person accepts or sends their
+  own back. Later changes need both sides.
+- **Inside the hours:** a job whose work time falls there reaches the
+  business, which applies and assigns.
+- **Outside them:** it's the member's own.
+- **What it replaced:** the earlier switches (the business's "all members",
+  the per-member allowance and the member's "Myself" switch, migrations
+  080–081). Migration 097 removed them.
+- **Where it's checked:** when applying, at hire, and when the business
+  hands a job on (`ensure_may_take_for_self`, `ensure_worker`).
 
 **No poaching, whoever they work for (2026-10-24).** A person can be on one
 team at a time, and can't register a business while on one. The 12-month
@@ -245,22 +252,18 @@ Guardrails:
 
 ### How a member works their own jobs
 
-- **A switch at the top of the provider app:** "Working as: ABC Plumbing |
-  Myself". Each side has its own job feed, active jobs, earnings and
-  notifications, each labelled with the hat.
-- **Their own provider profile:** turning on "Myself" the first time
-  creates it. It has its own rate card, skills and service area, and its own
-  Stripe Connect payout account as an individual. The background check is
-  reused; ID verification is the same person, so it isn't redone.
-- **Their own jobs** come exactly as an individual's do: matched, applied
-  for, hired, run step by step and paid to them. The business never sees them.
-- **The one shared thing is time.** While they're booked on their own job,
-  the business sees them as "Busy" with no details, and can't assign them over
-  it. While they're on a business job, their own feed pauses new direct
-  requests that clash.
-- **Turning it off:** a member can turn "Myself" off at any time. If the
-  business stops allowing it, their own active jobs finish normally and no
-  new ones come.
+- **Outside their hours, their feed is their own:**
+  - jobs come exactly as an individual's do;
+  - they're matched, applied for, hired, run step by step and paid to them;
+  - the business never sees them.
+- **Inside their hours,** jobs come through the business, and the empty
+  feed says so.
+- **The Business screen** shows which hat is on right now, the agreed
+  hours, and any change waiting.
+- **The one shared thing is time:**
+  - one calendar per person, so they can't be double-booked across the hats;
+  - while they're booked on their own job, the business can't assign them
+    over it.
 
 **Data:** one login (`users`) can hold an individual provider profile and
 memberships in businesses. Build this from the start; the second hat is

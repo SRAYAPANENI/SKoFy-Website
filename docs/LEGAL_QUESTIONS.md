@@ -254,3 +254,28 @@ disputes and claims are kept under "Former customer" / "Former provider".
   - **"Backups are replaced":** a backup retention period is still to set.
   - **Contact email:** a placeholder.
 
+## 13. Employers and work hours (added 2026-11-05)
+
+> **Status: built, behind `BUSINESS_ACCOUNTS_ENABLED` (off).** See
+> [EMPLOYER_PARTNERS_DESIGN.md](EMPLOYER_PARTNERS_DESIGN.md). A team member
+> agrees days and hours with a business. In those hours, jobs reach them
+> through the business, which applies, sets the price, assigns them and is
+> paid. Outside them, they work for themselves. Pay, tools and training are
+> agreed between business and member, outside Dodorez.
+
+- **Classification.** The business assigns its people in agreed hours and
+  is paid for the work. Is the member then its employee rather than a
+  contractor? Is that the business's responsibility alone, or Dodorez's
+  too? Does it change the answer to §1?
+- **Wage and hour rules.** Do agreed hours bring in minimum wage, overtime
+  or predictive-scheduling laws (for example in Oregon, Seattle, New York
+  City or San Francisco)? Must the terms make the business responsible for
+  them?
+- **The terms.** What must say that Dodorez isn't a party to the business's
+  arrangement with its people (pay, tools, training), and that the business
+  answers for its people in its hours: pay, classification, insurance?
+- **A maximum.** Should Dodorez cap employer hours (for example 8 a day,
+  5 days a week) to keep members independent outside them, or leave it to
+  what both agree?
+- **Leaving.** Is 7 days' notice, ending automatically, fair and enforceable
+  in every state?
