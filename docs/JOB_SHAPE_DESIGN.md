@@ -27,7 +27,8 @@ JobShape
   venue         CUSTOMER_PLACE | PROVIDER_PLACE | ROUTE | ONLINE
   timing        ONCE | WINDOW | STAY | RECURRING
   custody       NONE | ITEM | LIVING_BEING | HOME
-  pricing_unit  VISIT | HOUR | DAY | NIGHT | ITEM | FIXED | QUOTE
+  pricing_unit  VISIT | HOUR | DAY | NIGHT | ITEM | FIXED | QUOTE | TRIP   (TRIP: a route only —
+                base fare + per mile, MONEY_RULES_DESIGN.md §16)
   starts_at     datetime | null          (null = as soon as possible)
   ends_at       datetime | null          (required for WINDOW / STAY)
   recurrence    rule | null              (required for RECURRING, e.g. weekly on Mon/Thu)
@@ -53,7 +54,7 @@ JobShape
 | "Watch my house while I travel" | CUSTOMER_PLACE | STAY | HOME | DAY |
 | "My car makes a noise" | PROVIDER_PLACE | ONCE | ITEM | QUOTE |
 | "Walk my dog every weekday" | CUSTOMER_PLACE | RECURRING | LIVING_BEING | VISIT |
-| "Pick up my parcel and bring it home" | ROUTE | ONCE | ITEM | FIXED |
+| "Pick up my parcel and bring it home" | ROUTE | ONCE | ITEM | TRIP |
 | "Tutor my son weekly, online" | ONLINE | RECURRING | NONE | HOUR |
 | "Fix my website" | ONLINE | ONCE | NONE | FIXED |
 

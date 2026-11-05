@@ -39,6 +39,7 @@ What this covers, in the order money moves on a job:
 11. [Less pain on a job](#11-less-pain-on-a-job): visit counts toward the quote, parts paid at the start, added work, tips, typical prices, ways to pay (migration 072).
 12. [Promises that cost Dodorez](#12-promises-that-cost-dodorez): the guarantee, chargebacks, dispute deadlines, payout dates, the reserve (migration 073).
 13. [Repeat bookings](#13-repeat-bookings) (migration 074).
+16. [Pickup & Delivery fares](#16-pickup--delivery-fares): priced up front by the trip, like a delivery app (migration 099).
 
 ## Principles
 
@@ -262,9 +263,14 @@ The start code already proves both people are there. Add the mirror at the end:
 2. The customer's app shows the report: **"Sam says the inspection is done."**
    - **Yes, it's done:** confirmed; the visiting fee is released at once.
    - **Not done yet:** the provider is told to carry on.
-3. If the customer's phone isn't to hand, their app shows a **4-digit end
-   code** to read out, the same as the start code.
-4. **Accepting the quote counts as confirming.** Normal jobs get no extra step.
+3. **Accepting the quote counts as confirming.** Normal jobs get no extra step.
+
+**One way to confirm (2026-11-05).** There used to be a 4-digit end code as
+well, for the customer to read out to the provider. It added nothing: the
+code was in the customer's own app, so anyone who could read it could tap
+"Yes" instead. Both apps dropped it; the server keeps its routes until every
+installed app has updated. The start code stays: it proves the customer was
+there when the provider arrived.
 
 ### Layer 2: evidence, when the customer can't or won't confirm
 
@@ -282,7 +288,7 @@ The start code already proves both people are there. Add the mirror at the end:
 
 | Level | When | Visiting fee |
 |---|---|---|
-| **Confirmed** | The customer tapped "Yes" or read the end code, or accepted the quote | Released at once |
+| **Confirmed** | The customer tapped "Yes", or accepted the quote | Released at once |
 | **Evidence-backed** | Not confirmed; every Layer 2 check passes | Released after 24 hours unless disputed *(dial)* |
 | **Needs review** | Any check fails | Held; support decides |
 
@@ -362,7 +368,7 @@ Arrived (location-checked)          customer cancels → 100% to provider
 Start code (customer reads it) → Inspecting   location keeps updating
   ▼
 Inspection report (findings, photo, quote)
-  ├─ customer confirms / reads end code / accepts quote → visiting fee released (Fair Cap fee)
+  ├─ customer confirms / accepts quote → visiting fee released (Fair Cap fee)
   ├─ no answer, evidence passes → released after 24 h
   ├─ evidence fails → held for review
   └─ customer disputes → evidence pack → 48 h → support: outcome + finding (→ strike?)
@@ -573,7 +579,7 @@ parts, and work paid outside the app.
 - Lost while the money was still held: it simply goes back to the customer.
   Nobody bears anything.
 - Lost after the provider was paid, where the customer had confirmed the
-  work (the inspection, the end code, the quote, or "done"): Dodorez
+  work (the inspection, the quote, or "done"): Dodorez
   absorbs it.
 - Otherwise support decides: Dodorez absorbs it, or it's recovered from the
   provider's next payouts. A recovery is never more than they got from that
@@ -715,6 +721,136 @@ Decided 2026-10-29 (`app/domain/skill_pricing.py`, `data/catalogue/pricing.py`, 
   - **A half day of doggy day care** is a visit, not a full day.
   - **The result:** 106 skills differ from their profession. 653 skills are quoted, 401 hourly, 337 per visit, 18 per day and 9 per night.
   - **When the loader changes a skill's type,** that skill's old prices no longer apply. Its providers can't apply for its jobs until they set the new price; the app tells them so when they try. The loader's dry run lists each change and how many verified providers it affects. `read_catalogue` fails if an exception names a skill that isn't there.
-- **Pickup & Delivery** ("Personal Errands", outside the catalogue) is a quote: it has no price boxes (`KEEP_PRICING`).
+- **Pickup & Delivery** ("Personal Errands", outside the catalogue) is priced by the trip (§16, `KEEP_SKILL_PRICING`). The profession's other errands stay quoted (`KEEP_PRICING`).
 - **Shop-only quote work:** only the Auto Repair Shop's six repairs are left (`test_every_catalogue_skill_can_be_booked_somewhere`). They wait for a drop-off-and-quote flow. Tattoos are now booked by the hour at the studio and piercing per visit. The custom furniture maker also comes to measure.
 - **Commission-paid professions** (Insurance Agent, Real Estate Agent and similar) can only be booked as a quoted fee.
+
+## 16. Pickup & Delivery fares
+
+**Built 2026-11-05** (migration 099, `app/domain/trip_fare.py`). A delivery
+has nothing to inspect, and its distance is known before anyone moves. So it
+isn't priced like a repair (a visiting fee, then an invoice): it's priced up
+front, the way a ride or delivery app shows the price before you book.
+
+**Each provider sets their own fare** — Dodorez sets no prices:
+
+```
+fare = base fare + price per mile × the trip's miles + the size extra
+```
+
+- **Rates & hosting** has two boxes for the Pickup & Delivery skill: a base
+  fare ($2–$100) and a price per mile ($0.25–$10). An example shows what a
+  5-mile trip would cost. They're stored as rate-card units `TRIP_BASE` and
+  `TRIP_MILE`.
+- **The trip** is pickup → drop-off, measured **once, when the job is
+  posted**, and kept on the job (`jobs.trip_miles`), so the fare never moves.
+  - Google's driving distance when `GOOGLE_MAPS_SERVER_KEY` is set
+    (`app/services/trip_distance.py`).
+  - Otherwise, or when Google doesn't answer in 4 seconds, the straight line
+    × 1.3. Posting never fails on the routing service.
+  - The job records which it used (`trip_miles_source`: `ROAD` or `ESTIMATE`).
+- **The provider's own drive to the pickup isn't charged.** The base fare
+  covers getting going, as with a ride app.
+- **Size** (migration 100, `jobs.item_size`): the customer picks a bag, a
+  box, a car trunk, or a van or pickup truck when posting.
+  - **A bag** is always included.
+  - **A box** costs the provider's box extra, or nothing more if they haven't
+    set one.
+  - **A car trunk or a van** only goes to a provider who has set that extra
+    (even $0). Setting it is how they say they can carry it. The job isn't
+    sent to anyone else — distribution and the catch-up feed both filter on
+    it (`can_carry_sql` in `app/models/user.py`). A provider who opens it
+    anyway can't apply, and is told what to set.
+  - Extras are $0–$200, rate-card units `TRIP_BOX`, `TRIP_TRUNK`, `TRIP_VAN`.
+  - The estimate counts only providers who carry the size, and the fare says
+    it: "$6.00 + 4.2 mi × $1.50 + van $15.00 = $27.30".
+
+**What the customer sees:**
+1. **Before posting:** "About 4.2 mi · usually $12–$16" — the middle of
+   nearby providers' real fares for this trip (`GET /jobs/pickup-estimate`).
+   With none nearby yet, a typical local fare ($6 + $1.50 a mile), labelled
+   as a guide.
+2. **On each applicant:** their exact fare ("$12.30 total").
+3. **Hiring:** they book and pay the fare into escrow. No visiting fee, no
+   invoice.
+
+**The job:** paid up front → pickup photo → under way to the drop-off → the
+drop-off code → complete (`policy_for`: `PAY_UPFRONT`, `PICKUP_PROOF`,
+`TRACK_EN_ROUTE`, `HANDBACK_CODE`). Nothing is collected until the fare is
+paid (`require_ready`), and collecting it starts the job.
+
+**Buying it for the customer** is unchanged: the goods are held on their
+card, with the 5% shopping fee ($1.99–$9.99), and settled from the receipt.
+
+**Calling it off** (`upfront_terms.trip_cancel_terms`):
+
+| When | The provider gets | The customer gets back |
+|---|---|---|
+| Before the provider sets off | Nothing | Everything |
+| After they set off | The base fare (their trip) | The rest |
+| The item is refused at the pickup (prohibited, not as described, nobody there) | The base fare | The rest |
+| The provider cancels, or is late | Nothing | Everything (and the usual credit when late) |
+
+The base fare is kept on the job at hire (`upfront_base_rate`), so the share
+is the provider's own base fare out of the fare paid.
+
+**Pickups posted before trip fares** keep their visiting fee and invoice:
+their pricing stays `QUOTE`, and that flow is still there for them.
+
+**Waiting at the pickup and the drop-off** (built 2026-11-05, migration 101,
+`app/domain/trip_wait.py`). Decided: **capped and agreed at booking**, so
+nothing is ever charged after it.
+- **The provider's price:** an optional price per minute on their rate card
+  ($0.05–$2.00, unit `TRIP_WAIT`). Without one, waiting is free.
+- **The rules are Dodorez's:** the first 10 minutes at each stop are free
+  (`TRIP_WAIT_FREE_MINUTES`). After that, each whole minute is charged, at
+  most 20 for the whole trip, both stops together
+  (`TRIP_WAIT_MAX_MINUTES`). One cap means one hold covers it.
+  - The rate card's hint reads these numbers from the server
+    (`trip_wait` on `GET /hosting/me`), so changing a setting changes it.
+  - The price and both rules are copied onto the job at hire
+    (`wait_per_minute`, `wait_free_minutes`, `wait_max_minutes`), so a later
+    change never touches a booked trip.
+- **The clock, at each stop:**
+  - **Pickup:** starts at "I'm here" (location-checked, the existing
+    `mark_arrived`). Stops when the item is collected, refused, or the trip
+    is called off.
+  - **Drop-off:** starts at "I'm at the drop-off"
+    (`POST /jobs/{id}/delivery/arrived`, checked against the drop-off,
+    `jobs.dropoff_arrived_at`). Stops when the drop-off code is entered.
+- **Not for "buy it for me":** the shopping is the job.
+
+**The money:**
+1. **Before hiring,** each applicant shows their terms: "Waiting at the
+   pickup: free for 10 min, then $0.40/min, up to $8.00".
+2. **Booking** pays the fare plus that cap ($8.00) in the one payment.
+3. **When it's collected,** what was waited is recorded (`wait_minutes`,
+   `wait_charge`). The provider's share of the payment is set to
+   (fare + wait) ÷ (fare + cap).
+   - **When it's delivered,** the drop-off's minutes are added, out of what
+     the pickup left of the cap, and the share is set again.
+4. **At completion,** settlement pays that share, with the usual fee on it.
+   The rest is refunded to the customer automatically, in the same
+   settlement, along with its part of their own fee.
+   - A dispute decided for the provider pays the same share, never the whole
+     hold (`release_to_provider`).
+
+**Example:** a $12.30 fare at $0.40 a minute holds $20.30. The provider waits
+16 minutes, so 6 are charged ($2.40). The provider is paid on $14.70, and
+$5.60 comes back to the customer.
+
+**Called off or refused** (`trip_cancel_terms`): the base fare plus the
+waiting so far, out of everything held.
+
+**Both sides see the clock:**
+- The arrival push at each stop says when the free minutes end.
+- The provider's pickup and drop-off screens show "Waiting: 6 min · $2.40"
+  (`trip_wait.stage` says which stop's clock is running).
+- The customer's booking card shows the same, then the final charge and
+  what's coming back.
+
+**The provider app's trip screens.** A trip is paid up front, but it isn't
+care work: it uses the pickup and drop-off screens (photo, "I'm here",
+Confirm Pickup, drop-off code), never the care steps (`CareJobPanel`: check-in
+code, hand-over photos). Before 2026-11-05 it was sent to the care steps, so a
+booked trip couldn't be collected from the app.
