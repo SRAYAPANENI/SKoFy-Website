@@ -193,3 +193,6 @@ The owner always has both hats. A person on no team is always themselves.
   windows.
 - **Customers seeing an employer's name** on an individual's own work:
   decided no. The employer is only shown on its own jobs.
+- **Provider-initiated requests** (a provider finding and asking to join a
+  business, instead of waiting to be invited): built — see
+  [BUSINESS_DISCOVERY_DESIGN.md](BUSINESS_DISCOVERY_DESIGN.md).

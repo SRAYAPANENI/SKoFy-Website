@@ -279,3 +279,10 @@ disputes and claims are kept under "Former customer" / "Former provider".
   what both agree?
 - **Leaving.** Is 7 days' notice, ending automatically, fair and enforceable
   in every state?
+- **Provider-initiated requests** (built —
+  [BUSINESS_DISCOVERY_DESIGN.md](BUSINESS_DISCOVERY_DESIGN.md)): a provider
+  can now ask a business to join, not only the other way round. Doesn't
+  change the classification question above — who starts the contact isn't
+  the issue — but it does mean more people reach that question sooner,
+  since asking is easy. Worth a line to the lawyer alongside the rest of
+  this section, not a new one.
