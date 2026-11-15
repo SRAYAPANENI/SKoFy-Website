@@ -304,3 +304,24 @@ disputes and claims are kept under "Former customer" / "Former provider".
   the issue — but it does mean more people reach that question sooner,
   since asking is easy. Worth a line to the lawyer alongside the rest of
   this section, not a new one.
+
+## 14. Providers paying for customers' shopping (added 2026-11-15)
+
+- Today, on "Buy it for me", the provider pays the store with their own money
+  and is paid back from the customer's held card when the job is done. It's
+  opt-in, up to an amount the provider chooses (max $200). Does a provider
+  fronting a customer's money, and being reimbursed through us, raise any
+  money-transmission, lending or consumer-credit question?
+- Planned instead: a Dodorez virtual card per order (Stripe Issuing), loaded
+  from the customer's hold, that the provider pays with. Are we then the
+  card programme's business user, and does that change how providers are
+  classified (we'd be equipping them)? Any state rules on issuing cards to
+  independent contractors?
+- Tax forms: a shopping payout is the receipt paid back (the provider's own
+  money returned) plus the shopping fee (income). We record the two apart
+  (`payments.reimbursed_amount`) and count only the fee as earnings. When
+  Stripe Connect's 1099 reporting is turned on it totals transfers by
+  default — confirm we should report only the fee (adjusting Stripe's figures
+  before filing, or filing ourselves), and whether a fee paid to a team
+  member's own account on a business's job is reported to them, not the
+  business.

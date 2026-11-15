@@ -779,8 +779,76 @@ drop-off code → complete (`policy_for`: `PAY_UPFRONT`, `PICKUP_PROOF`,
 `TRACK_EN_ROUTE`, `HANDBACK_CODE`). Nothing is collected until the fare is
 paid (`require_ready`), and collecting it starts the job.
 
-**Buying it for the customer** is unchanged: the goods are held on their
-card, with the 5% shopping fee ($1.99–$9.99), and settled from the receipt.
+**Buying it for the customer**: the goods are held on their card, with the
+5% shopping fee ($1.99–$9.99), and settled from the receipt when the job is
+done. The provider pays the store **with their own money** and is paid back
+then, so buying is opt-in (2026-11-15):
+
+- A provider says they buy for customers by setting **"Buy for customers, up
+  to $X"** on the delivery skill's rate card (unit `TRIP_BUY`, $10–$200).
+  Empty = only already-paid orders.
+- A buy-for-me job reaches only providers whose amount covers its limit
+  (`can_buy_sql` in distribution, the fairness top-up, catch-up and the feed;
+  `ensure_buys_for` when applying — not at hire: applying is agreeing to buy).
+  Matched on the job's own skill (`jobs.skill_id`, the card the trip is
+  priced from). A job they've applied to stays in their feed even if they
+  lower their amount later. Booking a provider directly for a buy-for-me job
+  is refused unless everyone on the shortlist buys that much.
+- The platform limit is **$200** (was $1,000): an everyday shop.
+- **The shopping fee goes to the provider** (was kept by Dodorez): the
+  receipt total plus the 5% fee ($1.99–$9.99) are paid to them at settlement
+  (`goods_split` → kept = 0), with no Fair Cap fee on either. It's their reward
+  for paying first; Dodorez earns on the fare.
+- Posting: the estimate says how many nearby providers buy that much, and
+  points to "Already paid" (store's own online payment) when few or none do.
+- **Later, not built:** a Dodorez card per order (Stripe Issuing, loaded from
+  the hold) so no provider uses their own money — needs Stripe approval and
+  the lawyer (LEGAL_QUESTIONS.md §14).
+
+**Once the shopping is bought** (2026-11-15, migration 110):
+
+- **A dispute decides the shopping on its own.** It used to follow the fare's
+  outcome, so "refund the customer" refunded the receipt too and the provider
+  lost what they'd paid. Now (`pickup.goods_dispute_settlement`):
+
+  | The admin chooses | Receipt | Shopping fee | Allowed when |
+  |---|---|---|---|
+  | Pay the receipt back (default) | to whoever paid | to them if the fare went their way, else back to the customer | always |
+  | Refund the shopping | back to the customer | back to the customer | a reason is given (not bought · receipt doesn't match · items kept) **and** the drop-off code wasn't entered |
+
+  Once delivered, the customer has the items: refunding them would give the
+  shopping away at the provider's cost, so it's refused — the fare is decided
+  separately. The money waits while disputed (`settlement.py` → WAIT). The
+  admin sees the receipt photo beside the choice (DisputeDetail), and the
+  provider is told when the dispute opens that their shopping money is safe.
+- **A business's job: whoever paid is paid back.** A team member's work pays
+  the business, but if they paid the store with their own money the receipt
+  belongs to them. At pickup they say **"My own money"** or **"The business's
+  card"** (`jobs.goods_paid_with`). Own money: the goods payment is moved to
+  them (`payments.business_id` cleared, `goods_to_person`), so the payout, the
+  fee, their earnings and their tax form all follow it to their own account —
+  and they must have their own payouts set up, or pay with the card. The
+  business's card: everything to the business. The fare is the business's
+  either way.
+- **Paid back isn't income.** `payments.reimbursed_amount` keeps the receipt
+  part of each goods payout. Earnings (the provider's and a business's) count
+  only the fee; the payout list shows "$41.20 receipt + $2.06 shopping fee".
+  Tax forms must draw the same line (LEGAL_QUESTIONS.md §14). Payouts from
+  before this were the receipt alone and are backfilled as wholly paid back.
+- **A payout retried under an older rule is topped up, never paid twice.**
+  The goods transfer keeps its fixed idempotency key (a changed key could pay
+  twice after a crash). If Stripe refuses it as the same key with a new amount
+  (it went out as the receipt alone before the fee moved to the provider), the
+  earlier transfer is found by its metadata and only the difference is sent,
+  under its own key; nothing matching, or more already sent → logged
+  `payout_retry_needs_review` and stopped for a person. Refunds work the same
+  way (`_recover_refund`, found on the charge; `refund_retry_needs_review`) —
+  a dispute for the customer returns the fee too, so its refund can differ.
+  Top-ups are marked `skofy_top_up_of` and never taken for the original.
+- **Shopping already paid back** (the job completed, then was disputed):
+  "Refund the shopping" is refused with why — it would come out of the
+  provider's payout and needs a manual reversal in Stripe — never silently
+  skipped. The admin form only offers the choice while the money is held.
 
 **Calling it off** (`upfront_terms.trip_cancel_terms`):
 

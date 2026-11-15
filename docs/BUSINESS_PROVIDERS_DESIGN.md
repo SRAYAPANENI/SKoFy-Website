@@ -340,6 +340,17 @@ screens.
    business pays from its earnings** (§8).
 4. Whether the owner can read the job chat by default, or only when a
    member asks for help. *Suggested: by default, with the customer told.*
+5. ~~A member buying a customer's shopping on the business's job — who's
+   paid back?~~ **Decided 2026-11-15: whoever paid.** At pickup the member
+   says "my own money" (paid back to them, with the shopping fee, in their
+   own earnings — they need their own payouts) or "the business's card" (to
+   the business). The fare stays the business's. Whether the business buys
+   for customers at all is the owner's rate card (`TRIP_BUY`). Given to
+   another member before buying (reassigned, or handed back when someone
+   leaves): the customer's shopping hold moves with the job
+   (`move_open_business_payments`), so it isn't refunded or placed again.
+   After buying it can't change hands (they've set off). Details:
+   MONEY_RULES_DESIGN.md §16, "Once the shopping is bought".
 
 ## 12. Closing a business (2026-10-25)
 

@@ -52,7 +52,7 @@ Built, tested and deployed 2026-10-14 (server: migration 050); the apps need a r
 - **Timing.** "As soon as possible" (HIGH) or a scheduled time (LOW + `scheduled_at`) instead of always MEDIUM.
 
 **Buy it for me money hold, and what to collect (2026-10-15, migration 051; written and tested, NOT yet deployed).**
-- No 12% on goods. The customer pays a **shopping fee**: 5% of what was bought, at least $1.99 and at most $9.99 (`shopping_fee` in `app/domain/pickup.py`).
+- No 12% on goods. The customer pays a **shopping fee**: 5% of what was bought, at least $1.99 and at most $9.99 (`shopping_fee` in `app/domain/pickup.py`), **paid to the provider** with the receipt total since 2026-11-15. Buy-for-me is opt-in: only providers with a `TRIP_BUY` amount covering the limit (max $200) get it.
 - **Hold.** After the delivery fee, the customer holds the limit plus the largest possible fee, plus the card fee. This is payment purpose `GOODS_ADVANCE`, created at `POST /payments/goods-hold-intent`.
 - **Pickup.** The provider can't confirm pickup until the money is held, and has to enter the receipt total (`goods_amount`), which can't be more than the limit.
 - **Split.** When the job ends (`Settlement.SPLIT`), the receipt total goes to the provider, the fee to Dodorez, and the rest back to the customer. Split goods don't count in the provider's earnings.
