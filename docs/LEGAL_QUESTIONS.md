@@ -39,6 +39,24 @@ house) and brought to them, not only from a store. The safeguards:
   refuse it. A refusal cancels the job, and the provider keeps the trip fee.
   "Nobody there" needs a photo of the door.
 
+**Store pickups too (since 2026-11-15):** the customer ticks a box saying
+nothing in the order is alcohol, tobacco or vapes, cannabis, controlled
+medication, weapons, or anything illegal. Before that, store orders only
+showed a note and nothing was recorded.
+
+**What's kept with every pickup job** (and shown in the admin portal's job
+view; kept after the account is deleted, without the person's name):
+
+- The exact sentence the customer ticked, when, and which version of the
+  wording it was (`app/domain/pickup.py` `DECLARATION_VERSION`). If the
+  wording changes, a customer on the old one is asked to tick it again.
+- From a person: each of the provider's three checks, word for word with
+  its version, and the photo, GPS position and time at the pickup.
+- Every pickup: the provider's photo at the pickup, taken at the pickup's
+  location (the receipt too, for buy-for-me).
+- Every delivery: a photo of the order at the drop-off, taken there before
+  the customer's code is accepted, plus the code's GPS position and time.
+
 **Questions:**
 
 - Who is liable if a banned or illegal item is carried anyway: the customer
