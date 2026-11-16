@@ -850,6 +850,74 @@ then, so buying is opt-in (2026-11-15):
   provider's payout and needs a manual reversal in Stripe — never silently
   skipped. The admin form only offers the choice while the money is held.
 
+**Held on the card, not charged** (2026-11-16, migration 111,
+`app/domain/card_hold.py`). A trip's booking (fare + the most waiting can
+cost) and buy-for-me shopping money used to be charged in full and the unused
+part refunded — 5–10 days to show, so a $6.15 delivery read as $12.51 on the
+customer's statement for a week. Now, like a ride or delivery app:
+
+- **At booking** the card is only authorized (Stripe `capture_method=manual`,
+  card / Apple Pay / Google Pay only). The payment counts as HELD as before.
+- **At settlement** only what's owed is taken (`_take`): the fare, any
+  waiting, the fee on them; the rest is released at once — never charged,
+  nothing to refund. Called off before set-off: the hold is released whole.
+- **Safety net:** a hold still open after 6 days (a disputed trip) is taken
+  in full by the 30-minute sweep (`take_aging_holds`), inside the card
+  network's 7-day limit, and settled as any held payment from then on.
+- A late Stripe "succeeded" can't turn a paid-out payment back to HELD
+  (`mark_held` only from PENDING_CAPTURE/FAILED).
+- **What the customer sees** (`booking` on the job, the payment's own
+  figures): "Price $6.15 · Service fee $0.18 · You pay (no waiting) $6.33",
+  "Only if they wait: up to $6.00 more", "We hold $12.51 on your card and
+  take only what's used"; the button "Book — $6.33", Stripe's sheet "Hold
+  $12.51". Applicant cards say "$6.15 fare" and "+ only if they wait…".
+- Longer work (stays, quoted jobs) is charged and held in escrow as before.
+
+**Offers and credit on a booking** (2026-11-16). Booking a job priced up
+front goes through the same checkout as an invoice (`/jobs/{id}/book/offers`,
+`/book/preview`, `/book/pay` with `offer_code`): the customer's offers, a
+promo code, the bill, then "Book — $X" — after hiring, and from the job's
+booking card. An offer is on the **price**, never on a trip's waiting
+(`offer_pricing.fixed_on`: worked out on the fare, then fixed), capped by
+Dodorez's fees as everywhere, so the provider's share never changes.
+
+Settling only part of a payment (a trip's waiting unused, a stay ended
+early — `pay_cancellation_share`) now **uses the offer and the credit** as a
+full payment does: they pay the provider's part plus Dodorez's fee on it,
+less both; credit beyond that goes back to them; under the card minimum
+nothing is taken and Dodorez covers it. Before, the offer was silently lost
+on a part, and the credit handed back instead of used. The screens use the
+same rule (`offer_pricing.part_of`), so "You pay" is exactly what's taken.
+
+**Fixed:** a payment's worth to the provider (`owed_to_provider`) now adds
+back the customer's Dodorez credit, as it did an offer — credit is Dodorez's
+money. Before, a provider was paid as if the job were worth the credit less;
+Dodorez's recorded take is now less the credit instead.
+
+**Waiting can't be run up** (2026-11-16, migration 112, `trip_wait.py`).
+Waiting is charged only where the customer's side keeps the provider waiting,
+like a ride app — never a store's wait, like a food app:
+
+1. **No waiting fee at a store's pickup** (`pickup_counts`): only a pickup
+   from a person and the drop-off are charged. A store wait is covered by the
+   fare. Texts say where it's charged (`where_charged`).
+2. **The customer can stop the clock**: "It's handed over" in the app
+   (`POST /jobs/{id}/wait/stop`) stops the running stop's clock then and there
+   (`*_wait_stopped_at`, reason CUSTOMER); the provider is told. Stalling after
+   the hand-over earns nothing.
+3. **Told before it's charged**: when a charged stop's free minutes end and
+   they're still waiting, the customer gets a push (`wait_tasks.notify_paid_waiting`).
+4. **Only while the provider is there**: a location more than
+   `WAIT_LEAVE_KM` (0.8 km — wider than the arrival check, for GPS drift)
+   from the stop stops its clock (reason LEFT), on every location update
+   (`stop_waits_left_behind`).
+5. **Watched**: providers whose waiting reached the maximum 3+ times in 30
+   days are listed for support (admin → Waiting watch) with how each clock
+   ended. A long wait isn't a fault on its own — nothing is paused automatically.
+
+A customer could tap "handed over" early to avoid paying; it's recorded with
+who and when, for support if the provider disputes it.
+
 **Calling it off** (`upfront_terms.trip_cancel_terms`):
 
 | When | The provider gets | The customer gets back |
