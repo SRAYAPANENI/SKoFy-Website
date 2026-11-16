@@ -914,6 +914,15 @@ like a ride app — never a store's wait, like a food app:
 5. **Watched**: providers whose waiting reached the maximum 3+ times in 30
    days are listed for support (admin → Waiting watch) with how each clock
    ended. A long wait isn't a fault on its own — nothing is paused automatically.
+6. **No meter for the provider** (`as_provider_sees`): while a charged stop's
+   clock runs, the provider's job view leaves out its minutes and money
+   (`counting: true`; earlier stops stay counted). They're told it's counted for
+   them, and see the result once it stops: "Waiting stopped · N min · $X" when
+   the customer or leaving stops it, "Waiting paid · …" on the way to the
+   drop-off and after delivery (`WaitResult`). Hidden in the
+   API, not just the app, so nothing on the phone can show it. The customer
+   always sees the live count. Nothing to watch tick up, nothing gained by
+   dragging it out.
 
 A customer could tap "handed over" early to avoid paying; it's recorded with
 who and when, for support if the provider disputes it.

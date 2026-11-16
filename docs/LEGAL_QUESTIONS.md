@@ -325,3 +325,23 @@ disputes and claims are kept under "Former customer" / "Former provider".
   before filing, or filing ourselves), and whether a fee paid to a team
   member's own account on a business's job is reported to them, not the
   business.
+
+## 15. Providers' vehicles and insurance (added 2026-11-16)
+
+- Providers carry customers' items in their own vehicles. Car-trunk and
+  van-size trips now need a vehicle Dodorez has checked: photos, plate and
+  registration (docs/VEHICLES_DESIGN.md). We also collect proof of insurance,
+  but don't require it yet (`VEHICLE_INSURANCE_REQUIRED=false`).
+- Most personal auto policies exclude paid delivery ("business use"). Should
+  we require delivery or commercial cover, or a rideshare/delivery
+  endorsement, before these trips reach a provider? Does it differ by state?
+- If an item is damaged or someone is hurt during a delivery and the
+  provider's policy refuses, what's our exposure? Should Dodorez carry a
+  contingent or hired-and-non-owned auto policy, as delivery platforms do?
+- Does checking vehicles and their papers make providers look more like
+  employees (we "equip" or control them)? Is it any different from checking
+  ID or licences?
+- We keep plate numbers, vehicle photos and registration cards. We show the
+  plate only to the customer of a booked job, and remove it when an account
+  is deleted. Does any state's privacy law (DPPA, CCPA) need more, e.g.
+  a notice when the photo is taken?

@@ -76,6 +76,7 @@ that: the history tables' links to a person are `RESTRICT`, not
 | Live location, base address; their Stripe payout account is closed | |
 | What they typed asking for a service Dodorez didn't offer | |
 | Team invites sent to their number; the contact details of a business they closed | |
+| Vehicles' plates, photos and registration/insurance files; a vehicle no job used | A vehicle a job came in, as what it was ("a white Ford Transit") — `jobs.vehicle_id` is RESTRICT |
 
 **Banned people** (an admin disabled them) keep only a keyed fingerprint of
 their number (`banned_phone_fingerprints`), so the same number can't sign up

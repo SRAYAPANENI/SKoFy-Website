@@ -131,3 +131,23 @@ Built and switched off (`BUSINESS_ACCOUNTS_ENABLED=false`) — see
   - Customer: business applicants, the tracking label, the chat notice.
   - Portal: Businesses.
 
+## Providers' vehicles (2026-11-16)
+
+Built and on (migration 113, docs/VEHICLES_DESIGN.md). Car-trunk and van-size
+Pickup & Delivery trips need a vehicle Dodorez checked; bags and boxes don't.
+
+- **Rules:** `app/domain/vehicles.py` (types, what each carries, readiness, validation).
+  The SQL is built from the same tables in `app/repositories/vehicle_sql.py`.
+- **Enforced in:** the feed and distribution (`can_carry_sql`), the customer's
+  trip estimate, applying, direct booking, hire (`jobs.vehicle_id`), and a
+  business giving a job to another member.
+- **Service:** `VehicleService` — the provider's vehicles, review, `on_job` for
+  the customer, a daily expiry check (`check_vehicle_document_expiries`).
+- **Apps:**
+  - Provider: Profile → My vehicles; status under the trunk and van prices;
+    which vehicle to come in, on the job sheet.
+  - Customer: the vehicle on the applicant card; vehicle, plate and photo on tracking.
+  - Portal: Vehicles (`providers.verify`, sidebar count).
+- **Not yet:** insurance isn't required (`VEHICLE_INSURANCE_REQUIRED`, waiting on
+  the lawyer, LEGAL_QUESTIONS.md §15); no vehicles owned by a business.
+
