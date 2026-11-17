@@ -735,8 +735,23 @@ front, the way a ride or delivery app shows the price before you book.
 **Each provider sets their own fare** — Dodorez sets no prices:
 
 ```
-fare = base fare + price per mile × the trip's miles + the size extra
+fare = base fare + price per mile for the size × the trip's miles + the size extra
 ```
+
+**A big load's own price per mile** (2026-11-17): a car-trunk or van load
+costs the driver more *every mile* — fuel, wear, a bigger vehicle — which a
+flat extra didn't follow (dear on a short trip, short-paid on a long one). So:
+
+- a car trunk and a van may each have their own price per mile
+  (`TRUNK_MILE`, `VAN_MILE` on the rate card — optional). Unset, the usual
+  price per mile counts; it can't be saved below the usual one, and if the
+  usual one is later raised past it, the usual one counts (never less).
+- their size extra is now their **loading fee**, once per trip — and still
+  how a provider says they carry that size (even $0), so who gets the job
+  doesn't change.
+- the fare reads e.g. "$6.00 + 4.2 mi × $2.75 (van) + van loading $10.00".
+  The typical guide (no fares nearby) uses $1.90/mi + $5 for a car trunk and
+  $2.75/mi + $10 for a van; "Suggest for me" suggests both rates too.
 
 - **Rates & hosting** has two boxes for the Pickup & Delivery skill: a base
   fare ($2–$100) and a price per mile ($0.25–$10). An example shows what a
