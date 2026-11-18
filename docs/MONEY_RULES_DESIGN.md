@@ -252,6 +252,13 @@ the provider.
   `OFF_APP_PAYMENT`) and `pause_lapses` (each with its date and job), and the
   dashboard shows a red banner with them (`components/paused-banner.tsx`).
   Before this, a paused provider saw only an empty job list.
+- **Lifting a pause (built 2026-11-18, migration 114):** the portal's provider
+  panel has a *New jobs* section — paused until when, why, the lapses — and
+  **Lift pause** (`POST /providers/admin/{id}/lift-pause`, `providers.manage`,
+  a reason required). It ends the pause now and **forgives** the lapses so far
+  (`provider_lapses.forgiven_at`): kept on record, no longer counted, or the
+  next lapse would pause them again at once. The last lift, who and why, is
+  kept on the provider (`pause_lifted_*`), and the provider gets a push.
 
 ## 4. Proving an inspection happened
 
