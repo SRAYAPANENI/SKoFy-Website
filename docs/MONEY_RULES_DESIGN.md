@@ -245,6 +245,13 @@ the provider.
 - Pickup jobs already follow this shape: no cancelling once the item is
   collected, and the trip is paid on a refused pickup. The same stage table
   applies before collection.
+- **While paused (built 2026-11-18):** no new job is sent, none comes in on
+  moving into range, and jobs sent before the pause leave the feed — only
+  ones already applied to stay (`_INBOUND_FROM_WHERE`). The provider is told:
+  their profile carries `paused_until`, `pause_reason` (`LAPSES` or
+  `OFF_APP_PAYMENT`) and `pause_lapses` (each with its date and job), and the
+  dashboard shows a red banner with them (`components/paused-banner.tsx`).
+  Before this, a paused provider saw only an empty job list.
 
 ## 4. Proving an inspection happened
 
