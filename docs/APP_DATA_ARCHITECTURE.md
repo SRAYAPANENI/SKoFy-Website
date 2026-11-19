@@ -1,6 +1,6 @@
 # App data architecture: one data layer, small screens
 
-**Status (2026-10-30):** built in both apps, except one piece. Both apps have the data layer; Rates & hosting and the Jobs tab are on it and split; every redraw-over-and-over found on the big screens is fixed (table below). Left: splitting the provider's Manage/Service Room modal out of Home (about 720 lines) — the provider's most important flow, so it waits for testing on a device.
+**Status (2026-10-30):** built in both apps, except one piece. Both apps have the data layer; Rates & hosting and the Jobs tab are on it and split; every redraw-over-and-over found on the big screens is fixed (table below). The provider's Service Room is out of Home too (2026-11-19): its own screen, `app/service-room.tsx`, reading and watching its own job (`hooks/use-service-room-job.ts`) with each step in `components/service-room/` — Home's redraws can't reach it, and its typing doesn't redraw Home. Opened from anywhere by `openServiceRoom` (services/service-room.ts), which also tells Home when a job completed or ended (job lock, rating). Waits for testing on a device.
 
 ## Why
 
@@ -47,7 +47,7 @@ Server data and what's being typed are different things. A form copies the serve
 | 1 | Data layer: package, `QueryClient` with app-state and network awareness, keys, first hooks | Built |
 | 2 | Rates & hosting on the data layer, split into components | Built |
 | 3 | Jobs tab (542 lines) | Built |
-| 4 | Provider Home (4,127 lines): its data on hooks, then split section by section | Data on the layer; job cards split out (`JobFeedCard`); redraws fixed. The Manage/Service Room modal is the next piece to split |
+| 4 | Provider Home (4,127 lines): its data on hooks, then split section by section | Data on the layer; job cards split out (`JobFeedCard`); redraws fixed; the Service Room split out to its own screen (Home 4,608 → ~2,500 lines) |
 | 5 | Provider Profile (5,511 lines): the same | Clocks fixed (availability, skill test); profile and skills read through the shared cache. Not split further |
 | 6 | Customer app: the same plan, heaviest screens first | Data layer built (same client, keys, write refresh, sign-out clear); profile, addresses and active jobs shared by Home and the bottom bar; redraws on Home and Track provider fixed |
 
