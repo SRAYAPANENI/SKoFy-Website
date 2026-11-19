@@ -95,6 +95,27 @@ policy_for(shape) -> JobProtocol
 
 The policy is a **pure function** (no database, no I/O): easy to test exhaustively and to reason about.
 
+### 3a. On-site steps wait for the arrival (built 2026-11-19)
+
+Anything done **at a place** waits for "I'm here" recorded **at that place** —
+checked within `JOB_START_MAX_DISTANCE_KM` (500 m; 150 m where it starts a
+charged waiting clock). Before it, nothing there may happen or be revealed.
+Server: `require_arrival` (`app/services/job_steps/geofence.py`), error
+`ARRIVE_FIRST`; the provider app shows each step locked with what to tap.
+
+| Shape | Waits for "I'm here" (arrived_at) | Waits for "I'm at the drop-off" (dropoff_arrived_at) |
+|---|---|---|
+| Route, from a store | the store's pickup code (not even sent before — `pickup_details_for`), the photo, confirming | — |
+| Route, from a person | the photo, confirming, refusing the item | — |
+| Route, the hand-over | — | the drop-off photo, then the drop-off code on the customer's screen |
+| At the customer's (quoted) | asking for the arrival code | — |
+| At the customer's (care) | asking for the check-in code | — |
+
+At the provider's own place there's no arrival: they're home; the customer
+comes. A code on the customer's screen ("Your order is here", "Give this
+code to your provider") must never be asked for from somewhere else —
+that's what this closes. A new on-site step uses `require_arrival` too.
+
 ## 4. Architecture (SOLID)
 
 ### 4.1 Components
