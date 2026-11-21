@@ -29,14 +29,32 @@ changes.
   business owner's own `providers.location`, the point every provider
   already has. `provider_repo.get_nearby`'s `ST_DWithin` query is the
   template.
-- Each row carries name, logo, distance and team size — enough to judge at a
-  glance, in one query with no per-business lookups. Licensed/insured and
-  clear-check-share (BUSINESS_PROVIDERS_DESIGN.md §6) were considered for
-  this list too but dropped for v1: each needs its own per-business fetch
-  (documents, members), and a list is the wrong place to pay that cost for
-  every row. There's no deeper business-profile view to fall back on yet
-  either — a provider judges from the list, then asks. Add one if that
-  turns out not to be enough.
+- **Its record, never its people** (built 2026-11-21). Each row carries
+  name, logo, distance, team size, **jobs done as the business**, its
+  **rating** from reviews of those jobs (count shown; none yet reads "New on
+  Dodorez", never 0.0), **kinds of work** (top professions — its done jobs
+  weigh ten times a member's verified skill), **Verified** and **Insured**
+  (in-date general liability at `BUSINESS_MIN_LIABILITY`). All in the one
+  list query (`BusinessRepository._CARD_COLUMNS`); "done" is
+  `completed_work_sql`, so refunded disputes don't count. Members' names and
+  details are never shown — totals only.
+- **Distance is rough on purpose.** It's to the owner's own location — often
+  their home — so it's measured from that point snapped to the ~550 m grid
+  provider pins use (`_OWNER_AREA`), never the real one: distance, the radius
+  filter and the order all use it, so neither stepping the radius nor moving
+  one's own reported location finds more than the grid point. Sent in whole
+  kilometres (at least 1), shown as "Under 1 mi" or whole miles; the radius
+  asked for is whole kilometres too.
+  A business whose owner's account an admin has disabled isn't listed.
+- **The business's page** (`business-profile.tsx`, `GET
+  /businesses/{business_id}/profile` → `BusinessTeamService.business_profile`):
+  the same, with more kinds of work, its approved in-date trade licences,
+  "On Dodorez since", and its owner (name, photo, rating, jobs done) — who
+  you'd work for. **Request to join lives here**, with the hours and the
+  consents (`join-request-form.tsx`); the list's button opens the page. The
+  mirror of the requester's profile the owner decides on.
+- Not built yet: how quickly an owner answers requests — worth showing once
+  there's enough history to say it honestly.
 - **"Open to join requests"** (new, owner-set, off by default): a badge,
   sorts to the top. It never filters the list — every approved business
   stays visible and askable; the flag only signals the owner's actively
