@@ -345,3 +345,27 @@ disputes and claims are kept under "Former customer" / "Former provider".
   plate only to the customer of a booked job, and remove it when an account
   is deleted. Does any state's privacy law (DPPA, CCPA) need more, e.g.
   a notice when the photo is taken?
+
+## 16. Watching providers take the skill test (added 2026-11-21)
+
+- Skill tests are now timed by our server. Leaving the app or taking a
+  screenshot is recorded, and a pass that looks wrong is held for a person to
+  review (docs/SKILL_VERIFICATION_DESIGN.md). Nothing is filmed yet. Is
+  keeping those signs and each answer's timing fine under CCPA and similar
+  laws, with the notice on the test's rules screen?
+- Built 2026-11-21: for skills an admin picks (electrical, gas, HVAC), the
+  front camera is on during the test: a face photo at the start, photos
+  every 15 seconds, and two spoken answers that are recorded, transcribed and
+  scored by AI. The provider ticks a consent screen first. A **person**
+  compares the photos with the ID by eye. No software measures the face, so
+  we believe no "biometric identifier" (face geometry) is created under
+  Illinois BIPA, Texas CUBI or Washington's law. Is that right? Is our consent
+  wording enough, and is the retention (30 days after the decision, 180 if
+  turned down, at once on account deletion) fine?
+- If we later add automatic face matching (e.g. AWS Rekognition), what
+  written consent, retention schedule and published policy would we need?
+- Is a voice recording of a spoken answer biometric (a voiceprint) if we
+  only transcribe and score it, never identify the speaker?
+- Turning down a test for suspected cheating takes a provider's badge away
+  and so costs them work. Do we owe them the evidence, an appeal, or a
+  person's decision (never the AI's alone)? We already require a person.
