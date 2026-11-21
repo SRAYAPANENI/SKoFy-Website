@@ -71,14 +71,44 @@ answer a request unchanged:
   ("Invites don't lapse"): nothing times out, there's no badge for leaving
   it unanswered. That's the "ignore" the idea asked for.
 
-The owner sees these in the same **Team** list as everyone else
-(`team-section.tsx`) — not a separate "Requests to join" list as first
-sketched here. The badge reads "Wants to join" instead of "Invited", and the
-decline/withdraw button reads "Decline" instead of "Withdraw invite", by
-checking `requested_by`; everything else (the hours card, Accept/Offer
-other hours/Decline buttons) is the exact same UI an owner-sent invite with
-a countered offer already uses. One component, both directions — simpler
-and guaranteed visually consistent, rather than two.
+**Deciding on a profile, not a row** (built 2026-11-21). A request is
+decided only on the requester's profile — `join-request.tsx`, from
+`GET /businesses/me/team/{member_id}/profile` (`BusinessTeamService.request_profile`,
+owner only, as answering is): photo and name, skills (verified first, with
+their Skill-o-meter), rating and the per-dimension breakdown, jobs done,
+cancellations and no-shows, years of experience and bio, ID and background
+check, and the hours asked for. Accept, Offer other hours and Decline live
+there and nowhere else — the Team list (`team-section.tsx`) shows a request
+with "Wants to join" and a **View profile** button, never an Accept.
+
+**Consent comes with asking** (fixed 2026-11-21). The owner's Accept joins
+them on the spot, so the two things an invite asks before joining — the
+location notice, and authorising the background check when they have no
+clear one — are asked when they send the request (`business-nearby.tsx`,
+the same `Consent` blocks as an invite; `nearby()` returns the notice and
+disclosure). `request()` refuses without them and records both on the row
+(`notice_acknowledged_at`, `check_authorized_at`). Before this, a request
+recorded neither, and Accept stamped "notice acknowledged" at that moment
+and ordered a check nobody had authorised. A request still waiting from
+before the fix can't be accepted (`_ensure_request_consented`) — the owner
+declines it and they send a new one, which asks them.
+
+**Contact comes with joining.** A request's phone isn't sent to the app at
+all — `team()` blanks it for `is_join_request` rows, and the profile never
+includes phone or email. Once they join they're an ACTIVE member and their
+number shows as anyone's on the team. An invite the owner sent keeps the
+number the owner typed.
+
+**Seen on the home screen.** The owner's dashboard lists requests waiting
+for their answer — "Requests to join" on the Team side (`team-panel.tsx`),
+and a banner on the Myself side — each opening the profile. The Business tab
+carries their count. A request the owner countered with other hours is
+waiting on the provider, so it isn't counted (`awaitsOwner`); its profile
+says what was offered and only offers **Withdraw**.
+
+**The three business pages** — Team jobs, Map, Business — share one strip
+(`business-tabs.tsx`) with the page you're on highlighted; moving between
+them replaces the page, so Back returns to the home screen.
 
 On the provider's own side: `my_invites()` (what feeds the Business screen's
 invite card) already includes this row — it was only ever filtered by
@@ -132,10 +162,10 @@ papering every nearby business with requests at once — the mirror of
 | Discovery query | `BusinessRepository.nearby(provider_id, radius_km)` — the same `ST_DWithin` shape as `provider_repo.get_nearby`, joined to the owner's `providers.location`, filtered to `status = 'APPROVED'` |
 | Discovery service | `BusinessTeamService.nearby(provider_id, radius_km=None)` — defaults to the provider's own `preferred_radius_km` |
 | Sending a request | `BusinessTeamService.request(provider_id, business_id, hours=None)` — `_ensure_may_join`, then `BusinessRepository.request` (fresh) or `.re_request` (a REMOVED row, reopened) |
-| Owner answering | Nothing new — the existing `offer_hours` / `answer_hours` (EMPLOYER_PARTNERS_DESIGN.md §2) already handle a MEMBER-sourced INVITED row; see §2 above |
+| Owner answering | The existing `offer_hours` / `answer_hours` (EMPLOYER_PARTNERS_DESIGN.md §2) answer a MEMBER-sourced INVITED row; what they decide on is `request_profile` (`GET /businesses/me/team/{member_id}/profile`) — see §2 above |
 | The "open to join requests" toggle | `BusinessService.set_discoverable(provider_id, open)`; `PUT /businesses/me/discoverable` |
 | API | `GET /businesses/nearby`, `POST /businesses/{business_id}/requests` |
-| App | New screen `business-nearby.tsx` (list, off the Home banner and `EmployerBenefits()`); `team-section.tsx` and `business-invites.tsx` get `requested_by`-aware copy, not a new list; a toggle row on `business.tsx` for the owner |
+| App | `business-nearby.tsx` (list, off the Home banner and `EmployerBenefits()`); `join-request.tsx` (the requester's profile, where it's decided); requests on the home screen (`team-panel.tsx`, a Myself-side banner); `business-tabs.tsx` across Team jobs / Map / Business; `requested_by`-aware copy in `team-section.tsx` and `business-invites.tsx`; a toggle row on `business.tsx` for the owner |
 | Switch | `BUSINESS_ACCOUNTS_ENABLED`, same as everything else here |
 
 ## Open
