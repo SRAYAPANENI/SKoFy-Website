@@ -45,6 +45,15 @@ The answer response carries `counted` (`ANSWERED`, `TIMED_OUT`, `LEFT_APP`, `ALR
 ### 2.6 The bank grows
 When a provider has fewer than 10 unseen questions left at their level, `grow_question_bank` (Celery) adds a batch of 40. The existing questions are named to the model so it doesn't repeat them, and near-duplicates are dropped. Growth is capped at 400 per skill and guarded to one run per skill every 10 minutes. Questions are now asked as on-the-job situations, not definitions a search answers in one line.
 
+### 2.6.1 Questions written ahead of time, on their own queue
+Writing a bank takes 10–60 s on the live model, longer than the app waits on a request, so a test never waits for it.
+- **When it's written:** in the background when a skill is added (at most 3 per request, so a big list never floods the AI), when the test screen opens (`GET /skills/{id}/test/prepare`), and hourly for the 10 most-listed untested skills (`prepare_listed_skill_tests`).
+- **Not ready on Start:** the server answers `TEST_PREPARING` (409); nothing starts and nothing counts. The app waits, checks every 4 s, and starts by itself.
+- **Camera tests:** the multiple-choice and spoken banks are written at the same time.
+- **Its own queue:** all of it runs on the `ai` Celery queue, with its own worker (`celery_ai`), so it can't hold up job alerts and other pushes on the default queue.
+- **Never written** for no-test skills or Pickup & Delivery.
+- **Test accounts** (`SKILL_TEST_ANSWER_HINT_PHONES`, empty by default) see the right answer, or a spoken question's marking guide, in the question text. This is for trying a pass on purpose; empty it before launch.
+
 ### 2.7 The signs, and what happens to a pass
 
 | Sign | Meaning | Weight |
