@@ -108,6 +108,22 @@ the state and the insurance certificate.
   team's own jobs.
 - **The business applies.** Rates and hosting work per business, as on the
   individual rate card ([JOB_SHAPE_DESIGN.md](JOB_SHAPE_DESIGN.md) phase 4).
+- **Someone already booked** (2026-11-23, `booking_clash.py`): can't be named
+  when applying, nor given a job, that overlaps one they're hired for — the
+  team's or their own. Jobs at other times are fine. The picker marks them
+  "Already booked then" (`GET /businesses/me/jobs/{id}/busy`), never with what.
+  Online sessions (a set time, with an end or by the hour) count; other online
+  work doesn't.
+- **Change person** (2026-11-23): the owner or a dispatcher can name another
+  member on a waiting application (`POST /businesses/me/jobs/{id}/change-person`),
+  with every check the first faced. The price stays; the customer's list updates
+  at once and they're told. Atomic against a hire (`change_applicant`, and a
+  hire checks the application still names who the customer saw). The board
+  marks "Booked since" / "Left your team"; a hire refused for it tells the
+  dispatchers (once in 10 min). At most 3 by choice per application
+  (`BUSINESS_PERSON_CHANGES_MAX`, `person_changes`, migration 120), the number
+  left shown; a change they have to make isn't counted. A hire carries who the
+  customer saw (`HireRequest.provider_id`): anyone else is refused.
 - **Withdrawing** (2026-11-05): the owner or a dispatcher can take back the
   business's application while the customer hasn't chosen (Team jobs →
   Withdraw). It's final, as for an individual: the business can't apply for
@@ -192,8 +208,11 @@ screens.
 | Rule | Why |
 |---|---|
 | **Only while on a job:** from "Set off" until arrival, and while a job is in progress away from home. Never off duty, never between jobs | Tracking employees off duty is a legal risk in several states, and it's the line workers accept |
+| **Only for jobs the member travels to** (2026-11-23, `member_travels`): never online work or work at their own place, where they never set off. The map counts people, not jobs | The notice says "from when you set off" |
+| **The app follows a trip only from set-off** (2026-11-23) — for individuals too: before it, the customer sees "Booked" and no position (`track_job` `set_off`). Two jobs under way: the one set off for last | Hired isn't on the way |
+| **The map shows everyone working:** one pin per person (however many jobs), people too close gathered in a numbered bubble, those at one spot fanned out (`services/team-map.ts`); online or at their own place: listed, no location | A team can be any size |
 | **Written notice and acknowledgement** when a member joins a team, and again if the rules change | New York requires written notice of electronic monitoring, acknowledged by the employee; Connecticut and Delaware require notice. Doing it everywhere is simplest |
-| **Always visible to the worker:** "Sharing location with ABC Plumbing" shows while it's on, and they can see what the owner sees | Trust, and California's notice-at-collection rules for employee data |
+| **Always visible to the worker:** "Sharing location with ABC Plumbing" shows while it's on (the trip notification names the customer and the business), and they can see what the owner sees | Trust, and California's notice-at-collection rules for employee data |
 | **History kept as job evidence only:** the GPS points on steps (set-off, arrival, codes), not a breadcrumb trail of every minute | Collect the minimum. A full trail can be added if the lawyer is comfortable |
 | **The individual hat isn't shared** (§7): a member's own jobs are never visible to the business | They aren't the business's work |
 
