@@ -232,7 +232,7 @@ the provider.
 | When | Customer | Provider |
 |---|---|---|
 | Cancels before setting off | 100% back; the job reopens to other applicants (built) | Counts against reliability (built) |
-| Never sets off (no-show timer, built), or arrives more than 30 min after the booked time or the ETA they were given *(dial)* | 100% back, a free cancel, and a **$10 Dodorez credit** *(dial)*, paid by Dodorez, not the provider | Counts against reliability |
+| Never sets off (no-show timer, built; an urgent deadline: by an hour before it, or 15 min after the hire if later), or arrives more than 30 min after the booked time or the ETA they were given *(dial)* | 100% back, a free cancel, and a **$10 Dodorez credit** *(dial)*, paid by Dodorez, not the provider | Counts against reliability |
 | 3 of the above in 30 days *(dial)* | — | Paused from new jobs for 7 days |
 
 **Rules:**

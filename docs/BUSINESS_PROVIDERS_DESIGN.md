@@ -113,7 +113,8 @@ the state and the insurance certificate.
   team's or their own. Jobs at other times are fine. The picker marks them
   "Already booked then" (`GET /businesses/me/jobs/{id}/busy`), never with what.
   One job at a time, online work included: a session (a set time, with an end
-  or by the hour) takes its own time, other online work until it's finished;
+  or by the hour) takes its own time, other online work until it's finished
+  (or a day passes with no price agreed and paid);
   the same customer at the same address is one visit. A hire tells the other
   customers they're waiting on (their list shows "Booked on another job", Hire
   off: `ApplicantSummary.unavailable`) and asks the business for someone else.
