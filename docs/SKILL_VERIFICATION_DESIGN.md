@@ -50,7 +50,14 @@ Writing a bank takes 10–60 s on the live model, longer than the app waits on a
 - **When it's written:** in the background when a skill is added (at most 3 per request, so a big list never floods the AI), when the test screen opens (`GET /skills/{id}/test/prepare`), and hourly for the 10 most-listed untested skills (`prepare_listed_skill_tests`).
 - **Not ready on Start:** the server answers `TEST_PREPARING` (409); nothing starts and nothing counts. The app waits, checks every 4 s, and starts by itself.
 - **Camera tests:** the multiple-choice and spoken banks are written at the same time.
-- **Its own queue:** all of it runs on the `ai` Celery queue, with its own worker (`celery_ai`), so it can't hold up job alerts and other pushes on the default queue.
+- **Its own queues, two lanes** (2026-11-23, after a provider waited ~12 min behind 18 queued skills while Groq returned 429s). Neither lane can hold up job alerts and other pushes on the default queue.
+  - **Fast lane:** `ai_now`, worker `celery_ai_now`, 2 at once. It's for a test someone has open (the test screen's prepare, or Start).
+  - **Writing ahead:** `ai`, worker `celery_ai`, one at a time. It covers a skill being added, the hourly job and topping up a bank. Running more at once only hits Groq's rate limit.
+- **Never queued twice:** everything is queued through `queue_test_writing` (`app/tasks/skill_test_tasks.py`).
+  - Writing ahead is queued once per skill and language, marked by `skill_q_queued:*`.
+  - The fast lane is queued once per skill and language, marked by `skill_q_now:*`, and listed with its start time in the sorted set `skill_q_now_all`.
+  - Both marks are cleared when the run ends, whether it worked or failed, so a failed run is tried again the next time it's asked for. Each mark also has its own expiry, in case a run is lost: 30 min for writing ahead, 10 min for the fast lane. If handing the task to the queue fails, the mark is removed straight away.
+- **Writing ahead gives way:** while the fast lane holds anyone queued in the last 10 min, writing-ahead runs (`prepare_skill_test`, `grow_question_bank`) wait 20 s and check again. They do this at most 15 times (5 min), so they can never stall for good.
 - **Never written** for no-test skills or Pickup & Delivery.
 - **Test accounts** (`SKILL_TEST_ANSWER_HINT_PHONES`, empty by default) see the right answer, or a spoken question's marking guide, in the question text. This is for trying a pass on purpose; empty it before launch.
 

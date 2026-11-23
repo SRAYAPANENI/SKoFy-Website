@@ -111,8 +111,15 @@ the state and the insurance certificate.
 - **Withdrawing** (2026-11-05): the owner or a dispatcher can take back the
   business's application while the customer hasn't chosen (Team jobs →
   Withdraw). It's final, as for an individual: the business can't apply for
-  that job again, naming anyone, and the board shows it as withdrawn. A
+  that job again, naming anyone. A
   member can't withdraw an application their business made naming them.
+  (2026-11-23) A withdrawn job leaves the business's lists and counts (job
+  details still says the business withdrew), and the member it named stops
+  seeing it as applied. Their response time (HCI) stays when they first
+  responded: a distribution's `responded_at` is never moved by a later change. It leaves the customer's open applicants list at once
+  (`applicants_changed` on `/ws/jobs/{id}`). A withdrawal and a hire at the
+  same instant: exactly one happens (`settle_pending_application`), and the
+  other is told why.
 - **Assigning.** Once hired, an owner or dispatcher assigns a member who has
   the skill and a clear background check. That member does every step:
   - setting off, arrival, check-in and hand-back codes;
