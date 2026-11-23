@@ -180,6 +180,8 @@ Built 2026-10-28 (`app/domain/care_sheet.py`, migration 087).
   - **Pets:** which kinds, the biggest dog, pets at once, whether they provide food.
   - **Items:** items at once, the biggest size.
   - Limits count animals and items, not bookings: three dogs take three places, and pets and items each have their own limit (`host_refusal`).
+  - **Finding the place** (`app/domain/host_place.py`, migration 122): the customer gets the host's address and pin once booked and paid, until check-in — or, with something in care, until it is handed back. Never the provider's live position. A business's member working at its owner's place gets it too. Moving it with paid visits ahead tells them. These jobs need a time. A push an hour before the drop-off/visit and the pick-up (`remind_host_visits`) opens it, with Get directions.
+  - **Hosting switch** (App Settings): off in either app, jobs at the provider's place can't be posted, by form, voice or regular visit (`AppConfigRepository.hosting_open`). Jobs already booked carry on.
   - Matching skips hosts whose preferences rule a job out. Hosts who haven't set hosting up are still asked to.
   - Empty preferences mean the old behaviour: a host takes anything up to `host_capacity` (`effective_prefs`).
 - **Not yet:** a house-sitting sheet ("My home": keys, alarm, plants, pets in the home, mail). The description covers it for now.
