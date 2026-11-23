@@ -112,8 +112,11 @@ the state and the insurance certificate.
   when applying, nor given a job, that overlaps one they're hired for — the
   team's or their own. Jobs at other times are fine. The picker marks them
   "Already booked then" (`GET /businesses/me/jobs/{id}/busy`), never with what.
-  Online sessions (a set time, with an end or by the hour) count; other online
-  work doesn't.
+  One job at a time, online work included: a session (a set time, with an end
+  or by the hour) takes its own time, other online work until it's finished;
+  the same customer at the same address is one visit. A hire tells the other
+  customers they're waiting on (their list shows "Booked on another job", Hire
+  off: `ApplicantSummary.unavailable`) and asks the business for someone else.
 - **Change person** (2026-11-23): the owner or a dispatcher can name another
   member on a waiting application (`POST /businesses/me/jobs/{id}/change-person`),
   with every check the first faced. The price stays; the customer's list updates
