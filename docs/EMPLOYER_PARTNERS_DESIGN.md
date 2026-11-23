@@ -41,7 +41,8 @@ customers of their own.
    rating and distance, as it always has.
 2. **The job's work time decides the hat** for each person it reaches. The
    work time is the scheduled start, or for "as soon as possible", when the
-   job was posted. Both are fixed, so the label never changes afterwards.
+   job was posted — an urgent job with a deadline too: "done by 6 PM" isn't
+   when it starts (`booking_clash.is_deadline`). Both are fixed, so the label never changes afterwards.
    - **In their agreed hours:**
      - the job goes to their employer's board;
      - the owner and dispatchers are told;
