@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodorez Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  Dodorez "coming soon" flyers. One page, four looks:
+    ?v=customer|provider   who it's for
+    ?f=portrait|wide       1080x1350 (Instagram / WhatsApp) or 1800x600 (banner)
+    ?still=1               no animation (for exporting a PNG)
+-->
+<style>
+  :root {
+    --yellow: #FFCE48;
+    --yellow-hot: #FFB800;
+    --yellow-light: #FFE47A;
+    --ink: #111111;
+    --ink-soft: #1d1d1f;
+    --white: #ffffff;
+    --coral: #FF5A5F;
+    --teal: #12B5A6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #2a2a2a; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  .flyer { position: relative; overflow: hidden; }
+  .portrait { width: 1080px; height: 1350px; }
+  .wide { width: 1800px; height: 600px; }
+
+  /* ── Themes ─────────────────────────────────────────────── */
+  .customer { background: radial-gradient(120% 90% at 78% 72%, var(--yellow-light) 0%, var(--yellow) 38%, var(--yellow-hot) 100%); color: var(--ink); }
+  .provider { background: radial-gradient(110% 90% at 78% 70%, #2b2b2b 0%, #161616 45%, #0a0a0a 100%); color: var(--white); }
+
+  /* Sunburst rays behind the characters */
+  .rays { position: absolute; inset: -40%; pointer-events: none; }
+  .customer .rays { background: repeating-conic-gradient(from 0deg at var(--rx) var(--ry), rgba(255,255,255,.28) 0deg 7deg, transparent 7deg 20deg); -webkit-mask: radial-gradient(circle at var(--rx) var(--ry), #000 0%, transparent 42%); mask: radial-gradient(circle at var(--rx) var(--ry), #000 0%, transparent 42%); }
+  .provider .rays { background: repeating-conic-gradient(from 0deg at var(--rx) var(--ry), rgba(255,206,72,.20) 0deg 7deg, transparent 7deg 20deg); -webkit-mask: radial-gradient(circle at var(--rx) var(--ry), #000 0%, transparent 40%); mask: radial-gradient(circle at var(--rx) var(--ry), #000 0%, transparent 40%); }
+  .portrait .rays { --rx: 72%; --ry: 70%; }
+  .wide .rays { --rx: 76%; --ry: 62%; }
+
+  /* Glow disc the characters stand on */
+  .glow { position: absolute; border-radius: 50%; pointer-events: none; }
+  .customer .glow { background: radial-gradient(circle, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 68%); }
+  .provider .glow { background: radial-gradient(circle, rgba(255,206,72,.55) 0%, rgba(255,206,72,0) 66%); }
+  .portrait .glow { width: 980px; height: 980px; right: -230px; bottom: -210px; }
+  .wide .glow { width: 900px; height: 900px; right: -60px; top: -120px; }
+
+  /* Big decorative ring + dots */
+  .ring { position: absolute; border-radius: 50%; pointer-events: none; }
+  .customer .ring { border: 3px dashed rgba(17,17,17,.18); }
+  .provider .ring { border: 3px dashed rgba(255,206,72,.25); }
+  .portrait .ring { width: 760px; height: 760px; right: -120px; bottom: 60px; }
+  .wide .ring { width: 640px; height: 640px; right: 120px; top: -20px; }
+
+  /* ── Header ─────────────────────────────────────────────── */
+  .brand { position: absolute; display: flex; align-items: center; gap: 16px; z-index: 5; }
+  .mark { width: 62px; height: 74px; object-fit: contain; }
+  .wordmark { font-weight: 800; font-size: 46px; letter-spacing: -1px; }
+  .portrait .brand { left: 72px; top: 64px; }
+  .wide .brand { left: 72px; top: 52px; }
+  .wide .mark { width: 50px; height: 60px; }
+  .wide .wordmark { font-size: 38px; }
+
+  .soon { position: absolute; z-index: 5; display: inline-flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; font-weight: 800; font-size: 22px; letter-spacing: 3px; text-transform: uppercase; }
+  .customer .soon { background: var(--ink); color: var(--yellow); }
+  .provider .soon { background: var(--yellow); color: var(--ink); }
+  .soon .dot { width: 12px; height: 12px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 0 currentColor; animation: pulse 1.6s infinite; }
+  .portrait .soon { right: 72px; top: 72px; }
+  .wide .soon { right: 72px; top: 56px; font-size: 18px; padding: 12px 22px; }
+
+  /* ── Headline + story ───────────────────────────────────── */
+  .copy { position: absolute; z-index: 4; }
+  .portrait .copy { left: 72px; top: 196px; width: 936px; }
+  .wide .copy { left: 72px; top: 150px; width: 1010px; }
+
+  .eyebrow { font-weight: 700; font-size: 22px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 18px; opacity: .85; }
+  .wide .eyebrow { font-size: 17px; margin-bottom: 12px; }
+
+  h1 { font-weight: 900; letter-spacing: -2.5px; line-height: .98; }
+  .portrait h1 { font-size: 104px; }
+  .wide h1 { font-size: 62px; letter-spacing: -1.5px; }
+  .chip { display: inline-block; padding: 2px 24px 10px; border-radius: 22px; transform: rotate(-1.5deg); margin-top: 16px; font-size: .78em; }
+  .customer .chip { background: var(--ink); color: var(--yellow); }
+  .provider .chip { background: var(--yellow); color: var(--ink); }
+  .provider h1 .y { color: var(--yellow); }
+
+  .story { font-weight: 500; margin-top: 26px; max-width: 560px; }
+  .portrait .story { font-size: 28px; line-height: 1.38; max-width: 500px; }
+  .wide .story { font-size: 23px; line-height: 1.4; max-width: 760px; margin-top: 18px; }
+  .story b { font-weight: 800; }
+
+  /* Three promises */
+  .points { position: absolute; z-index: 4; display: flex; flex-direction: column; gap: 16px; }
+  .portrait .points { left: 72px; bottom: 214px; width: 470px; }
+  .wide .points { display: none; }
+  .point { display: flex; align-items: center; gap: 16px; padding: 16px 22px; border-radius: 20px; font-weight: 700; font-size: 25px; line-height: 1.2; backdrop-filter: blur(6px); }
+  .customer .point { background: rgba(255,255,255,.62); box-shadow: 0 10px 30px -12px rgba(120,70,0,.45); }
+  .provider .point { background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,206,72,.35); }
+  .point .ic { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; }
+  .customer .point .ic { background: var(--ink); color: var(--yellow); }
+  .provider .point .ic { background: var(--yellow); color: var(--ink); }
+
+  /* ── Footer CTA ─────────────────────────────────────────── */
+  .cta { position: absolute; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .portrait .cta { left: 48px; right: 48px; bottom: 48px; padding: 26px 34px; border-radius: 30px; }
+  .wide .cta { left: 72px; bottom: 50px; padding: 0; background: none !important; box-shadow: none !important; }
+  .customer .cta { background: var(--ink); color: var(--white); box-shadow: 0 24px 50px -20px rgba(0,0,0,.6); }
+  .provider .cta { background: var(--yellow); color: var(--ink); box-shadow: 0 24px 60px -20px rgba(255,206,72,.6); }
+  .cta .go { font-weight: 800; font-size: 34px; letter-spacing: -.5px; display: flex; align-items: center; gap: 14px; }
+  .cta .go .arrow { display: inline-grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; font-size: 30px; }
+  .customer .cta .go .arrow { background: var(--yellow); color: var(--ink); }
+  .provider .cta .go .arrow { background: var(--ink); color: var(--yellow); }
+  .cta .stores { font-weight: 600; font-size: 20px; opacity: .8; text-align: right; line-height: 1.3; }
+  .wide .cta .go { font-size: 28px; }
+  .wide .cta .go .arrow { width: 46px; height: 46px; font-size: 24px; }
+  .wide.customer .cta .go { color: var(--ink); }
+  .wide.customer .cta .go .arrow { background: var(--ink); color: var(--yellow); }
+  .wide.provider .cta .go { color: var(--white); }
+  .wide.provider .cta .go .arrow { background: var(--yellow); color: var(--ink); }
+  .wide .cta .stores { display: none; }
+  .wide .stores-wide { position: absolute; z-index: 6; left: 520px; bottom: 60px; font-weight: 600; font-size: 18px; opacity: .75; }
+  .portrait .stores-wide { display: none; }
+
+  /* ── Characters ─────────────────────────────────────────── */
+  .cast { position: absolute; z-index: 3; pointer-events: none; }
+  .cast img { position: absolute; bottom: 0; filter: drop-shadow(0 26px 22px rgba(0,0,0,.28)); }
+  .provider .cast img { filter: drop-shadow(0 26px 26px rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(255,206,72,.18)); }
+  .portrait .cast { right: 0; bottom: 150px; width: 520px; height: 640px; }
+  .wide .cast { right: 40px; bottom: 0; width: 760px; height: 560px; }
+
+  /* ── Floating app cards ─────────────────────────────────── */
+  .card { position: absolute; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px 18px 12px 12px; border-radius: 18px; background: #fff; color: var(--ink); box-shadow: 0 18px 40px -14px rgba(0,0,0,.45); font-size: 19px; font-weight: 700; line-height: 1.15; white-space: nowrap; animation: float 5s ease-in-out infinite; }
+  .card small { display: block; font-size: 15px; font-weight: 500; color: #555; }
+  .card .badge { flex: none; width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; font-size: 22px; }
+  .card .ok { color: var(--teal); font-weight: 800; }
+  .card .up { color: var(--teal); }
+  .wide .card { font-size: 16px; padding: 9px 14px 9px 9px; border-radius: 15px; }
+  .wide .card small { font-size: 13px; }
+  .wide .card .badge { width: 36px; height: 36px; font-size: 18px; border-radius: 11px; }
+
+  /* Sparkles */
+  .spark { position: absolute; z-index: 2; width: var(--s); height: var(--s); animation: twinkle 2.4s ease-in-out infinite; }
+  .spark svg { width: 100%; height: 100%; }
+  .customer .spark path { fill: #fff; }
+  .provider .spark path { fill: var(--yellow); }
+  .confetti { position: absolute; z-index: 2; border-radius: 3px; }
+
+  @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+  @keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0); opacity: 1 } 50% { transform: scale(.6) rotate(20deg); opacity: .5 } }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 currentColor } 70% { box-shadow: 0 0 0 12px transparent } 100% { box-shadow: 0 0 0 0 transparent } }
+  .still *, .still *::before { animation: none !important; }
+</style>
+</head>
+<body>
+<div id="flyer"></div>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  const who = q.get("v") === "provider" ? "provider" : "customer";
+  const format = q.get("f") === "wide" ? "wide" : "portrait";
+  const still = q.get("still") === "1";
+
+  // The story, in each audience's words. Only claims that are true today.
+  const COPY = {
+    customer: {
+      eyebrow: "Anyone · Any skill · Anywhere",
+      h1: `Someone great<br>at everything.<br><span class="chip">Nearby or online.</span>`,
+      h1Wide: `Someone great at everything.<br><span class="chip">Nearby or online.</span>`,
+      story: `A photographer for Saturday. A coding mentor tonight. A hand with the big move. <b>Real, verified people</b> — one tap away.`,
+      points: [
+        ["✓", "ID-verified people"],
+        ["★", "A trust score you can read"],
+        ["🔒", "Paid safely, only when it's done"],
+      ],
+      cta: "Get ready",
+      cast: [
+        { src: "dad-kid.png", p: { left: 0, h: 500 }, w: { left: 60, h: 430 } },
+        { src: "woman-phone.png", p: { left: 196, h: 620 }, w: { left: 330, h: 540 } },
+      ],
+      cards: [
+        { icon: "📸", bg: "#FFE9A8", t: "Photographer · Saturday", s: `<span class="ok">✓ ID verified</span>`, p: null, w: { right: 560, top: 120 }, d: 0 },
+        { icon: "📈", bg: "#D9F5F1", t: "Trust score 812", s: `<span class="up">▲ Improving</span>`, p: { right: 24, bottom: 400 }, w: { right: 30, top: 250 }, d: 1.2 },
+        { icon: "🎸", bg: "#E8E4FF", t: "Guitar lessons · Online", s: "Tonight, 7 pm", p: { right: 250, bottom: 200 }, w: { right: 600, top: 410 }, d: 2.1 },
+      ],
+    },
+    provider: {
+      eyebrow: "Calling everyone who's great at something",
+      h1: `Your skill.<br>Your price.<br><span class="y">Your name.</span>`,
+      h1Wide: `Your skill. Your price.<br><span class="y">Your name.</span>`,
+      story: `Code it. Shoot it. Teach it. Make it. If you're great at it, <b>get hired for it</b> — not an agency, not a bidding war.`,
+      points: [
+        ["$", "You set your own rates"],
+        ["★", "A trust score that's yours"],
+        ["🌍", "Hired nearby — or anywhere online"],
+      ],
+      cta: "Be one of the first",
+      cast: [
+        { src: "pro-woman.png", p: { left: 0, h: 470 }, w: { left: 20, h: 410 } },
+        { src: "laptop.png", p: { left: 250, h: 380 }, w: { left: 470, h: 380 } },
+        { src: "creator.png", p: { left: 112, h: 600 }, w: { left: 200, h: 530 } },
+      ],
+      cards: [
+        { icon: "✨", bg: "#FFE9A8", t: "New request · Brand shoot", s: "2.1 mi away", p: null, w: { right: 590, top: 110 }, d: 0 },
+        { icon: "💲", bg: "#D9F5F1", t: "Your rate: $85/hr", s: "You decide", p: { right: 24, bottom: 560 }, w: { right: 330, top: 330 }, d: 1.1 },
+        { icon: "💻", bg: "#E8E4FF", t: "Online · App design", s: "Work from anywhere", p: { right: 260, bottom: 200 }, w: { right: 40, top: 420 }, d: 2.2 },
+      ],
+    },
+  };
+
+  const c = COPY[who];
+  const root = document.getElementById("flyer");
+  root.className = `flyer ${format} ${who}${still ? " still" : ""}`;
+
+  const px = (o) => Object.entries(o).filter(([k]) => k !== "h").map(([k, v]) => `${k}:${v}px`).join(";");
+  const star = `<svg viewBox="0 0 24 24"><path d="M12 0c.7 5.6 3.4 9.3 12 12-8.6 2.7-11.3 6.4-12 12-.7-5.6-3.4-9.3-12-12 8.6-2.7 11.3-6.4 12-12z"/></svg>`;
+
+  const sparks = (format === "portrait"
+    ? [[560, 150, 40], [960, 250, 28], [860, 470, 54], [620, 560, 24], [140, 830, 30], [980, 900, 36], [520, 960, 22]]
+    : [[1150, 70, 30], [1700, 150, 26], [1060, 320, 40], [1740, 470, 34], [980, 520, 20]]
+  ).map(([x, y, s], i) => `<div class="spark" style="left:${x}px;top:${y}px;--s:${s}px;animation-delay:${i * 0.35}s">${star}</div>`).join("");
+
+  const confettiColors = who === "customer" ? ["#111", "#fff", "#FF5A5F", "#12B5A6"] : ["#FFCE48", "#fff", "#FF5A5F", "#12B5A6"];
+  const confetti = (format === "portrait"
+    ? [[690, 120], [1010, 380], [600, 700], [1030, 640], [470, 1080], [750, 330], [300, 760]]
+    : [[1250, 40], [1500, 60], [1640, 300], [1100, 450], [1350, 560]]
+  ).map(([x, y], i) => `<span class="confetti" style="left:${x}px;top:${y}px;width:${10 + (i % 3) * 4}px;height:${18 - (i % 3) * 3}px;background:${confettiColors[i % 4]};transform:rotate(${i * 37}deg)"></span>`).join("");
+
+  const cast = c.cast.map((m) => {
+    const pos = format === "portrait" ? m.p : m.w;
+    return `<img src="${m.src}" style="left:${pos.left}px;height:${pos.h}px" alt="">`;
+  }).join("");
+
+  const cards = c.cards.filter((k) => (format === "portrait" ? k.p : k.w)).map((k) => {
+    const pos = format === "portrait" ? k.p : k.w;
+    return `<div class="card" style="${px(pos)};animation-delay:${k.d}s">
+      <span class="badge" style="background:${k.bg}">${k.icon}</span>
+      <span>${k.t}<small>${k.s}</small></span></div>`;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="rays"></div><div class="glow"></div><div class="ring"></div>
+    ${confetti}${sparks}
+    <div class="brand"><img class="mark" src="${who === "provider" ? "logo-yellow.png" : "logo-black.png"}" alt=""><span class="wordmark">Dodorez</span></div>
+    <div class="soon"><span class="dot"></span>Coming soon</div>
+    <div class="copy">
+      <div class="eyebrow">${c.eyebrow}</div>
+      <h1>${format === "portrait" ? c.h1 : c.h1Wide}</h1>
+      <p class="story">${c.story}</p>
+    </div>
+    <div class="points">${c.points.map(([i, t]) => `<div class="point"><span class="ic">${i}</span>${t}</div>`).join("")}</div>
+    <div class="cast">${cast}</div>
+    ${cards}
+    <div class="cta"><span class="go">${c.cta}<span class="arrow">→</span></span><span class="stores">Launching soon on<br>iPhone &amp; Android</span></div>
+    <div class="stores-wide">Launching soon on iPhone &amp; Android</div>
+  `;
+</script>
+</body>
+</html>

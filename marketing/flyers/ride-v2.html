@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodorez — As easy as booking a ride (night)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  "As easy as booking a ride. Verified like it matters." — v2, the night look
+  (RIDE_V2_PROMPTS.md): three pros walking in out of the dark like rides
+  arriving, golden light trails behind them as routes on a map. Yellow is the
+  accent only — "Verified", the trails, the badge.
+    ?f=portrait|story   1080x1350 (post) or 1080x1920 (story / status)
+    ?still=1            no animation (for exporting a PNG)
+  Characters: v2-pro-arrival.png, v2-pro-developer.png, v2-pro-delivery.png —
+  rendered on black with a glow, so they sit on the near-black background
+  with mix-blend-mode: lighten (black falls away, the glow stays). They
+  mustn't overlap each other: lighten would let one show through another.
+  Every claim is what the app does (docs/SKILL_VERIFICATION_DESIGN.md).
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  .flyer {
+    --mid: #05080F; --night: #13233A; --yellow: #FFCE48; --teal: #1EE3C1; --white: #FFF8E7;
+    position: relative; overflow: hidden; width: 1080px; height: 1350px; color: var(--white);
+    padding: 52px 64px 46px; display: flex; flex-direction: column;
+    background:
+      radial-gradient(70% 45% at 50% 62%, rgba(255,206,72,.13) 0%, rgba(255,206,72,0) 70%),
+      radial-gradient(90% 60% at 50% 0%, #13233A 0%, rgba(19,35,58,0) 70%),
+      var(--mid);
+  }
+  .flyer.story { height: 1920px; padding: 104px 64px 92px; }
+
+  /* Top bar */
+  .top { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 40px; font-weight: 800; color: var(--white); }
+  .brand img { width: 48px; }
+  .pill { padding: 11px 22px; border-radius: 999px; border: 2px solid var(--yellow); color: var(--yellow); font-size: 20px; font-weight: 800; }
+
+  /* Hook */
+  h1 { position: relative; z-index: 5; margin-top: 40px; font-size: 98px; line-height: .95; font-weight: 900; letter-spacing: -4px; }
+  h2 { position: relative; z-index: 5; margin-top: 18px; font-size: 50px; line-height: 1; font-weight: 900; letter-spacing: -1.5px; }
+  h2 em { font-style: normal; color: var(--yellow); text-shadow: 0 0 28px rgba(255,206,72,.55); }
+  .story h1 { margin-top: 70px; font-size: 122px; letter-spacing: -5px; }
+  .story h2 { font-size: 62px; }
+
+  /* The scene: three pros walking in, light trails behind them */
+  .stage { position: relative; flex: 1; margin-top: 6px; }
+  .trails { position: absolute; inset: -40px -64px 0; width: calc(100% + 128px); height: calc(100% + 40px); z-index: 0; }
+  .trail { fill: none; stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(255,206,72,.9)); }
+  .trail.a { stroke: var(--yellow); stroke-width: 4; stroke-dasharray: 2 16; animation: flow 1.4s linear infinite; }
+  .trail.b { stroke: rgba(255,206,72,.55); stroke-width: 2.5; }
+  .trail.c { stroke: rgba(30,227,193,.5); stroke-width: 2.5; }
+  @keyframes flow { to { stroke-dashoffset: -36; } }
+
+  .pro { position: absolute; bottom: 0; z-index: 2; }
+  .pro img { display: block; height: 100%; width: auto; mix-blend-mode: lighten; }
+  /* Back left, front centre, back right — side by side, never overlapping. */
+  .pro.dev  { left: -70px;  height: 76%; }
+  .pro.fix  { left: 50%; transform: translateX(-50%); height: 100%; z-index: 3; }
+  .pro.del  { right: -70px; height: 76%; }
+  .pro img { animation: walk 4s ease-in-out var(--d) infinite; }
+  @keyframes walk { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  /* "On the way" chips, like a ride app's arriving card */
+  .eta { position: absolute; z-index: 4; display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border-radius: 18px;
+    background: rgba(19,35,58,.78); border: 1px solid rgba(255,248,231,.14); backdrop-filter: blur(10px);
+    box-shadow: 0 16px 30px -14px rgba(0,0,0,.8); white-space: nowrap; }
+  .eta .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 5px rgba(30,227,193,.22); }
+  .eta b { display: block; font-size: 18px; font-weight: 800; line-height: 1.15; }
+  .eta span { display: block; font-size: 14px; font-weight: 600; color: rgba(255,248,231,.7); }
+  .eta span i { font-style: normal; color: var(--yellow); font-weight: 800; }
+  .eta.e-dev { left: 0; bottom: 30%; }
+  /* Beside his head, never on it. */
+  .eta.e-fix { right: calc(50% + 120px); top: 5%; }
+  .story .eta.e-fix { right: calc(50% + 150px); top: 4%; }
+  .eta.e-del { right: 0; bottom: 30%; }
+  .story .eta b { font-size: 22px; } .story .eta span { font-size: 17px; }
+
+  /* What "Verified" means here */
+  .verified { position: relative; z-index: 5; margin-top: 18px; display: grid; grid-template-columns: 74px 1fr; gap: 18px; align-items: center;
+    padding: 20px 24px; border-radius: 26px; background: rgba(19,35,58,.82); border: 1px solid rgba(255,206,72,.35);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 24px 40px -20px rgba(0,0,0,.9); }
+  .shield { width: 74px; height: 82px; display: grid; place-items: center; }
+  .shield svg { width: 100%; height: 100%; filter: drop-shadow(0 0 14px rgba(255,206,72,.6)); }
+  .checks { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 6px 22px; }
+  .check { display: flex; align-items: flex-start; gap: 9px; font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .check::before { content: "✓"; flex: none; display: grid; place-items: center; width: 24px; height: 24px; margin-top: 1px; border-radius: 50%;
+    background: var(--teal); color: var(--mid); font-size: 14px; font-weight: 900; }
+  .check small { display: block; font-size: 14px; font-weight: 600; color: rgba(255,248,231,.65); }
+  .check.cam::before { background: var(--yellow); }
+  .story .verified { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 28px; margin-top: 30px; }
+  .story .checks { grid-template-columns: 1fr; justify-items: start; gap: 14px; text-align: left; }
+  .story .check { font-size: 24px; } .story .check small { font-size: 18px; }
+  .story .shield { width: 92px; height: 102px; }
+
+  .foot { position: relative; z-index: 5; margin-top: 16px; font-size: 19px; font-weight: 700; color: rgba(255,248,231,.78); text-align: center; }
+  .foot b { color: var(--white); }
+  .story .foot { margin-top: 26px; font-size: 24px; }
+
+  .still *, .still *::before { animation: none !important; }
+</style>
+</head>
+<body>
+<div class="flyer" id="flyer">
+  <div class="top">
+    <div class="brand"><img src="logo-yellow.png" alt=""> Dodorez</div>
+    <div class="pill">Coming soon · USA</div>
+  </div>
+
+  <h1>As easy as<br>booking a ride.</h1>
+  <h2><em>Verified</em> like it matters.</h2>
+
+  <div class="stage">
+    <svg class="trails" viewBox="0 0 1080 800" preserveAspectRatio="none" aria-hidden="true">
+      <path class="trail b" d="M -20 520 C 220 470, 360 300, 540 290 S 880 420, 1100 360"/>
+      <path class="trail c" d="M -20 640 C 260 600, 400 420, 560 400 S 900 560, 1100 520"/>
+      <path class="trail a" d="M -20 760 C 240 720, 420 520, 540 500 S 860 660, 1100 600"/>
+    </svg>
+
+    <div class="pro dev"><img src="v2-pro-developer.png" alt="" style="--d:.5s"></div>
+    <div class="pro fix"><img src="v2-pro-arrival.png" alt="" style="--d:0s"></div>
+    <div class="pro del"><img src="v2-pro-delivery.png" alt="" style="--d:1s"></div>
+
+    <div class="eta e-dev"><span class="dot"></span><div><b>Developer</b><span>online · <i>now</i></span></div></div>
+    <div class="eta e-fix"><span class="dot"></span><div><b>Plumbing &amp; gas</b><span>on the way · <i>6 min</i></span></div></div>
+    <div class="eta e-del"><span class="dot"></span><div><b>Pickup &amp; delivery</b><span>on the way · <i>9 min</i></span></div></div>
+  </div>
+
+  <div class="verified">
+    <div class="shield">
+      <svg viewBox="0 0 74 82" aria-hidden="true">
+        <path d="M37 2 L70 14 V40 C70 60 56 74 37 80 C18 74 4 60 4 40 V14 Z" fill="#FFCE48" stroke="#05080F" stroke-width="3"/>
+        <path d="M22 42 L33 53 L54 30" fill="none" stroke="#05080F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="checks">
+      <div class="check"><div>ID checked<small>every pro</small></div></div>
+      <div class="check"><div>Skills tested<small>timed, answers hidden</small></div></div>
+      <div class="check cam"><div>Camera test<small>gas &amp; wiring, a person reviews</small></div></div>
+    </div>
+  </div>
+
+  <div class="foot">Code, a gas line, a car, a pickup — <b>one app, booked in a tap.</b></div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const f = document.getElementById('flyer');
+  if (q.get('f') === 'story') f.classList.add('story');
+  if (q.get('still')) f.classList.add('still');
+</script>
+</body>
+</html>

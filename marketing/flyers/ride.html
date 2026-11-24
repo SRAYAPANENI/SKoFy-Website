@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodorez — As easy as booking a ride</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  "As easy as booking a ride. Verified like it matters."
+  Booking a skilled pro the way you book a cab — the familiar ride-app card
+  (a map, someone on the way, minutes away) — with what makes it different:
+  what "Verified" means on Dodorez.
+    ?f=portrait|story   1080x1350 (post) or 1080x1920 (story / status)
+    ?still=1            no animation (for exporting a PNG)
+  Characters: hero-customer.png, biz-owner.png (same cast as magic/business).
+  Every claim is what the app does (docs/SKILL_VERIFICATION_DESIGN.md): ID
+  checked; skills tested on a timed test with hidden answers; gas, wiring and
+  roofs on camera with a person reviewing every pass; paid in the app and
+  held until done. No competitor named, no "can't be cheated". "Mike" is
+  made up.
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #2a2a2a; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  .flyer {
+    --yellow: #FFCE48; --ink: #111111; --teal: #12B5A6; --cream: #FFF6D8;
+    --fig: 470px;
+    position: relative; overflow: hidden; width: 1080px; height: 1350px; color: var(--ink);
+    padding: 48px 64px 44px; display: flex; flex-direction: column;
+    background:
+      radial-gradient(60% 40% at 50% 56%, #FFF0B8 0%, rgba(255,240,184,0) 70%),
+      radial-gradient(120% 90% at 50% 0%, #FFD95E 0%, var(--yellow) 55%, #F5B92A 100%);
+  }
+  .flyer.story { height: 1920px; padding: 96px 64px 88px; --fig: 600px; }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 40px; font-weight: 800; }
+  .brand img { width: 48px; }
+  .pill { padding: 12px 22px; border-radius: 999px; background: var(--ink); color: var(--yellow); font-size: 21px; font-weight: 800; }
+
+  /* Hook */
+  h1 { margin-top: 34px; font-size: 104px; line-height: .93; font-weight: 900; letter-spacing: -4.2px; }
+  h2 { margin-top: 18px; font-size: 52px; line-height: 1; font-weight: 900; letter-spacing: -1.6px; }
+  h2 em { font-style: normal; position: relative; z-index: 0; white-space: nowrap; }
+  h2 em::before { content: ""; position: absolute; z-index: -1; left: -10px; right: -12px; bottom: 2px; height: 46%;
+    background: #fff; border-radius: 10px; transform: rotate(-1.5deg) scaleX(0); transform-origin: left;
+    animation: mark .7s cubic-bezier(.2,.8,.2,1) .35s forwards; }
+  @keyframes mark { to { transform: rotate(-1.5deg) scaleX(1); } }
+  .story h1 { margin-top: 64px; font-size: 124px; letter-spacing: -5px; }
+  .story h2 { font-size: 62px; }
+
+  /* The scene: customer — the ride-app card — the pro */
+  .stage { position: relative; flex: 1; margin-top: 10px; display: grid; grid-template-columns: 1fr 430px 1fr; align-items: end; }
+  .story .stage { grid-template-columns: 1fr 470px 1fr; margin-top: 30px; }
+  .who { position: relative; display: flex; justify-content: center; align-items: flex-end; height: 100%; }
+  .who img { height: var(--fig); max-width: 150%; object-fit: contain; object-position: bottom;
+    filter: drop-shadow(0 22px 16px rgba(17,17,17,.22)); animation: bob 3.6s ease-in-out var(--d) infinite; }
+  .who.cust img { margin-right: -70px; } .who.pro img { margin-left: -70px; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  .tag { position: absolute; bottom: 10px; z-index: 3; padding: 7px 16px; border-radius: 999px; background: var(--ink); color: #fff;
+    font-size: 18px; font-weight: 800; white-space: nowrap; }
+  .tag span { color: var(--yellow); }
+
+  /* The card everyone knows from booking a ride */
+  .ride { position: relative; z-index: 4; align-self: center; margin-bottom: 40px; border-radius: 30px; background: #fff; overflow: hidden;
+    box-shadow: 0 30px 50px -22px rgba(17,17,17,.5); animation: rise .8s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+  .map { position: relative; height: 196px; overflow: hidden;
+    background:
+      repeating-linear-gradient(90deg, rgba(17,17,17,.05) 0 2px, transparent 2px 46px),
+      repeating-linear-gradient(0deg, rgba(17,17,17,.05) 0 2px, transparent 2px 46px),
+      var(--cream); }
+  .story .map { height: 240px; }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .road { fill: none; stroke: #fff; stroke-width: 20; stroke-linecap: round; }
+  .route { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2 13; animation: march 1.2s linear infinite; }
+  @keyframes march { to { stroke-dashoffset: -30; } }
+  .pin { position: absolute; display: grid; place-items: center; border-radius: 50%; font-size: 20px; }
+  .pin.home { right: 34px; top: 30px; width: 44px; height: 44px; background: var(--ink); box-shadow: 0 0 0 7px rgba(17,17,17,.12); }
+  .pin.pro { left: 70px; bottom: 34px; width: 50px; height: 50px; background: var(--yellow); border: 4px solid #fff;
+    box-shadow: 0 8px 16px -6px rgba(17,17,17,.5); animation: drive 6s ease-in-out infinite; }
+  @keyframes drive { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px,-22px); } }
+  .eta { position: absolute; left: 16px; top: 16px; padding: 7px 13px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 800; }
+  .eta b { color: var(--yellow); }
+
+  .body { padding: 18px 22px 20px; }
+  .row { display: flex; align-items: center; gap: 13px; }
+  .avatar { flex: none; width: 54px; height: 54px; border-radius: 16px; background: var(--ink); display: grid; place-items: center; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+  .name { font-size: 22px; font-weight: 900; line-height: 1.1; }
+  .sub { font-size: 15px; font-weight: 600; color: #6B7280; }
+  .sub b { color: var(--ink); }
+  .badges { margin-top: 14px; display: grid; gap: 7px; }
+  .badge { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 700; line-height: 1.25; }
+  .badge::before { content: "✓"; flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--teal); color: #fff; font-size: 13px; font-weight: 900; }
+  .badge.cam::before { background: var(--ink); color: var(--yellow); }
+  .badge i { font-style: normal; color: #6B7280; font-weight: 600; }
+  .story .name { font-size: 26px; } .story .sub { font-size: 18px; } .story .badge { font-size: 19px; }
+
+  /* The difference, in three steps */
+  .steps { margin-top: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .step { padding: 16px 18px 18px; border-radius: 22px; background: #fff; box-shadow: 0 14px 26px -16px rgba(17,17,17,.4); }
+  .step:nth-child(2) { background: var(--ink); color: #fff; }
+  .step .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--yellow);
+    color: var(--ink); font-size: 16px; font-weight: 900; }
+  .step h3 { margin-top: 10px; font-size: 22px; font-weight: 900; line-height: 1.1; letter-spacing: -.4px; }
+  .step p { margin-top: 6px; font-size: 15.5px; font-weight: 600; line-height: 1.32; color: #4B5563; }
+  .step:nth-child(2) p { color: #D1D5DB; }
+  .story .steps { grid-template-columns: 1fr; gap: 14px; margin-top: 34px; }
+  .story .step { display: grid; grid-template-columns: 44px 1fr; column-gap: 16px; padding: 20px 24px; }
+  .story .step .n { grid-row: span 2; width: 44px; height: 44px; font-size: 20px; }
+  .story .step h3 { margin-top: 0; font-size: 28px; } .story .step p { font-size: 20px; }
+
+  /* What you can book */
+  .chips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { padding: 9px 18px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 19px; font-weight: 800; }
+  .only-story { display: none; } .story .only-story { display: inline-block; }
+  .story .chips { margin-top: 30px; } .story .chip { font-size: 23px; padding: 11px 22px; }
+  .foot { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
+  .foot::before { content: "✓"; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--teal);
+    color: #fff; font-size: 16px; font-weight: 900; }
+  .story .foot { font-size: 23px; margin-top: 22px; }
+
+  .still *, .still *::before { animation: none !important; }
+  .still h2 em::before { transform: rotate(-1.5deg) scaleX(1); }
+</style>
+</head>
+<body>
+<div class="flyer" id="flyer">
+  <div class="top">
+    <div class="brand"><img src="logo-mark.png" alt=""> Dodorez</div>
+    <div class="pill">Coming soon · USA</div>
+  </div>
+
+  <h1>As easy as<br>booking a ride.</h1>
+  <h2><em>Verified</em> like it matters.</h2>
+
+  <div class="stage">
+    <div class="who cust">
+      <img src="hero-customer.png" alt="" style="--d:0s">
+      <div class="tag">You · <span>booked in a tap</span></div>
+    </div>
+
+    <div class="ride">
+      <div class="map">
+        <svg viewBox="0 0 430 196" preserveAspectRatio="none">
+          <path class="road" d="M -10 150 C 90 150, 120 90, 220 96 S 340 60, 440 52"/>
+          <path class="road" d="M 150 -10 C 160 60, 120 130, 140 210"/>
+          <path class="route" d="M 95 140 C 160 120, 190 96, 250 92 S 350 64, 392 52"/>
+        </svg>
+        <div class="eta">On the way · <b>6 min</b></div>
+        <div class="pin pro">🧰</div>
+        <div class="pin home">🏠</div>
+      </div>
+      <div class="body">
+        <div class="row">
+          <div class="avatar"><img src="biz-owner.png" alt=""></div>
+          <div>
+            <div class="name">Mike · Plumbing &amp; gas</div>
+            <div class="sub"><b>★ 4.9</b> · 212 jobs done</div>
+          </div>
+        </div>
+        <div class="badges">
+          <div class="badge">ID checked</div>
+          <div class="badge">Skill tested <i>· timed, answers hidden</i></div>
+          <div class="badge cam">Camera test <i>· reviewed by a real person</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="who pro">
+      <img src="biz-owner.png" alt="" style="--d:.8s">
+      <div class="tag">Mike · <span>verified pro</span></div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step"><span class="n">1</span><h3>Post once</h3><p>Code, a gas line, a car, a pickup — anything.</p></div>
+    <div class="step"><span class="n">2</span><h3>Pick your pro</h3><p>Verified pros near you reply. You choose who.</p></div>
+    <div class="step"><span class="n">3</span><h3>Track to your door</h3><p>Pay in the app — held until the job's done.</p></div>
+  </div>
+
+  <div class="chips">
+    <span class="chip">Developers</span><span class="chip">Plumbing &amp; gas</span><span class="chip">Mechanics</span>
+    <span class="chip">Pickup &amp; delivery</span><span class="chip">Home repairs</span><span class="chip only-story">Tutors</span>
+  </div>
+  <div class="foot">Every pro's ID is checked. The skills that matter are tested.</div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const f = document.getElementById('flyer');
+  if (q.get('f') === 'story') f.classList.add('story');
+  if (q.get('still')) f.classList.add('still');
+</script>
+</body>
+</html>

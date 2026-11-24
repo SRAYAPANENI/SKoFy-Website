@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodorez — We ask them to show us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  "Anyone can say they're good. We ask them to show us." — skill verification,
+  in the brand yellow. One pro, big, with product-ad callouts: each line
+  points at him and says one check he passed.
+    ?f=portrait|story   1080x1350 (post) or 1080x1920 (story / status)
+    ?still=1            no animation (for exporting a PNG)
+  Character: v2-pro-arrival-cut.png.
+  Every claim is what the app does (docs/SKILL_VERIFICATION_DESIGN.md):
+  ID checked; a timed test on real job situations, answers hidden; leaving
+  the app loses the question; gas, wiring and roofs on camera with spoken
+  answers and a person reviewing every pass; English or Spanish; spot checks
+  can take a badge away. No competitor named, no "can't be cheated".
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #2a2a2a; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  .flyer {
+    --yellow: #FFCE48; --ink: #111111; --teal: #12B5A6; --coral: #FF6B8A;
+    position: relative; overflow: hidden; width: 1080px; height: 1350px; color: var(--ink);
+    padding: 48px 64px 44px; display: flex; flex-direction: column;
+    background:
+      radial-gradient(45% 38% at 50% 58%, #FFF4C8 0%, rgba(255,244,200,0) 72%),
+      radial-gradient(120% 90% at 50% 0%, #FFD95E 0%, var(--yellow) 55%, #F5B92A 100%);
+  }
+  .flyer.story { height: 1920px; padding: 96px 64px 88px; }
+
+  .top { position: relative; z-index: 6; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 40px; font-weight: 800; }
+  .brand img { width: 48px; }
+  .pill { padding: 12px 22px; border-radius: 999px; background: var(--ink); color: var(--yellow); font-size: 21px; font-weight: 800; }
+
+  .say { position: relative; z-index: 6; margin-top: 30px; font-size: 44px; line-height: 1.05; font-weight: 800; letter-spacing: -1.2px; }
+  .say s { text-decoration: none; position: relative; }
+  .say s::after { content: ""; position: absolute; left: -4px; right: -4px; top: 52%; height: 6px; border-radius: 3px; background: var(--coral); transform: rotate(-3deg); }
+  h1 { position: relative; z-index: 6; margin-top: 8px; font-size: 98px; line-height: .93; font-weight: 900; letter-spacing: -4px; }
+  h1 em { font-style: normal; position: relative; z-index: 0; white-space: nowrap; }
+  h1 em::before { content: ""; position: absolute; z-index: -1; left: -.08em; right: -.1em; bottom: .14em; height: .3em; background: #fff;
+    border-radius: 10px; transform: rotate(-2deg); }
+  .story .say { margin-top: 64px; font-size: 54px; } .story h1 { font-size: 120px; letter-spacing: -5px; }
+
+  /* One pro, big, with callouts */
+  .stage { position: relative; flex: 1; margin-top: 4px; }
+  .hero { position: absolute; left: 50%; bottom: 0; height: 100%; transform: translateX(-50%); z-index: 2; }
+  .hero img { display: block; height: 100%; width: auto; filter: drop-shadow(0 28px 20px rgba(17,17,17,.32)); }
+  .shadow { position: absolute; left: 50%; bottom: -6px; width: 380px; height: 40px; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(17,17,17,.28), rgba(17,17,17,0)); z-index: 1; }
+
+  .call { position: absolute; z-index: 4; width: 292px; padding: 14px 16px 15px; border-radius: 20px; background: #fff;
+    box-shadow: 0 16px 30px -16px rgba(17,17,17,.55); }
+  .call h3 { display: flex; align-items: center; gap: 9px; font-size: 19px; font-weight: 900; line-height: 1.15; }
+  .call h3::before { content: "✓"; flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--teal); color: #fff; font-size: 14px; font-weight: 900; }
+  .call p { margin-top: 5px; font-size: 14.5px; font-weight: 600; line-height: 1.32; color: #4B5563; }
+  .call.dark { background: var(--ink); color: #fff; } .call.dark p { color: #D1D5DB; }
+  .call.dark h3::before { background: var(--yellow); color: var(--ink); }
+  /* The dot on him, and the line to its card */
+  .call::after { content: ""; position: absolute; top: 28px; width: var(--len); height: 3px; background: var(--ink); border-radius: 2px; }
+  .call.l::after { left: 100%; } .call.r::after { right: 100%; }
+  .call i { position: absolute; top: 22px; width: 15px; height: 15px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 5px rgba(255,255,255,.75); }
+  .call.l i { left: calc(100% + var(--len) - 2px); } .call.r i { right: calc(100% + var(--len) - 2px); }
+  .c1 { left: 0; top: 4%; --len: 120px; }     /* at his face — ID */
+  .c2 { right: 0; top: 18%; --len: 110px; }   /* at the badge on his pocket — tested */
+  .c3 { left: 0; top: 42%; --len: 90px; }     /* at his tool bag — camera trades */
+  .c4 { right: 0; top: 56%; --len: 100px; }   /* at his stride — the badge can go */
+  .story .call { width: 330px; } .story .call h3 { font-size: 22px; } .story .call p { font-size: 17px; }
+  .story .hero { height: 92%; }
+  .story .c1 { top: 8%; --len: 150px; } .story .c2 { top: 30%; --len: 120px; } .story .c3 { top: 48%; --len: 100px; } .story .c4 { top: 64%; --len: 120px; }
+
+  .bar { position: relative; z-index: 6; margin-top: 18px; display: flex; align-items: center; gap: 18px; padding: 18px 24px;
+    border-radius: 24px; background: var(--ink); color: #fff; }
+  .bar .shield { flex: none; width: 54px; height: 60px; }
+  .bar p { font-size: 21px; font-weight: 700; line-height: 1.3; }
+  .bar p b { color: var(--yellow); }
+  .langs { margin-left: auto; flex: none; display: flex; gap: 6px; }
+  .langs span { padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 15px; font-weight: 800; }
+  .story .bar { margin-top: 30px; padding: 24px 28px; } .story .bar p { font-size: 25px; }
+
+  .still *, .still *::before { animation: none !important; }
+</style>
+</head>
+<body>
+<div class="flyer" id="flyer">
+  <div class="top">
+    <div class="brand"><img src="logo-mark.png" alt=""> Dodorez</div>
+    <div class="pill">Coming soon · USA</div>
+  </div>
+
+  <p class="say">Anyone can <s>say</s> they're good.</p>
+  <h1>We ask them<br>to <em>show us.</em></h1>
+
+  <div class="stage">
+    <div class="shadow"></div>
+    <div class="hero"><img src="v2-pro-arrival-cut.png" alt=""></div>
+
+    <div class="call l c1"><h3>ID checked</h3><p>Before a single job reaches him.</p><i></i></div>
+    <div class="call r c2"><h3>Skill tested</h3><p>Real job situations, against the clock. Leave the app and that question's gone.</p><i></i></div>
+    <div class="call l c3 dark"><h3>Camera test</h3><p>Gas, wiring, roofs: camera on, answers out loud — a real person checks every pass.</p><i></i></div>
+    <div class="call r c4"><h3>Checked again</h3><p>Passes are spot-checked. If something doesn't add up, the badge goes.</p><i></i></div>
+  </div>
+
+  <div class="bar">
+    <svg class="shield" viewBox="0 0 74 82" aria-hidden="true">
+      <path d="M37 2 L70 14 V40 C70 60 56 74 37 80 C18 74 4 60 4 40 V14 Z" fill="#FFCE48"/>
+      <path d="M22 42 L33 53 L54 30" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p>When you see <b>Verified</b> on Dodorez,<br>it means they showed us.</p>
+    <div class="langs"><span>English</span><span>Español</span></div>
+  </div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const f = document.getElementById('flyer');
+  if (q.get('f') === 'story') f.classList.add('story');
+  if (q.get('still')) f.classList.add('still');
+</script>
+</body>
+</html>

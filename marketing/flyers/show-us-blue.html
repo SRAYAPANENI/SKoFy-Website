@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodorez — We ask them to show us (blue)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  "Anyone can say they're good. We ask them to show us." — deep blue + coral,
+  a real moment: the pro checking a gas line, the homeowner relaxed with his
+  coffee — because the pro proved it before he came. scene-kitchen.jpg
+  (Gemini; empty top band cropped off; its watermark sits under the strip).
+    ?f=portrait|story   1080x1350 (post) or 1080x1920 (story / status)
+  Every claim is what the app does (docs/SKILL_VERIFICATION_DESIGN.md).
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #1b1b1b; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  .flyer {
+    --ink: #0E1430;
+    position: relative; overflow: hidden; width: 1080px; height: 1350px; background: var(--deep);
+    --panel: 470px; --photo-top: 330px;
+  }
+  .flyer.story { height: 1920px; --panel: 680px; --photo-top: 560px; }
+
+  .photo { position: absolute; left: 0; right: 0; top: var(--photo-top); }
+  .photo img { display: block; width: 100%; height: auto; }
+
+  .panel { position: absolute; left: 0; right: 0; top: 0; height: var(--panel); z-index: 3; padding: 48px 64px 0;
+    border-radius: 0 0 56px 56px; color: #fff;
+    background:
+      radial-gradient(40% 60% at 8% 12%, rgb(var(--accent-rgb) / .25) 0%, rgb(var(--accent-rgb) / 0) 70%),
+      linear-gradient(200deg, var(--mid) 0%, var(--deep) 78%);
+    box-shadow: 0 26px 40px -24px rgb(var(--shadow-rgb) / .7); }
+  .story .panel { padding: 96px 64px 0; }
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 800; }
+  .brand img { width: 46px; filter: brightness(0) invert(1); }
+  .pill { padding: 11px 20px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 19px; font-weight: 800; }
+  .say { margin-top: 30px; font-size: 38px; font-weight: 800; letter-spacing: -.8px; color: var(--muted); }
+  .say s { text-decoration: none; position: relative; color: #fff; }
+  .say s::after { content: ""; position: absolute; left: -4px; right: -4px; top: 54%; height: 6px; border-radius: 3px; background: var(--accent); transform: rotate(-4deg); }
+  h1 { margin-top: 6px; font-size: 92px; line-height: .95; font-weight: 900; letter-spacing: -3.6px; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .story .say { margin-top: 70px; font-size: 48px; } .story h1 { font-size: 118px; letter-spacing: -4.6px; }
+
+  /* What he passed, pinned to the scene */
+  .tags { position: absolute; z-index: 4; left: 48px; top: calc(var(--panel) + 26px); display: grid; gap: 12px; width: 370px; }
+  .tag { display: grid; grid-template-columns: 40px 1fr; gap: 2px 12px; align-items: center; padding: 14px 16px; border-radius: 22px;
+    background: #fff; color: var(--ink); box-shadow: 0 22px 36px -18px rgb(var(--shadow-rgb) / .6); }
+  .tag .n { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; background: var(--pale); color: var(--pale-ink);
+    display: grid; place-items: center; font-size: 18px; font-weight: 900; }
+  .tag b { font-size: 19px; font-weight: 900; line-height: 1.15; }
+  .tag span { font-size: 14.5px; font-weight: 600; line-height: 1.3; color: #4B5563; }
+  .tag.cam { background: var(--accent); color: var(--on-accent); } .tag.cam span { color: var(--on-accent); opacity: .85; } .tag.cam .n { background: rgb(255 255 255 / .28); color: var(--on-accent); }
+  .story .tags { width: 430px; top: calc(var(--panel) + 40px); gap: 16px; }
+  .story .tag b { font-size: 23px; } .story .tag span { font-size: 17px; }
+
+/* A sticker over the photo's bottom-right corner (the story sizes show it) */
+  .sticker { display: none; position: absolute; z-index: 4; right: 40px; max-width: 360px; padding: 14px 18px; border-radius: 20px;
+    background: var(--accent); color: var(--on-accent); font-size: 20px; font-weight: 800; line-height: 1.25; transform: rotate(-3deg);
+    box-shadow: 0 20px 34px -16px rgb(var(--shadow-rgb) / .6); }
+  .sticker b { display: block; font-size: 24px; font-weight: 900; }
+  .story .sticker { display: block; }
+  .sticker { top: 1580px; }
+  .strip { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; align-items: center; gap: 20px;
+    padding: 24px 64px 32px; border-radius: 44px 44px 0 0; background: var(--deep); color: #fff;
+    box-shadow: 0 -18px 34px -20px rgb(var(--shadow-rgb) / .7); }
+  .story .strip { padding: 40px 64px 96px; }
+  .strip svg { flex: none; width: 52px; height: 58px; }
+  .strip p { font-size: 22px; font-weight: 700; line-height: 1.3; }
+  .strip p b { color: var(--accent); }
+  .langs { margin-left: auto; flex: none; display: flex; gap: 6px; }
+  .langs span { padding: 7px 13px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 15px; font-weight: 800; }
+  .story .strip p { font-size: 27px; } .story .langs span { font-size: 18px; }
+
+  /* Palettes: ?c=blue (default) | emerald | berry | teal | charcoal.
+     deep/mid: the panel and strip; accent: the one bright colour; on-accent:
+     text on it; accent-text: the accent as text on white; soft/ink: the
+     accent's pale chip; pale/pale-ink: the main colour's pale chip; muted:
+     quiet text on the dark colour. */
+  .flyer {
+    --deep: #14268A; --mid: #1F3FBF; --mid-rgb: 31 63 191;
+    --accent: #FF6B5E; --accent-rgb: 255 107 94; --on-accent: #fff; --accent-text: #E5483B;
+    --soft: #FFE6E3; --ink-on-soft: #B3372B; --pale: #E8EEFF; --pale-ink: #14268A;
+    --muted: #AFC0FF; --shadow-rgb: 8 14 48;
+  }
+  .flyer.c-emerald { --deep: #0A3D30; --mid: #0F6B50; --mid-rgb: 15 107 80;
+    --accent: #FFB547; --accent-rgb: 255 181 71; --on-accent: #1A1305; --accent-text: #B87300;
+    --soft: #FFF1D6; --ink-on-soft: #8A5A00; --pale: #E1F3EB; --pale-ink: #0A3D30; --muted: #9FD9C1; --shadow-rgb: 3 22 16; }
+  .flyer.c-berry { --deep: #4A0E35; --mid: #7A1A57; --mid-rgb: 122 26 87;
+    --accent: #FF9F68; --accent-rgb: 255 159 104; --on-accent: #3A0A26; --accent-text: #C75A1C;
+    --soft: #FFE9DC; --ink-on-soft: #A84B17; --pale: #F8E6F1; --pale-ink: #4A0E35; --muted: #F0B6D8; --shadow-rgb: 30 5 20; }
+  .flyer.c-teal { --deep: #08414C; --mid: #0C6E7A; --mid-rgb: 12 110 122;
+    --accent: #FF8A3D; --accent-rgb: 255 138 61; --on-accent: #2A1203; --accent-text: #C85A12;
+    --soft: #FFE8D9; --ink-on-soft: #A9470A; --pale: #E0F3F4; --pale-ink: #08414C; --muted: #9ED8DD; --shadow-rgb: 3 25 30; }
+  .flyer.c-charcoal { --deep: #16181D; --mid: #2B2F38; --mid-rgb: 43 47 56;
+    --accent: #FF6B5E; --accent-rgb: 255 107 94; --on-accent: #fff; --accent-text: #E5483B;
+    --soft: #FFE6E3; --ink-on-soft: #B3372B; --pale: #EEF0F3; --pale-ink: #16181D; --muted: #B8BEC9; --shadow-rgb: 0 0 0; }
+</style>
+</head>
+<body>
+<div class="flyer" id="flyer">
+  <div class="photo"><img src="scene-kitchen.jpg" alt=""></div>
+
+  <div class="panel">
+    <div class="top">
+      <div class="brand"><img src="logo-mark.png" alt=""> Dodorez</div>
+      <div class="pill">Coming soon · USA</div>
+    </div>
+    <p class="say">Anyone can <s>say</s> they're good.</p>
+    <h1>We ask them<br>to <em>show us.</em></h1>
+  </div>
+
+  <div class="tags">
+    <div class="tag"><span class="n">1</span><b>ID checked</b><span>Before a single job reaches him.</span></div>
+    <div class="tag"><span class="n">2</span><b>Skill tested</b><span>Real job situations, against the clock.</span></div>
+    <div class="tag cam"><span class="n">3</span><b>Camera test</b><span>Gas &amp; wiring: answers out loud — a real person checks every pass.</span></div>
+  </div>
+
+  <div class="sticker"><b>Checked again</b>passes are spot-checked — a badge can be taken away</div>
+
+  <div class="strip">
+    <svg viewBox="0 0 74 82" aria-hidden="true">
+      <path d="M37 2 L70 14 V40 C70 60 56 74 37 80 C18 74 4 60 4 40 V14 Z" style="fill: var(--accent)"/>
+      <path d="M22 42 L33 53 L54 30" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p>When you see <b>Verified</b> on Dodorez,<br>it means they showed us.</p>
+    <div class="langs"><span>English</span><span>Español</span></div>
+  </div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  if (q.get('f') === 'story') document.getElementById('flyer').classList.add('story');
+  if (q.get('c')) document.getElementById('flyer').classList.add('c-' + q.get('c'));
+</script>
+</body>
+</html>

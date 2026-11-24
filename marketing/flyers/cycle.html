@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Dodorez Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!--
+  Dodorez "how it works" flyer: the whole cycle, from "I need…" to "Done!".
+    ?f=portrait|story          1080x1350 (Instagram / WhatsApp post) or 1080x1920 (story / status)
+    ?t=violet|mint|yellow|dark|cream|navy|sunset|forest|sky   the colour theme (violet is the default)
+    ?still=1                   no animation (for exporting a PNG)
+  Every step is something the app does today.
+  Characters: hero-pair.png (or hero-customer.png + hero-pro.png) and step-1..6.png from CHARACTER_PROMPTS.md.
+  Until they're added: the Dodorez mark in the middle, icons on the steps.
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #2a2a2a; }
+  body { font-family: "Poppins", system-ui, sans-serif; display: flex; justify-content: center; }
+
+  /* ── Themes: every colour below comes from these ─────────── */
+  .flyer {
+    --yellow: #FFCE48;
+    --ink: #111111;
+  }
+  .violet {
+    --bg: radial-gradient(110% 80% at 50% 58%, #6B3CF0 0%, #3A1C9E 48%, #160B45 100%);
+    --fg: #ffffff;
+    --soft: rgba(255,255,255,.8);
+    --pill-bg: var(--yellow); --pill-fg: var(--ink);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,206,72,.14);
+    --loop: rgba(255,206,72,.75);
+    --hub: radial-gradient(circle, rgba(255,120,150,.42) 0%, rgba(255,206,72,.18) 50%, rgba(255,206,72,0) 72%);
+    --label-bg: #FF6B8A; --label-fg: #ffffff;
+    --card-ring: 0 0 0 2px rgba(255,206,72,.45);
+    --side-bg: rgba(255,255,255,.08); --side-border: rgba(255,206,72,.4);
+    --check: var(--yellow);
+    --spark: var(--yellow);
+    --cta-bg: var(--yellow); --cta-fg: var(--ink);
+    --arrow-bg: var(--ink); --arrow-fg: var(--yellow);
+    --logo: url("logo-yellow.png");
+    --shadow: rgba(10,4,40,.65);
+  }
+  .mint {
+    --bg: radial-gradient(110% 80% at 50% 58%, #E6FFF6 0%, #9BEBD3 45%, #2EC4A6 100%);
+    --fg: var(--ink);
+    --soft: rgba(17,17,17,.75);
+    --pill-bg: var(--ink); --pill-fg: var(--yellow);
+    --chip-bg: var(--ink); --chip-fg: var(--yellow);
+    --ray: rgba(255,255,255,.35);
+    --loop: rgba(17,17,17,.5);
+    --hub: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,230,140,.35) 55%, rgba(255,255,255,0) 72%);
+    --label-bg: var(--yellow); --label-fg: var(--ink);
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,255,255,.6); --side-border: transparent;
+    --check: #0E9F86;
+    --spark: #ffffff;
+    --cta-bg: var(--ink); --cta-fg: #ffffff;
+    --arrow-bg: var(--yellow); --arrow-fg: var(--ink);
+    --logo: url("logo-black.png");
+    --shadow: rgba(0,60,50,.35);
+  }
+  .yellow {
+    --bg: radial-gradient(110% 80% at 50% 58%, #FFE47A 0%, #FFCE48 42%, #FFB800 100%);
+    --fg: var(--ink);
+    --soft: rgba(17,17,17,.8);
+    --pill-bg: var(--ink); --pill-fg: var(--yellow);
+    --chip-bg: var(--ink); --chip-fg: var(--yellow);
+    --ray: rgba(255,255,255,.26);
+    --loop: rgba(17,17,17,.45);
+    --hub: radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,255,255,.35) 55%, rgba(255,255,255,0) 72%);
+    --label-bg: var(--ink); --label-fg: var(--yellow);
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,255,255,.62); --side-border: transparent;
+    --check: #12B5A6;
+    --spark: #ffffff;
+    --cta-bg: var(--ink); --cta-fg: #ffffff;
+    --arrow-bg: var(--yellow); --arrow-fg: var(--ink);
+    --logo: url("logo-black.png");
+    --shadow: rgba(120,70,0,.4);
+  }
+  .dark {
+    --bg: radial-gradient(100% 75% at 50% 58%, #2b2b2b 0%, #161616 48%, #0a0a0a 100%);
+    --fg: #ffffff;
+    --soft: rgba(255,255,255,.8);
+    --pill-bg: var(--yellow); --pill-fg: var(--ink);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,206,72,.16);
+    --loop: rgba(255,206,72,.6);
+    --hub: radial-gradient(circle, rgba(255,206,72,.42) 0%, rgba(255,206,72,.12) 55%, rgba(255,206,72,0) 72%);
+    --label-bg: var(--yellow); --label-fg: var(--ink);
+    --card-ring: 0 0 0 2px rgba(255,206,72,.35);
+    --side-bg: rgba(255,255,255,.06); --side-border: rgba(255,206,72,.35);
+    --check: var(--yellow);
+    --spark: var(--yellow);
+    --cta-bg: var(--yellow); --cta-fg: var(--ink);
+    --arrow-bg: var(--ink); --arrow-fg: var(--yellow);
+    --logo: url("logo-yellow.png");
+    --shadow: rgba(0,0,0,.7);
+  }
+
+  .cream {
+    --bg: radial-gradient(110% 80% at 50% 58%, #FFFDF7 0%, #FFF4DE 50%, #F7E6C4 100%);
+    --fg: var(--ink); --soft: rgba(17,17,17,.7);
+    --pill-bg: var(--ink); --pill-fg: var(--yellow);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,206,72,.22); --loop: rgba(17,17,17,.55);
+    --hub: radial-gradient(circle, rgba(255,206,72,.45) 0%, rgba(255,206,72,.15) 55%, rgba(255,206,72,0) 72%);
+    --label-bg: #FF5A5F; --label-fg: #ffffff;
+    --card-ring: 0 0 0 1.5px rgba(17,17,17,.08);
+    --side-bg: #ffffff; --side-border: rgba(17,17,17,.06);
+    --check: #FF5A5F; --spark: #FFB800;
+    --cta-bg: var(--ink); --cta-fg: #ffffff; --arrow-bg: var(--yellow); --arrow-fg: var(--ink);
+    --logo: url("logo-black.png"); --shadow: rgba(90,60,10,.28);
+  }
+  .navy {
+    --bg: radial-gradient(110% 80% at 50% 58%, #1E4C8C 0%, #0F2C57 50%, #071A36 100%);
+    --fg: #ffffff; --soft: rgba(255,255,255,.78);
+    --pill-bg: var(--yellow); --pill-fg: var(--ink);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,206,72,.13); --loop: rgba(255,206,72,.8);
+    --hub: radial-gradient(circle, rgba(255,206,72,.32) 0%, rgba(255,206,72,.1) 55%, rgba(255,206,72,0) 72%);
+    --label-bg: var(--yellow); --label-fg: var(--ink);
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,255,255,.08); --side-border: rgba(255,206,72,.35);
+    --check: var(--yellow); --spark: var(--yellow);
+    --cta-bg: var(--yellow); --cta-fg: var(--ink); --arrow-bg: var(--ink); --arrow-fg: var(--yellow);
+    --logo: url("logo-yellow.png"); --shadow: rgba(2,10,30,.65);
+  }
+  .sunset {
+    --bg: linear-gradient(165deg, #FF8A5B 0%, #FF5E62 55%, #E8436B 100%);
+    --fg: #ffffff; --soft: rgba(255,255,255,.88);
+    --pill-bg: #ffffff; --pill-fg: #E8436B;
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,255,255,.18); --loop: rgba(255,255,255,.85);
+    --hub: radial-gradient(circle, rgba(255,230,140,.55) 0%, rgba(255,206,72,.2) 55%, rgba(255,206,72,0) 72%);
+    --label-bg: var(--ink); --label-fg: var(--yellow);
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,255,255,.18); --side-border: rgba(255,255,255,.4);
+    --check: var(--yellow); --spark: #FFE47A;
+    --cta-bg: var(--ink); --cta-fg: #ffffff; --arrow-bg: var(--yellow); --arrow-fg: var(--ink);
+    --logo: url("logo-yellow.png"); --shadow: rgba(120,20,40,.45);
+  }
+  .forest {
+    --bg: radial-gradient(110% 80% at 50% 58%, #1F6F64 0%, #12463F 50%, #0A2A26 100%);
+    --fg: #FFF8E7; --soft: rgba(255,248,231,.8);
+    --pill-bg: var(--yellow); --pill-fg: var(--ink);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,206,72,.12); --loop: rgba(255,206,72,.75);
+    --hub: radial-gradient(circle, rgba(255,206,72,.3) 0%, rgba(255,206,72,.1) 55%, rgba(255,206,72,0) 72%);
+    --label-bg: #FFF8E7; --label-fg: #12463F;
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,248,231,.08); --side-border: rgba(255,206,72,.35);
+    --check: var(--yellow); --spark: var(--yellow);
+    --cta-bg: var(--yellow); --cta-fg: var(--ink); --arrow-bg: #12463F; --arrow-fg: var(--yellow);
+    --logo: url("logo-yellow.png"); --shadow: rgba(0,20,15,.6);
+  }
+  .sky {
+    --bg: radial-gradient(110% 80% at 50% 58%, #F2F9FF 0%, #BFE0FF 50%, #7DBBFF 100%);
+    --fg: var(--ink); --soft: rgba(17,17,17,.72);
+    --pill-bg: var(--ink); --pill-fg: var(--yellow);
+    --chip-bg: var(--yellow); --chip-fg: var(--ink);
+    --ray: rgba(255,255,255,.4); --loop: rgba(17,17,17,.45);
+    --hub: radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(255,230,140,.4) 55%, rgba(255,255,255,0) 72%);
+    --label-bg: var(--ink); --label-fg: var(--yellow);
+    --card-ring: 0 0 0 0 transparent;
+    --side-bg: rgba(255,255,255,.7); --side-border: transparent;
+    --check: #2D7FF9; --spark: #ffffff;
+    --cta-bg: var(--ink); --cta-fg: #ffffff; --arrow-bg: var(--yellow); --arrow-fg: var(--ink);
+    --logo: url("logo-black.png"); --shadow: rgba(20,60,120,.3);
+  }
+
+  .flyer { position: relative; overflow: hidden; width: 1080px; background: var(--bg); color: var(--fg); }
+  .portrait { height: 1350px; }
+  .story { height: 1920px; }
+
+  .rays { position: absolute; inset: -40%; pointer-events: none;
+    background: repeating-conic-gradient(from 0deg at 50% var(--ry), var(--ray) 0deg 6deg, transparent 6deg 18deg);
+    -webkit-mask: radial-gradient(circle at 50% var(--ry), #000 0%, transparent 30%); mask: radial-gradient(circle at 50% var(--ry), #000 0%, transparent 30%); }
+
+  /* ── Header ─────────────────────────────────────────────── */
+  .brand { position: absolute; left: 64px; top: 58px; display: flex; align-items: center; gap: 14px; z-index: 5; }
+  .mark { width: 54px; height: 64px; background: var(--logo) center / contain no-repeat; }
+  .wordmark { font-weight: 800; font-size: 40px; letter-spacing: -1px; }
+  .soon { position: absolute; right: 64px; top: 64px; z-index: 5; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; font-weight: 800; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; background: var(--pill-bg); color: var(--pill-fg); }
+  .soon .dot { width: 11px; height: 11px; border-radius: 50%; background: currentColor; animation: pulse 1.6s infinite; }
+
+  .copy { position: absolute; left: 64px; right: 64px; z-index: 4; text-align: center; }
+  .portrait .copy { top: 158px; }
+  .story .copy { top: 200px; }
+  .eyebrow { font-weight: 700; font-size: 22px; letter-spacing: 5px; text-transform: uppercase; color: var(--soft); margin-bottom: 14px; }
+  h1 { font-weight: 900; letter-spacing: -2.5px; line-height: 1; }
+  .portrait h1 { font-size: 78px; }
+  .story h1 { font-size: 100px; }
+  .chip { display: inline-block; padding: 0 22px 8px; border-radius: 20px; transform: rotate(-1.5deg); background: var(--chip-bg); color: var(--chip-fg); }
+  .sub { font-weight: 600; font-size: 30px; margin-top: 22px; color: var(--soft); }
+  .portrait .sub { display: none; }
+
+  /* ── The cycle ──────────────────────────────────────────── */
+  .loop { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .loop circle { fill: none; stroke: var(--loop); stroke-width: 5; stroke-dasharray: 2 16; stroke-linecap: round; animation: flow 1.4s linear infinite; }
+  .loop .head { fill: var(--loop); }
+
+  .hub { position: absolute; z-index: 3; border-radius: 50%; transform: translate(-50%, -50%); background: var(--hub); }
+  /* Until the characters are added: the Dodorez mark. */
+  .hub-mark { position: absolute; z-index: 3; transform: translate(-50%, -50%); background: var(--logo) center / contain no-repeat; filter: drop-shadow(0 18px 24px var(--shadow)); animation: idle 3.6s ease-in-out infinite; }
+  .cast { position: absolute; z-index: 4; transform: translateX(-50%); display: flex; align-items: flex-end; }
+  .cast img { display: block; filter: drop-shadow(0 18px 18px var(--shadow)); transform-origin: 50% 100%; animation: idle 3.4s ease-in-out infinite; }
+  .cast img + img { margin-left: -46px; animation-duration: 3.9s; animation-delay: -1.2s; }
+  .hub-label { position: absolute; z-index: 5; transform: translate(-50%, 0); padding: 8px 18px; border-radius: 999px; font-weight: 800; font-size: 18px; letter-spacing: .5px; white-space: nowrap; background: var(--label-bg); color: var(--label-fg); }
+
+  /* max-content: a card near the edge would otherwise be squeezed to the space left. */
+  .step { position: absolute; z-index: 6; width: max-content; transform: translate(-50%, -50%); display: flex; gap: 12px; align-items: center; padding: 14px 18px 14px 14px; border-radius: 22px; background: #fff; color: var(--ink); box-shadow: 0 18px 38px -16px var(--shadow), var(--card-ring); animation: float 5s ease-in-out infinite; }
+  .step .ic { flex: none; width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; font-size: 28px; position: relative; }
+  .step .ic .face { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; }
+  .step .ic .face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 6%; transform: scale(1.7); transform-origin: 50% 0; }
+  .step .n { position: absolute; top: -10px; left: -10px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; font-weight: 800; background: var(--ink); color: var(--yellow); box-shadow: 0 0 0 3px #fff; }
+  .step b { display: block; font-size: 22px; font-weight: 800; line-height: 1.15; letter-spacing: -.3px; }
+  .step span.t { display: block; font-size: 15.5px; font-weight: 500; color: #555; line-height: 1.3; margin-top: 3px; }
+  .story .step b { font-size: 25px; }
+  .story .step span.t { font-size: 17.5px; }
+  .story .step .ic { width: 64px; height: 64px; font-size: 32px; }
+
+  /* ── Story only: who it's for ───────────────────────────── */
+  .sides { position: absolute; left: 64px; right: 64px; top: 1500px; z-index: 5; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .portrait .sides { display: none; }
+  .side { padding: 24px 26px; border-radius: 26px; background: var(--side-bg); border: 1.5px solid var(--side-border); }
+  .side h3 { font-size: 24px; font-weight: 800; margin-bottom: 10px; letter-spacing: -.3px; }
+  .side li { list-style: none; font-size: 19px; font-weight: 600; line-height: 1.5; }
+  .side li::before { content: "✓  "; font-weight: 800; color: var(--check); }
+
+  /* ── Footer ─────────────────────────────────────────────── */
+  .cta { position: absolute; left: 44px; right: 44px; bottom: 44px; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 32px; border-radius: 28px; background: var(--cta-bg); color: var(--cta-fg); box-shadow: 0 24px 50px -20px var(--shadow); }
+  .cta .line { font-weight: 800; font-size: 28px; letter-spacing: -.5px; line-height: 1.15; }
+  .cta .line small { display: block; font-weight: 600; font-size: 18px; opacity: .75; letter-spacing: 0; }
+  .cta .stores { font-weight: 700; font-size: 19px; text-align: right; line-height: 1.3; display: flex; align-items: center; gap: 14px; }
+  .cta .arrow { display: inline-grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; font-size: 26px; flex: none; background: var(--arrow-bg); color: var(--arrow-fg); }
+
+  .spark { position: absolute; z-index: 1; width: var(--s); height: var(--s); animation: twinkle 2.4s ease-in-out infinite; }
+  .spark svg { width: 100%; height: 100%; }
+  .spark path { fill: var(--spark); }
+
+  @keyframes float { 0%, 100% { margin-top: 0 } 50% { margin-top: -8px } }
+  @keyframes idle { 0%, 100% { translate: 0 0; rotate: 0deg } 30% { translate: 0 -9px; rotate: -1.2deg } 65% { translate: 0 -3px; rotate: 1deg } }
+  @keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0); opacity: 1 } 50% { transform: scale(.6) rotate(20deg); opacity: .5 } }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 currentColor } 70% { box-shadow: 0 0 0 10px transparent } 100% { box-shadow: 0 0 0 0 transparent } }
+  @keyframes flow { to { stroke-dashoffset: -36 } }
+  .still *, .still *::before { animation: none !important; }
+</style>
+</head>
+<body>
+<div id="flyer"></div>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  const format = q.get("f") === "story" ? "story" : "portrait";
+  const THEMES = ["violet", "mint", "yellow", "dark", "cream", "navy", "sunset", "forest", "sky"];
+  const theme = THEMES.includes(q.get("t")) ? q.get("t") : "violet";
+  const still = q.get("still") === "1";
+
+  // The cycle, clockwise from the top. Only what the app does today.
+  const STEPS = [
+    { ic: "💬", bg: "#FFE9A8", t: "Ask for anything", s: "Type it, snap it, or say<br>“Hey Dodorez”" },
+    { ic: "📡", bg: "#DCEEFF", t: "Matched in seconds", s: "Sent to verified people<br>nearby — or online" },
+    { ic: "🙋", bg: "#E8E4FF", t: "Pros apply", s: "ID-verified, skill-tested,<br>with real ratings" },
+    { ic: "🔒", bg: "#D9F5F1", t: "Hire &amp; pay safely", s: "We hold the money until<br>the job is done" },
+    { ic: "📍", bg: "#FFE0E1", t: "Get it done", s: "Chat, call &amp; track — your<br>number stays private" },
+    { ic: "⭐", bg: "#FFF1C2", t: "Rate each other", s: "Reviews both ways keep<br>everyone great" },
+  ];
+
+  // Layout per format: the loop's centre and radius, and the people inside it.
+  const L = format === "portrait"
+    ? { cx: 540, cy: 792, r: 298, hub: 430, castH: 300, castTop: 620, label: 936, mark: 190, pairH: 372, pairTop: 562, pairLabel: 946 }
+    : { cx: 540, cy: 1040, r: 350, hub: 520, castH: 360, castTop: 820, label: 1196, mark: 230, pairH: 430, pairTop: 768, pairLabel: 1210 };
+  const H = format === "portrait" ? 1350 : 1920;
+
+  const root = document.getElementById("flyer");
+  root.className = `flyer ${format} ${theme}${still ? " still" : ""}`;
+  root.style.setProperty("--ry", `${(L.cy / H) * 100}%`);
+
+  const rad = (deg) => (deg * Math.PI) / 180;
+  const at = (deg, r = L.r) => [L.cx + r * Math.cos(rad(deg)), L.cy + r * Math.sin(rad(deg))];
+
+  // Steps every 60°, starting at the top; arrowheads halfway between, pointing clockwise.
+  const steps = STEPS.map((s, i) => {
+    const [x, y] = at(-90 + i * 60);
+    return `<div class="step" style="left:${x}px;top:${y}px;animation-delay:${i * 0.4}s">
+      <span class="ic" style="background:${s.bg}">${s.ic}<span class="face"><img src="step-${i + 1}.png" alt="" onerror="this.parentNode.remove()"></span><span class="n">${i + 1}</span></span>
+      <span><b>${s.t}</b><span class="t">${s.s}</span></span></div>`;
+  }).join("");
+  const heads = STEPS.map((_, i) => {
+    const deg = -60 + i * 60;
+    const [x, y] = at(deg);
+    return `<path class="head" d="M -11 -12 L 13 0 L -11 12 Z" transform="translate(${x} ${y}) rotate(${deg + 90})"/>`;
+  }).join("");
+
+  const star = `<svg viewBox="0 0 24 24"><path d="M12 0c.7 5.6 3.4 9.3 12 12-8.6 2.7-11.3 6.4-12 12-.7-5.6-3.4-9.3-12-12 8.6-2.7 11.3-6.4 12-12z"/></svg>`;
+  const sparks = (format === "portrait"
+    ? [[90, 470, 34], [990, 520, 28], [70, 1080, 26], [1000, 1120, 36], [460, 560, 18], [640, 1040, 20]]
+    : [[90, 640, 40], [990, 700, 30], [80, 1380, 30], [1000, 1420, 40], [470, 760, 20], [640, 1290, 22]]
+  ).map(([x, y, s], i) => `<div class="spark" style="left:${x}px;top:${y}px;--s:${s}px;animation-delay:${i * 0.4}s">${star}</div>`).join("");
+
+  root.innerHTML = `
+    <div class="rays"></div>
+    ${sparks}
+    <div class="brand"><span class="mark"></span><span class="wordmark">Dodorez</span></div>
+    <div class="soon"><span class="dot"></span>Coming soon</div>
+    <div class="copy">
+      <div class="eyebrow">How Dodorez works</div>
+      <h1>From “I need…”<br>to <span class="chip">“Done!”</span></h1>
+      <p class="sub">Skilled people, in person or online.</p>
+    </div>
+
+    <svg class="loop" viewBox="0 0 1080 ${H}" width="1080" height="${H}">
+      <circle cx="${L.cx}" cy="${L.cy}" r="${L.r}"/>
+      ${heads}
+    </svg>
+    <div class="hub" style="left:${L.cx}px;top:${L.cy}px;width:${L.hub}px;height:${L.hub}px"></div>
+    <div class="hub-mark" style="left:${L.cx}px;top:${L.cy - 20}px;width:${L.mark}px;height:${L.mark * 1.18}px"></div>
+    <div class="cast" style="left:${L.cx}px;top:${L.castTop}px"></div>
+    <div class="hub-label" style="left:${L.cx}px;top:${L.label}px">You &nbsp;🤝&nbsp; a pro</div>
+    ${steps}
+
+    <div class="sides">
+      <div class="side"><h3>Need something done?</h3><ul>
+        <li>Post it in seconds</li><li>Pick from verified people</li><li>Pay only through the app</li></ul></div>
+      <div class="side"><h3>Great at something?</h3><ul>
+        <li>Get requests nearby or online</li><li>Set your own rates</li><li>Get paid when it's done</li></ul></div>
+    </div>
+
+    <div class="cta">
+      <span class="line">Skilled people, one tap away.<small>Photos, lessons, moves, design &amp; more</small></span>
+      <span class="stores">Coming soon on<br>iPhone &amp; Android<span class="arrow">→</span></span>
+    </div>
+  `;
+
+  // The 3D cast (CHARACTER_PROMPTS.md), in place of the mark: the customer and
+  // the provider together in one image (hero-pair.png), or as two images.
+  const cast = root.querySelector(".cast");
+  const load = (src) => new Promise((ok) => { const img = new Image(); img.onload = () => ok(img); img.onerror = () => ok(null); img.src = src; });
+  const show = (imgs, height) => {
+    imgs.forEach((img) => { img.style.height = `${height}px`; img.alt = ""; cast.appendChild(img); });
+    root.querySelector(".hub-mark").remove();
+  };
+  load("hero-pair.png").then((pair) => {
+    if (pair) {
+      cast.style.top = `${L.pairTop}px`;
+      root.querySelector(".hub-label").style.top = `${L.pairLabel}px`;
+      return show([pair], L.pairH);
+    }
+    return Promise.all([load("hero-customer.png"), load("hero-pro.png")]).then((imgs) => {
+      if (imgs.every(Boolean)) show(imgs, L.castH);
+    });
+  });
+</script>
+</body>
+</html>
