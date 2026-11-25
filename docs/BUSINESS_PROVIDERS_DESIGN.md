@@ -149,7 +149,13 @@ the state and the insurance certificate.
   The step audit (`job_step_events`) records the member as the actor.
 - **Reassigning** is allowed before the member sets off, for example if
   someone is sick. The customer is told who's coming instead. After set-off,
-  the existing cancel and no-show rules apply to the business.
+  the existing cancel and no-show rules apply to the business: its owner or a
+  dispatcher can give the job up (Team jobs → Give up) until the work starts;
+  it counts for the **business** (`business_lapses`, migration 126), never for
+  the member or whoever decided, whose own work a pause would stop. 3 in 30
+  days, or one per active member if that's more, pause the business from
+  applying for 7 days; support can lift it. The member is told, and can't
+  give it up themselves.
 - **No-shows and lapses** count against the business, and against the member
   inside the business (§6).
 
@@ -409,3 +415,17 @@ The owner closes it in the provider app: Business → **Close business**.
 Code: `BusinessClosureService`, `BusinessTeamService.release_everyone`,
 `ConnectGateway.close_account`, `components/business/close-business.tsx`.
 
+## Applying again (built 2026-11-25, migration 124)
+
+`app/domain/reapply.py` (SQL twin: `can_reapply_sql`). Why an application closed is kept (`closed_reason`):
+
+| Closed because | Who can reopen it |
+|---|---|
+| Withdrew while waiting (themselves, or the business) | Them, once the job's time changes or it's reposted. In their feed again, one alert; not if paused, and if the new time is in their business hours it's the business's |
+| Customer rejected | Only the customer ("Undo" on the applicants screen). If the time changed since, they're asked to apply afresh — their price was for the old time |
+| Someone else was hired | Waiting again if that hire falls through — never those rejected by hand |
+| Hired, then cancelled or let go | Nobody |
+
+- A rejected business can't apply with another member; a member it never named can apply for themselves. One application per business per job: applying again moves its slot (`free_business_slot`).
+- Search, repost and catch-up skip anyone who has applied (`not_applied_sql`), so nobody who can't apply is alerted. Someone waiting keeps the job through a repost.
+- Applying twice (a double tap) is one application and one alert.

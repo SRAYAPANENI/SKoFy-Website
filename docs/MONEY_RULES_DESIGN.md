@@ -260,6 +260,15 @@ the provider.
   next lapse would pause them again at once. The last lift, who and why, is
   kept on the provider (`pause_lifted_*`), and the provider gets a push.
 
+### When the job reopens to the next provider
+
+Each hired provider's payment is their own. Money held for one who left is
+settled before the next one's is charged, and never counts as the next one's.
+A payment that was paid out (a cancellation share) or refunded is kept on record
+(`payments.superseded_at`, migration 125); there's one current payment per job
+and purpose, and a later provider's Stripe calls have their own keys. An unpaid
+charge is cancelled when the job is called off.
+
 ## 4. Proving an inspection happened
 
 The app can't see inside a home. It can make faking an inspection hard and make
@@ -336,6 +345,10 @@ Support records two separate things:
     clear evidence: for example, the customer read the start code, the provider
     was on site 25 minutes, the photos were taken at their address, and the
     customer thanked them in the chat.
+
+A job's report is decided once: neither side can open it again (the guarantee
+or Help covers what comes up later). A provider is free for other jobs as soon
+as a dispute stops the work.
 
 A confirmed inspection (Layer 1) can still be disputed, but the confirmation
 is strong evidence for the provider.
