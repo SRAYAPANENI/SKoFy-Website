@@ -54,6 +54,12 @@ Every move is one row in `ticket_escalations` (department moves have `from_depar
 - A photo on a closed ticket reopens it like any message. Anonymising an account removes its attachments (the link and the file).
 - Photos open full screen (app: tap; portal: the image viewer, paging through every photo in the ticket); PDFs open in the browser.
 
+## Live: typing and new messages
+
+- The person's chat (`/ws/support/{ticket}`) and the portal (`/ws/admin`) carry "typing" both ways and a `support_message` nudge when a reply is saved; each side then fetches the ticket (no text travels on the line). Polling (apps 8 s, portal 5 s) is the fallback.
+- The portal says which ticket it has open (`ticket_open`/`ticket_close`) and gets only that one's events: seeing needs the same access as reading the ticket, typing the same as replying (`support_live.agent_may`). Private notes never send typing.
+- Typing is never stored. Senders repeat every 3 s; the other side drops it after 6 s without one. Job chats do the same over `/ws/jobs/{job}` (`typing_service.py`, only while the chat is open); a business owner writing from their job view has no socket, so shows no typing.
+
 ## Code map
 
 | Layer | Files |
