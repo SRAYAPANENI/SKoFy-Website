@@ -1028,3 +1028,21 @@ care work: it uses the pickup and drop-off screens (photo, "I'm here",
 Confirm Pickup, drop-off code), never the care steps (`CareJobPanel`: check-in
 code, hand-over photos). Before 2026-11-05 it was sent to the care steps, so a
 booked trip couldn't be collected from the app.
+
+## 17. Several skills on one job (built 2026-11-25)
+
+A job has one price and one place. `app/domain/skill_groups.py` decides which chosen skills can share it; `services/skill-groups.ts` in the customer app is the same rules (keep them alike — the server refuses anything else).
+
+| Skills | Job | Price |
+|---|---|---|
+| All quoted | One | One quote |
+| Quoted + set price | One, quoted | The provider quotes the whole job |
+| All set price | One | Added up, line by line |
+| All per hour, day or night | One | Once, at the highest price among them (each at its cheapest) |
+| Anything else, or no place in common | Separate jobs, posted together | Each its own |
+
+- `jobs.all_skills_priced` (migration 123): priced from every skill, and sent to / taken by only providers verified in **all** of them (`skills_needed_sql`, `_match_threshold`), with a price for each. Off for every earlier job: they keep their price and the 50% match. A repeat visit keeps its first visit's.
+- The make-up of the price is kept on the application (`price_text`) and the booked job (`upfront_text`).
+- The summary screen has one section per job and posts them in turn; a failure keeps those already posted and retries the rest. Voice keeps the first job and says the others are posted after it. An older app posting skills that don't fit gets a refusal naming each.
+- The AI's suggestions are matched to real skills on the server. In the form only the main one is chosen for the customer (with other quoted ones, when it's quoted): a suggestion never adds to a price by itself. A job can't go out with no skill chosen.
+- The base rate used for early ends and cancellations is the rate of the skill that set the price.
